@@ -12,3 +12,4 @@ Route::get('/user', function (Request $request) {
 Route::get('/test', [UserController::class, "index"]);
 
 require __DIR__.'/api/auth.php';
+require __DIR__.'/api/site.php';
