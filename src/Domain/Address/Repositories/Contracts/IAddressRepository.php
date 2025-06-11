@@ -23,7 +23,7 @@ interface IAddressRepository
      * Get the countrys.
      * @return Collection
      */
-    public function getCountries() :Collection;
+    public function activeCountries() :Collection;
 
     /**
      * Get the provinces pagination.
@@ -39,7 +39,7 @@ interface IAddressRepository
      * @param Country $country
      * @return Collection
      */
-    public function getProvinces(Country $country) :Collection;
+    public function activeProvinces(Country $country) :Collection;
 
 
     /**
@@ -49,10 +49,11 @@ interface IAddressRepository
      * @return LengthAwarePaginator
      */
     public function getCitiesPaginate(Province $province, TableRequest $request) :LengthAwarePaginator;
+    
     /**
      * Get the cities.
      * @param Province $province
      * @return Collection
      */
-    public function getCities(Province $province) :Collection;
+    public function activeCities(Province $province) :Collection;
 }

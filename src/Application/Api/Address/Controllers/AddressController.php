@@ -15,7 +15,7 @@ class AddressController extends Controller
 {
 
     /**
-     * @param TelegramNotificationService $service
+     * @param IPlanRepository $repository
      */
     public function __construct(protected IAddressRepository $repository)
     {
@@ -26,9 +26,9 @@ class AddressController extends Controller
      * Get all countries.
      * @param TableRequest $request
      */
-    public function getCountries(TableRequest $request): JsonResponse
+    public function activeCountries(TableRequest $request): JsonResponse
     {
-        return response()->json($this->repository->getCountries($request), Response::HTTP_OK);
+        return response()->json($this->repository->activeCountries($request), Response::HTTP_OK);
     }
 
     /**
@@ -38,9 +38,9 @@ class AddressController extends Controller
      *
      * @return JsonResponse
      */
-    public function getProvinces(Country $country, TableRequest $request): JsonResponse
+    public function activeProvinces(Country $country, TableRequest $request): JsonResponse
     {
-        return response()->json($this->repository->getProvinces($country, $request), Response::HTTP_OK);
+        return response()->json($this->repository->activeProvinces($country, $request), Response::HTTP_OK);
     }
 
     /**
@@ -50,8 +50,8 @@ class AddressController extends Controller
      *
      * @return JsonResponse
      */
-    public function getCities(Province $province, TableRequest $request): JsonResponse
+    public function activeCities(Province $province, TableRequest $request): JsonResponse
     {
-        return response()->json($this->repository->getCities($province, $request), Response::HTTP_OK);
+        return response()->json($this->repository->activeCities($province, $request), Response::HTTP_OK);
     }
 }
