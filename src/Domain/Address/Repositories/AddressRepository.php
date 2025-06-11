@@ -15,6 +15,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 class AddressRepository implements IAddressRepository
 {
+    
     /**
      * Get the countrys pagination.
      * @param TableRequest $request
@@ -39,7 +40,7 @@ class AddressRepository implements IAddressRepository
      * Get the countrys.
      * @return Collection
      */
-    public function getCountries() :Collection
+    public function activeCountries() :Collection
     {
         return Country::query()
             ->where('status', 1)
@@ -71,7 +72,7 @@ class AddressRepository implements IAddressRepository
      * @param Country $country
      * @return Collection
      */
-    public function getProvinces(Country $country) :Collection
+    public function activeProvinces(Country $country) :Collection
     {
         return Province::query()
             ->where('country_id', $country->id)
@@ -103,7 +104,7 @@ class AddressRepository implements IAddressRepository
      * @param Province $province
      * @return Collection
      */
-    public function getCities(Province $province) :Collection
+    public function activeCities(Province $province) :Collection
     {
         return City::query()
             ->where('province_id', $province->id)
