@@ -3,6 +3,7 @@
 namespace Domain\Project\Repositories;
 
 use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Project\models\Project;
@@ -12,6 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Application\Api\Project\Requests\SearchProjectRequest;
 
 /**
  * Class ProjectRepository.
@@ -28,7 +30,7 @@ class ProjectRepository implements IProjectRepository
     public function index(TableRequest $request) :LengthAwarePaginator
     {
         $search = $request->get('query');
-        return Project::query()
+        $projects = Project::query()
             ->with([
                 'oCountry',
                 'oProvince',
@@ -46,6 +48,8 @@ class ProjectRepository implements IProjectRepository
             })
             ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
             ->paginate($request->get('rowsPerPage', 25));
+
+        return $projects->through(fn ($project) => new ProjectResource($project));
     }
 
     /**
@@ -54,7 +58,7 @@ class ProjectRepository implements IProjectRepository
      */
     public function activeProjects() :Collection
     {
-        return Project::query()
+        $projects = Project::query()
             ->with([
                 'oCountry',
                 'oProvince',
@@ -66,16 +70,18 @@ class ProjectRepository implements IProjectRepository
             ])
             ->where('status', 1)
             ->get();
+
+        return $projects->map(fn ($project) => new ProjectResource($project));
     }
 
     /**
      * Get the project.
      * @param Project $project
-     * @return Project
+     * @return ProjectResource
      */
-    public function show(Project $project) :Project
+    public function show(Project $project) :ProjectResource
     {
-        return Project::query()
+        $project = Project::query()
                 ->with([
                     'oCountry',
                     'oProvince',
@@ -87,6 +93,8 @@ class ProjectRepository implements IProjectRepository
                 ])
                 ->where('id', $project->id)
                 ->first();
+
+        return new ProjectResource($project);
     }
 
     /**
@@ -106,6 +114,10 @@ class ProjectRepository implements IProjectRepository
             'amount' => $request->input('amount'),
             'weight' => $request->input('weight'),
             'status' => $request->input('status'),
+            'vip' => $request->input('vip'),
+            'priority' => $request->input('priority'),
+            'send_date' => $request->input('send_date'),
+            'receive_date' => $request->input('receive_date'),
             'o_country_id' => $request->input('o_country_id'),
             'o_province_id' => $request->input('o_province_id'),
             'o_city_id' => $request->input('o_city_id'),
@@ -123,7 +135,8 @@ class ProjectRepository implements IProjectRepository
 
             return response()->json([
                 'status' => 1,
-                'message' => __('site.The operation has been successfully')
+                'message' => __('site.The operation has been successfully'),
+                'data' => new ProjectResource($project)
             ], Response::HTTP_CREATED);
         }
 
@@ -148,6 +161,10 @@ class ProjectRepository implements IProjectRepository
             'amount' => $request->input('amount'),
             'weight' => $request->input('weight'),
             'status' => $request->input('status'),
+            'vip' => $request->input('vip'),
+            'priority' => $request->input('priority'),
+            'send_date' => $request->input('send_date'),
+            'receive_date' => $request->input('receive_date'),
             'o_country_id' => $request->input('o_country_id'),
             'o_province_id' => $request->input('o_province_id'),
             'o_city_id' => $request->input('o_city_id'),
@@ -165,7 +182,8 @@ class ProjectRepository implements IProjectRepository
 
             return response()->json([
                 'status' => 1,
-                'message' => __('site.The operation has been successfully')
+                'message' => __('site.The operation has been successfully'),
+                'data' => new ProjectResource($project)
             ], Response::HTTP_OK);
         }
 
@@ -191,5 +209,157 @@ class ProjectRepository implements IProjectRepository
         }
 
         throw new \Exception();
+    }
+
+    /**
+     * Get featured projects by type with configurable limits.
+     * @return array{sender: Collection, passenger: Collection}
+     */
+    public function getFeaturedProjects(): array
+    {
+        $today = now()->startOfDay();
+
+        $senderProjects = Project::query()
+            ->with([
+                'oCountry',
+                'oProvince',
+                'oCity',
+                'dCountry',
+                'dProvince',
+                'dCity',
+                'categories'
+            ])
+            ->where('type', 'sender')
+            ->where('status', 1)
+            ->where('send_date', '>=', $today)
+            ->orderBy('priority', 'desc')
+            ->limit(config('project.senderLimit'))
+            ->get()
+            ->map(fn ($project) => new ProjectResource($project));
+
+        $passengerProjects = Project::query()
+            ->with([
+                'oCountry',
+                'oProvince',
+                'oCity',
+                'dCountry',
+                'dProvince',
+                'dCity',
+                'categories'
+            ])
+            ->where('type', 'passenger')
+            ->where('status', 1)
+            ->where('send_date', '>=', $today)
+            ->orderBy('priority', 'desc')
+            ->limit(config('project.passengerLimit'))
+            ->get()
+            ->map(fn ($project) => new ProjectResource($project));
+
+        return [
+            'sender' => $senderProjects,
+            'passenger' => $passengerProjects
+        ];
+    }
+
+    /**
+     * Search projects with filters and pagination.
+     * @param SearchProjectRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function search(SearchProjectRequest $request): LengthAwarePaginator
+    {
+        $today = now()->startOfDay();
+
+        // Generate a unique cache key based on all search parameters
+        $cacheKey = 'project_search_' . md5(json_encode([
+            'type' => $request->input('type'),
+            'o_city_id' => $request->input('o_city_id'),
+            'd_city_id' => $request->input('d_city_id'),
+            'o_province_id' => $request->input('o_province_id'),
+            'd_province_id' => $request->input('d_province_id'),
+            'o_country_id' => $request->input('o_country_id'),
+            'd_country_id' => $request->input('d_country_id'),
+            'send_date' => $request->input('send_date'),
+            'receive_date' => $request->input('receive_date'),
+            'path_type' => $request->input('path_type'),
+            'categories' => $request->input('categories'),
+            'min_weight' => $request->input('min_weight'),
+            'max_weight' => $request->input('max_weight'),
+            'page' => $request->input('page', 1),
+        ]));
+
+        // Try to get results from cache first
+        // return cache()->remember($cacheKey, now()->addMinutes(5), function () use ($request, $today) {
+            $query = Project::query()
+                ->with([
+                    'oCountry',
+                    'oProvince',
+                    'oCity',
+                    'dCountry',
+                    'dProvince',
+                    'dCity',
+                    'categories'
+                ])
+                ->where('status', 1)
+                ->where('send_date', '>=', $today)
+                ->where('type', $request->input('type'))
+                ->orderBy('priority', 'desc');
+
+            // Apply filters
+            if ($request->has('o_city_id')) {
+                $query->where('o_city_id', $request->input('o_city_id'));
+            }
+
+            if ($request->has('d_city_id')) {
+                $query->where('d_city_id', $request->input('d_city_id'));
+            }
+
+            if ($request->has('o_province_id')) {
+                $query->where('o_province_id', $request->input('o_province_id'));
+            }
+
+            if ($request->has('d_province_id')) {
+                $query->where('d_province_id', $request->input('d_province_id'));
+            }
+
+            if ($request->has('o_country_id')) {
+                $query->where('o_country_id', $request->input('o_country_id'));
+            }
+
+            if ($request->has('d_country_id')) {
+                $query->where('d_country_id', $request->input('d_country_id'));
+            }
+
+            if ($request->has('send_date')) {
+                $query->where('send_date', '=', $request->input('send_date'));
+            }
+
+            if ($request->has('receive_date')) {
+                $query->where('receive_date', '>=', $request->input('receive_date'));
+            }
+
+            if ($request->has('path_type')) {
+                $query->where('path_type', $request->input('path_type'));
+            }
+
+            // Apply weight range filter
+            if ($request->has('min_weight')) {
+                $query->where('weight', '>=', $request->input('min_weight'));
+            }
+
+            if ($request->has('max_weight')) {
+                $query->where('weight', '<=', $request->input('max_weight'));
+            }
+
+            if ($request->has('categories')) {
+                $query->whereHas('categories', function ($q) use ($request) {
+                    $q->whereIn('project_categories.id', $request->input('categories'));
+                });
+            }
+
+            $projects = $query->paginate(9);
+
+            return $projects->through(fn ($project) => new ProjectResource($project));
+        // });
     }
 }

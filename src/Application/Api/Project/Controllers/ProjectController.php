@@ -10,6 +10,8 @@ use Domain\Project\models\ProjectCategory;
 use Domain\Project\Repositories\Contracts\IProjectRepository;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Application\Api\Project\Requests\SearchProjectRequest;
 
 
 class ProjectController extends Controller
@@ -81,5 +83,28 @@ class ProjectController extends Controller
     public function destroy(Project $project) :JsonResponse
     {
         return $this->repository->destroy($project);
+    }
+
+    /**
+     * Get featured projects by type.
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function featured(): JsonResponse
+    {
+        return response()->json([
+            'status' => 1,
+            'data' => $this->repository->getFeaturedProjects()
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * Search projects with filters.
+     * @param SearchProjectRequest $request
+     * @return JsonResponse
+     */
+    public function search(SearchProjectRequest $request): JsonResponse
+    {
+        return response()->json($this->repository->search($request), Response::HTTP_OK);
     }
 }

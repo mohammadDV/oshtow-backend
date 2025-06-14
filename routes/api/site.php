@@ -26,4 +26,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('ticket-subjects', TicketSubjectController::class);
 });
 
-
+// Projects
+Route::prefix('projects')->group(function () {
+    Route::get('featured', [ProjectController::class, 'featured']);
+    Route::get('search', [ProjectController::class, 'search']);
+});

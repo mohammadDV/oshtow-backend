@@ -14,7 +14,35 @@ class Project extends Model
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'type',
+        'path_type',
+        'amount',
+        'weight',
+        'status',
+        'vip',
+        'priority',
+        'send_date',
+        'receive_date',
+        'o_country_id',
+        'o_province_id',
+        'o_city_id',
+        'd_country_id',
+        'd_province_id',
+        'd_city_id',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'send_date' => 'date',
+        'receive_date' => 'date',
+        'amount' => 'integer',
+        'weight' => 'integer',
+        'status' => 'integer',
+        'vip' => 'boolean',
+        'priority' => 'integer',
+    ];
 
     public function categories()
     {

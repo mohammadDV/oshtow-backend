@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Api\Address\Resources;
+namespace Application\Api\Address\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +20,7 @@ class CountryResource extends JsonResource
             'image' => $this->image,
             'status' => $this->status,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            // 'updated_at' => $this->updated_at,
         ];
     }
 }

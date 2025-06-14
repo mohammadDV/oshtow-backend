@@ -3,6 +3,8 @@
 namespace Domain\Project\Repositories\Contracts;
 
 use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Project\Requests\SearchProjectRequest;
+use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
 use Domain\Project\models\Project;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,9 +32,9 @@ interface IProjectRepository
     /**
      * Get the project.
      * @param Project $project
-     * @return Project
+     * @return ProjectResource
      */
-    public function show(Project $project) :Project;
+    public function show(Project $project) :ProjectResource;
 
     /**
      * Store the project.
@@ -57,4 +59,17 @@ interface IProjectRepository
      * @return JsonResponse
      */
     public function destroy(Project $project) :JsonResponse;
+
+    /**
+     * Get featured projects by type with configurable limits.
+     * @return array{sender: Collection, passenger: Collection}
+     */
+    public function getFeaturedProjects(): array;
+
+    /**
+     * Search projects with filters and pagination.
+     * @param SearchProjectRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function search(SearchProjectRequest $request): LengthAwarePaginator;
 }
