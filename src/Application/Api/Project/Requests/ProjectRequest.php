@@ -3,6 +3,7 @@
 namespace Application\Api\Project\Requests;
 
 use Core\Http\Requests\BaseRequest;
+use Illuminate\Validation\Rule;
 
 class ProjectRequest extends BaseRequest
 {
@@ -23,11 +24,32 @@ class ProjectRequest extends BaseRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:2000'],
             'type' => ['required', 'string', 'in:passenger,sender'],
             'path_type' => ['nullable', 'string', 'in:land,sea,air'],
             'amount' => ['required', 'integer', 'min:0'],
             'weight' => ['required', 'integer', 'min:0'],
             'status' => ['nullable', 'integer', 'in:0,1'],
+            'vip' => ['nullable', 'integer', 'in:0,1'],
+            'priority' => ['nullable', 'integer', 'max:101'],
+            'send_date' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+                Rule::when(function ($input) {
+                    return $input->has('receive_date');
+                }, ['before_or_equal:receive_date'])
+            ],
+            'receive_date' => [
+                Rule::when(function ($input) {
+                    return $input->type === 'sender';
+                }, [
+                    'required',
+                    'date',
+                    'after_or_equal:send_date',
+                    'after_or_equal:today'
+                ])
+            ],
             'o_country_id' => ['required', 'exists:countries,id'],
             'o_province_id' => ['required', 'exists:provinces,id'],
             'o_city_id' => ['required', 'exists:cities,id'],

@@ -20,6 +20,11 @@ return new class extends Migration
             $table->unsignedBigInteger('amount');
             $table->unsignedBigInteger('weight');
             $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('vip')->default(0);
+            $table->tinyInteger('priority')->default(0);
+            $table->date('send_date')->nullable();
+            $table->date('receive_date')->nullable();
+            $table->text('description');
             $table->bigInteger('o_country_id')->unsigned()->index();
             $table->foreign('o_country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->bigInteger('o_province_id')->unsigned()->index();
