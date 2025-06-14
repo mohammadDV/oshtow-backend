@@ -26,22 +26,4 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('ticket-subjects', TicketSubjectController::class);
 });
 
- // tickets
-//  Route::prefix('tickets')->group(function () {
-//     Route::get('/', [TicketController::class, 'indexPaginate'])->name('profile.ticket.index')->middleware('permission:ticket_show');
-//     Route::get('/{ticket}', [TicketController::class, 'show'])->name('profile.ticket.show')->middleware('permission:ticket_show');
-//     Route::post('/', [TicketController::class, 'store'])->name('profile.ticket.store')->middleware('permission:ticket_store');
-//     Route::post('/{ticket}', [TicketController::class, 'storeMessage'])->name('profile.ticket.store.message')->middleware('permission:ticket_store');
-//     Route::post('/status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status')->middleware('permission:ticket_store');
-// });
-
-// ticket subjects
-// Route::prefix('ticket-subjects')->group(function () {
-//     Route::get('/', [TicketSubjectController::class, 'indexPaginate'])->name('profile.ticket-subject.index')->middleware('permission:subject_show');
-//     Route::get('/{ticketSubject}', [TicketSubjectController::class, 'show'])->name('profile.ticket-subject.show')->middleware('permission:subject_show');
-//     Route::post('/', [TicketSubjectController::class, 'store'])->name('profile.ticket-subject.store')->middleware('permission:subject_store');
-//     Route::post('/{ticketSubject}', [TicketSubjectController::class, 'update'])->name('profile.ticket-subject.update')->middleware('permission:subject_update');
-//     Route::delete('/{ticketSubject}', [TicketSubjectController::class, 'destroy'])->name('profile.ticket-subject.delete')->middleware('permission:subject_delete');
-// });
-
 

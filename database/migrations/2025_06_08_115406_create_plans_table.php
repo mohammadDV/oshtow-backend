@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('priod', ['monthly', 'yearly']);
             $table->enum('type', ['passenger', 'sender']);
             $table->tinyInteger('status')->default(0);
-            $table->unsignedBigInteger('amount');
+            $table->decimal('amount', 15, 2);
             $table->unsignedInteger('period_count')->default(1);
             $table->unsignedInteger('request_count')->default(0);
             $table->unsignedInteger('project_count')->default(0);
