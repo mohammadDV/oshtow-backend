@@ -5,10 +5,9 @@ namespace Application\Api\Wallet\Controllers;
 use App\Domain\Transaction\Repositories\ITransactionRepository;
 use App\Domain\Wallet\Repositories\IWalletRepository;
 use App\Domain\Payment\Repositories\IPaymentRepository;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Wallet\TopUpRequest;
-use App\Http\Requests\Wallet\TransferRequest;
+
 use App\Models\User;
+use Core\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

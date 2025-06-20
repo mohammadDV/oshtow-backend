@@ -1,9 +1,9 @@
 <?php
 
-namespace Src\Domain\Wallet\Models;
+namespace Domain\Wallet\Models;
 
-use Src\Domain\Payment\Models\PaymentHold;
-use Src\Domain\Transaction\Models\Transaction;
+use Domain\Payment\Models\PaymentHold;
+use Domain\Transaction\Models\Transaction;
 use Src\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Wallet extends Model
 {
+
+    const IRR = 'IRR';
+
     protected $fillable = [
         'user_id',
         'balance',

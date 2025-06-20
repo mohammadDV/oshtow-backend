@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Domain\Payment\Models;
+namespace Domain\Payment\Models;
 
-use Src\Domain\Transaction\Models\Transaction;
+use Domain\Transaction\Models\Transaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

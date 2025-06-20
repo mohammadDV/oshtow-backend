@@ -6,7 +6,7 @@ use Application\Api\Project\Requests\ProjectRequest;
 use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
-use Domain\Project\models\Project;
+use Domain\Project\Models\Project;
 use Domain\Project\Repositories\Contracts\IProjectRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,6 +30,7 @@ class ProjectRepository implements IProjectRepository
     public function index(TableRequest $request) :LengthAwarePaginator
     {
         $search = $request->get('query');
+        $status = $request->get('status');
         $projects = Project::query()
             ->with([
                 'oCountry',
@@ -45,6 +46,9 @@ class ProjectRepository implements IProjectRepository
             })
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('title', 'like', '%' . $search . '%');
+            })
+            ->when(!empty($status), function ($query) use ($status) {
+                return $query->where('status', $status);
             })
             ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
             ->paginate($request->get('rowsPerPage', 25));
@@ -68,7 +72,8 @@ class ProjectRepository implements IProjectRepository
                 'dCity',
                 'categories'
             ])
-            ->where('status', 1)
+            ->where('active', 1)
+            ->where('status', Project::PENDING)
             ->get();
 
         return $projects->map(fn ($project) => new ProjectResource($project));
@@ -105,15 +110,17 @@ class ProjectRepository implements IProjectRepository
      */
     public function store(ProjectRequest $request) :JsonResponse
     {
-        $this->checkLevelAccess();
 
         $project = Project::create([
             'title' => $request->input('title'),
             'type' => $request->input('type'),
             'path_type' => $request->input('path_type'),
             'amount' => $request->input('amount'),
+            'description' => $request->input('description'),
+            'address' => $request->input('address'),
             'weight' => $request->input('weight'),
-            'status' => $request->input('status'),
+            'active' => 1,
+            'status' => Project::PENDING,
             'vip' => $request->input('vip'),
             'priority' => $request->input('priority'),
             'send_date' => $request->input('send_date'),
@@ -159,7 +166,10 @@ class ProjectRepository implements IProjectRepository
             'type' => $request->input('type'),
             'path_type' => $request->input('path_type'),
             'amount' => $request->input('amount'),
+            'description' => $request->input('description'),
+            'address' => $request->input('address'),
             'weight' => $request->input('weight'),
+            'active' => $request->input('active'),
             'status' => $request->input('status'),
             'vip' => $request->input('vip'),
             'priority' => $request->input('priority'),
@@ -229,8 +239,9 @@ class ProjectRepository implements IProjectRepository
                 'dCity',
                 'categories'
             ])
-            ->where('type', 'sender')
-            ->where('status', 1)
+            ->where('type', Project::SENDER)
+            ->where('active', 1)
+            ->where('status', Project::PENDING)
             ->where('send_date', '>=', $today)
             ->orderBy('priority', 'desc')
             ->limit(config('project.senderLimit'))
@@ -247,8 +258,9 @@ class ProjectRepository implements IProjectRepository
                 'dCity',
                 'categories'
             ])
-            ->where('type', 'passenger')
-            ->where('status', 1)
+            ->where('type', Project::PASSENGER)
+            ->where('active', 1)
+            ->where('status', Project::PENDING)
             ->where('send_date', '>=', $today)
             ->orderBy('priority', 'desc')
             ->limit(config('project.passengerLimit'))
@@ -300,7 +312,8 @@ class ProjectRepository implements IProjectRepository
                     'dCity',
                     'categories'
                 ])
-                ->where('status', 1)
+                ->where('active', 1)
+                ->where('status', Project::PENDING)
                 ->where('send_date', '>=', $today)
                 ->where('type', $request->input('type'))
                 ->orderBy('priority', 'desc');

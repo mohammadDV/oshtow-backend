@@ -11,16 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_secure', function (Blueprint $table) {
+        Schema::create('payment_secures', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('wallet_id')->constrained()->onDelete('cascade');
-            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
+            $table->integer('model_id')->nullable();
+            $table->string('model_type')->nullable();
+            $table->bigInteger("wallet_id")->unsigned()->index();
+            $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->bigInteger("claim_id")->unsigned()->index();
+            $table->foreign('claim_id')->references('id')->on('claims')->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->string('currency', 3)->default('IRR');
             $table->enum('status', ['pending', 'released', 'cancelled']); // pending, released, cancelled
             $table->timestamp('expires_at')->nullable();
             $table->text('description')->nullable();
-            $table->json('metadata')->nullable();
+            $table->bigInteger("user_id")->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
 
             $table->index(['wallet_id', 'status']);
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_secure');
+        Schema::dropIfExists('payment_secures');
     }
 };

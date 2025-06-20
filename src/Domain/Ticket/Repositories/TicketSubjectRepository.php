@@ -5,7 +5,7 @@ namespace Domain\Ticket\Repositories;
 use Application\Api\Ticket\Requests\SubjectRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
-use Domain\Ticket\models\TicketSubject;
+use Domain\Ticket\Models\TicketSubject;
 use Domain\Ticket\Repositories\Contracts\ITicketSubjectRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;

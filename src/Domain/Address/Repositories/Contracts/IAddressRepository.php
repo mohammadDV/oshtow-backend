@@ -3,8 +3,8 @@
 namespace Domain\Address\Repositories\Contracts;
 
 use Core\Http\Requests\TableRequest;
-use Domain\Address\models\Country;
-use Domain\Address\models\Province;
+use Domain\Address\Models\Country;
+use Domain\Address\Models\Province;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -49,7 +49,7 @@ interface IAddressRepository
      * @return LengthAwarePaginator
      */
     public function getCitiesPaginate(Province $province, TableRequest $request) :LengthAwarePaginator;
-    
+
     /**
      * Get the cities.
      * @param Province $province

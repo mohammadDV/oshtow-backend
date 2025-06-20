@@ -1,11 +1,14 @@
 <?php
 
 use Application\Api\Address\Controllers\AddressController;
+use Application\Api\Claim\Controllers\ClaimController;
+use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
 use Application\Api\Project\Controllers\ProjectController;
 use Application\Api\Ticket\Controllers\TicketController;
 use Application\Api\Ticket\Controllers\TicketSubjectController;
+use Application\Api\User\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/countries', [AddressController::class, 'activeCountries'])->name('active-countries');
@@ -22,8 +25,25 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('tickets', TicketController::class);
-    Route::post('/ticket-status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status')->middleware('permission:ticket_store');
+    Route::post('/ticket-status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status');
     Route::resource('ticket-subjects', TicketSubjectController::class);
+
+
+    // activity count
+    Route::get('/activity-count', [UserController::class, 'getActivityCount'])->name('profile.activity.count');
+
+
+});
+
+Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() {
+    Route::post('/claims', [ClaimController::class, 'store'])->name('claim.store');
+    Route::patch('/claims/{claim}', [ClaimController::class, 'update'])->name('claim.update');
+    Route::get('/claims/project/{project}', [ClaimController::class, 'getClaimsPerProject'])->name('claim.index');
+    Route::get('/claims/{claim}', [ClaimController::class, 'show'])->name('claim.show');
+    Route::get('/claims/{claim}/approve', [ClaimController::class, 'approveClaim'])->name('claim.approve');
+    Route::get('/claims/{claim}/paid', [ClaimController::class, 'paidClaim'])->name('claim.paid');
+    Route::post('/claims/{claim}/inprogress', [ClaimController::class, 'inprogressClaim'])->name('claim.inprogress');
+    Route::post('/claims/{claim}/delivered', [ClaimController::class, 'deliveredClaim'])->name('claim.delivered');
 });
 
 // Projects

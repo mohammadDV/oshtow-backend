@@ -1,9 +1,9 @@
 <?php
 
-namespace Src\Domain\Payment\Repositories;
+namespace Domain\Payment\Repositories;
 
-use Src\Domain\Payment\Models\BankTransaction;
-use Src\Domain\Payment\Models\PaymentHold;
+use Domain\Payment\Models\BankTransaction;
+use Domain\Payment\Models\PaymentHold;
 use Illuminate\Support\Collection;
 
 interface IPaymentRepository

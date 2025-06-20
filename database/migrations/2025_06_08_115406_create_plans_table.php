@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('priod', ['monthly', 'yearly']);
-            $table->enum('type', ['passenger', 'sender']);
+            $table->enum('priod', ['monthly', 'yearly'])->default('monthly');
             $table->tinyInteger('status')->default(0);
             $table->decimal('amount', 15, 2);
             $table->unsignedInteger('period_count')->default(1);
-            $table->unsignedInteger('request_count')->default(0);
+            $table->unsignedInteger('claim_count')->default(0);
             $table->unsignedInteger('project_count')->default(0);
             $table->bigInteger("user_id")->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

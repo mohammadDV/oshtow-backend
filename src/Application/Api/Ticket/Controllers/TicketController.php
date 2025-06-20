@@ -7,7 +7,7 @@ use Application\Api\Ticket\Requests\TicketRequest;
 use Application\Api\Ticket\Requests\TicketStatusRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
-use Domain\Ticket\models\Ticket;
+use Domain\Ticket\Models\Ticket;
 use Domain\Ticket\Repositories\Contracts\ITicketRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

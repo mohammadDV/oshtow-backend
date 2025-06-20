@@ -17,14 +17,15 @@ return new class extends Migration
             $table->enum('type', ['passenger', 'sender']);
             $table->enum('path_type', ['land', 'sea', 'air'])->nullable();
             $table->string('image', 2048)->nullable();
-            $table->unsignedBigInteger('amount');
+            $table->decimal('amount', 15, 2);
             $table->unsignedBigInteger('weight');
-            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('active')->default(0);
+            $table->enum('status',['pending', 'in_progress', 'completed', 'canceled', 'failed'])->default('pending'); // pending, completed, failed
             $table->tinyInteger('vip')->default(0);
             $table->tinyInteger('priority')->default(0);
             $table->date('send_date')->nullable();
             $table->date('receive_date')->nullable();
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->bigInteger('o_country_id')->unsigned()->index();
             $table->foreign('o_country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->bigInteger('o_province_id')->unsigned()->index();
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->foreign('d_province_id')->references('id')->on('provinces')->onDelete('cascade');
             $table->bigInteger('d_city_id')->unsigned()->index();
             $table->foreign('d_city_id')->references('id')->on('cities')->onDelete('cascade');
+            $table->text('address')->nullable();
             $table->bigInteger("user_id")->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

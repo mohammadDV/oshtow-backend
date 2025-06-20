@@ -5,7 +5,7 @@ namespace Application\Api\Plan\Controllers;
 use Application\Api\Plan\Requests\PlanRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
-use Domain\Plan\models\Plan;
+use Domain\Plan\Models\Plan;
 use Domain\Plan\Repositories\Contracts\IPlanRepository;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;

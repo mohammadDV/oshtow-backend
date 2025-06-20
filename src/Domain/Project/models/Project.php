@@ -1,10 +1,10 @@
 <?php
 
-namespace Domain\Project\models;
+namespace Domain\Project\Models;
 
-use Domain\Address\models\City;
-use Domain\Address\models\Country;
-use Domain\Address\models\Province;
+use Domain\Address\Models\City;
+use Domain\Address\Models\Country;
+use Domain\Address\Models\Province;
 use Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,12 +14,21 @@ class Project extends Model
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory;
 
+    const PASSENGER = "passenger";
+    const SENDER = "sender";
+    const PENDING = "pending";
+    const INPROGRESS = "in_progress";
+    const COMPLETED = "completed";
+    const CANCELLED = "canceled";
+    const FAILED = "failed";
+
     protected $fillable = [
         'title',
         'type',
         'path_type',
         'amount',
         'weight',
+        'active',
         'status',
         'vip',
         'priority',
@@ -31,6 +40,8 @@ class Project extends Model
         'd_country_id',
         'd_province_id',
         'd_city_id',
+        'address',
+        'description',
         'user_id',
     ];
 
@@ -39,7 +50,7 @@ class Project extends Model
         'receive_date' => 'date',
         'amount' => 'integer',
         'weight' => 'integer',
-        'status' => 'integer',
+        'active' => 'integer',
         'vip' => 'boolean',
         'priority' => 'integer',
     ];

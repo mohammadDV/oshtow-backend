@@ -4,7 +4,7 @@ namespace Domain\Ticket\Repositories\Contracts;
 
 use Application\Api\Ticket\Requests\SubjectRequest;
 use Core\Http\Requests\TableRequest;
-use Domain\Ticket\models\TicketSubject;
+use Domain\Ticket\Models\TicketSubject;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;

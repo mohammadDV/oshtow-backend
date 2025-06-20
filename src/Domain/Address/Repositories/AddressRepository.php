@@ -3,9 +3,9 @@
 namespace Domain\Address\Repositories;
 
 use Core\Http\Requests\TableRequest;
-use Domain\Address\models\City;
-use Domain\Address\models\Country;
-use Domain\Address\models\Province;
+use Domain\Address\Models\City;
+use Domain\Address\Models\Country;
+use Domain\Address\Models\Province;
 use Domain\Address\Repositories\Contracts\IAddressRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,7 +15,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  */
 class AddressRepository implements IAddressRepository
 {
-    
+
     /**
      * Get the countrys pagination.
      * @param TableRequest $request

@@ -1,0 +1,19 @@
+<?php
+return array(
+    'The operation has been successfully' => 'The operation has been successfully completed.',
+    'Active' => 'Active',
+    'Inactive' => 'Inactive',
+    'Invalid request' => 'Invalid request',
+    'Invalid Nickname' => 'Invalid Nickname',
+    'Invalid recaptcha' => 'Invalid recaptcha',
+    'These credentials do not match our records.' => 'These credentials do not match our records.',
+    'You have already created a claim for this project' => 'You have already created a claim for this project',
+    'You have already approved a claim for this project' => 'You have already approved a claim for this project',
+    'The confirmation code is incorrect.' => 'The confirmation code is incorrect.',
+    'You are not allowed to resend messages. Please try again in 5 minutes.' => 'You are not allowed to resend messages. Please try again in 5 minutes.',
+    'You are not allowed to send new tickets because you have 3 active tickets.' => 'You are not allowed to send new tickets because you have 3 active tickets.',
+    'You are not allowed to resend messages. Please wait until the operator answers.' => 'You are not allowed to resend messages. Please wait until the operator answers.',
+    ':days days remain to expire your subscription' => ':days days remain to expire your subscription',
+    'Your subscription has expired' => 'Your subscription has expired',
+    'No active subscription found' => 'No active subscription found',
+);

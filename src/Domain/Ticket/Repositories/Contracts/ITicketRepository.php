@@ -5,7 +5,7 @@ namespace Domain\Ticket\Repositories\Contracts;
 use Application\Api\Ticket\Requests\TicketRequest;
 use Application\Api\Ticket\Requests\TicketStatusRequest;
 use Core\Http\Requests\TableRequest;
-use Domain\Ticket\models\Ticket;
+use Domain\Ticket\Models\Ticket;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
