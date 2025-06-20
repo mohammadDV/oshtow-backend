@@ -5,7 +5,7 @@ namespace Application\Api\Project\Controllers;
 use Application\Api\Project\Requests\ProjectCategoryRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
-use Domain\Project\models\ProjectCategory;
+use Domain\Project\Models\ProjectCategory;
 use Domain\Project\Repositories\Contracts\IProjectCategoryRepository;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;

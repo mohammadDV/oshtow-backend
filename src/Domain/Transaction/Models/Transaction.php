@@ -1,10 +1,10 @@
 <?php
 
-namespace Src\Domain\Transaction\Models;
+namespace Domain\Transaction\Models;
 
-use Src\Domain\Payment\Models\BankTransaction;
-use Src\Domain\Payment\Models\PaymentHold;
-use Src\Domain\Wallet\Models\Wallet;
+use Domain\Payment\Models\BankTransaction;
+use Domain\Payment\Models\PaymentHold;
+use Domain\Wallet\Models\Wallet;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;

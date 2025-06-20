@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Domain\Wallet\Repositories;
+namespace Domain\Wallet\Repositories;
 
-use Src\Domain\Wallet\Models\Wallet;
+use Domain\Wallet\Models\Wallet;
 
 interface IWalletRepository
 {

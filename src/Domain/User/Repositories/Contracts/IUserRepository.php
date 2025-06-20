@@ -2,15 +2,24 @@
 
 namespace Domain\User\Repositories\Contracts;
 
+use Illuminate\Http\JsonResponse;
+
 /**
  * Interface IUserRepository.
  */
 interface IUserRepository
 {
     /**
-     * Get the seller based on the given identifier.
+     * Get the users
+     *
+     * @return JsonResponse The seller object
+     */
+    public function index() :JsonResponse;
+
+    /**
+     * Get Activity Count about the user
      *
      * @return string The seller object
      */
-    public function index() :string;
+    public function getActivityCount() :JsonResponse;
 }

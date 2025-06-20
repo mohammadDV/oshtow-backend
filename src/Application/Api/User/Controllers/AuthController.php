@@ -12,6 +12,7 @@ use Google_Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Domain\Wallet\Models\Wallet;
 
 class AuthController extends Controller
 {
@@ -73,8 +74,8 @@ class AuthController extends Controller
                     'first_name' => !empty($payload['given_name']) ? $payload['given_name'] : $payload['name'],
                     'last_name' => !empty($payload['family_name']) ? $payload['family_name'] : '',
                     'nickname' => $nickname,
-                    'role_id' => 4,
-                    'status' => 1,
+                    'role_id' => 2,
+                    'status' => 0,
                     'email' => $payload['email'],
                     'google_id' => $payload['sub'],
                     'password' => bcrypt($nickname . '!@#' . rand(1111, 9999)),
@@ -86,12 +87,21 @@ class AuthController extends Controller
 
                 $token = $user->createToken('myapptokens')->plainTextToken;
 
+                // create wallet for the user
+                Wallet::create([
+                    'user_id' => $user->id,
+                    'balance' => 0,
+                    'currency' => Wallet::IRR,
+                    'status' => 1
+                ]);
+
             }
 
 
             return response([
                 'token' => $token,
-                'status' => 1
+                'status' => 1,
+                'data' => $user
             ], Response::HTTP_ACCEPTED);
 
 
@@ -127,7 +137,7 @@ class AuthController extends Controller
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'nickname' => $request->nickname,
-            'role_id' => 4,
+            'role_id' => 2,
             'status' => 1,
             'email' => $request->email,
             'mobile' => $request->mobile,
@@ -139,6 +149,14 @@ class AuthController extends Controller
         $user->assignRole(['user']);
 
         $token = $user->createToken('myapptokens')->plainTextToken;
+
+         // create wallet for the user
+         Wallet::create([
+            'user_id' => $user->id,
+            'balance' => 0,
+            'currency' => Wallet::IRR,
+            'status' => 1
+        ]);
 
         // $this->service->sendNotification(
         //     config('telegram.chat_id'),

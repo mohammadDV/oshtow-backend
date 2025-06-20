@@ -24,7 +24,8 @@ class ProjectRequest extends BaseRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:2000'],
+            'address' => ['required', 'string', 'max:500'],
+            'description' => ['required', 'string', 'max:2000'],
             'type' => ['required', 'string', 'in:passenger,sender'],
             'path_type' => ['nullable', 'string', 'in:land,sea,air'],
             'amount' => ['required', 'integer', 'min:0'],

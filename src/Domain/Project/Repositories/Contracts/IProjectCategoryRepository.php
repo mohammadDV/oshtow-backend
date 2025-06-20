@@ -4,7 +4,7 @@ namespace Domain\Project\Repositories\Contracts;
 
 use Application\Api\Project\Requests\ProjectCategoryRequest;
 use Core\Http\Requests\TableRequest;
-use Domain\Project\models\ProjectCategory;
+use Domain\Project\Models\ProjectCategory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -3,6 +3,8 @@
 namespace Core\Http\traits;
 
 use App\Services\Image\ImageService;
+use Carbon\Carbon;
+use Domain\Plan\Models\Subscription;
 use Domain\User\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -19,6 +21,22 @@ trait GlobalFunc
         if (!$condition && Auth::user()->level != 3) {
             throw New \Exception('Unauthorized', 403);
         }
+    }
+
+    /**
+     * Expire the user's subscriprions
+     * @return void
+     */
+    public function expireSubscriprions() {
+
+        Subscription::query()
+            ->where('user_id', Auth::user()->id)
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '>', Carbon::now())
+            ->update([
+                'active' => 0,
+                'ends_at' => Carbon::now()
+            ]);
     }
 
     /**

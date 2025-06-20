@@ -5,7 +5,7 @@ namespace Domain\Project\Repositories;
 use Application\Api\Project\Requests\ProjectCategoryRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
-use Domain\Project\models\ProjectCategory;
+use Domain\Project\Models\ProjectCategory;
 use Domain\Project\Repositories\Contracts\IProjectCategoryRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;

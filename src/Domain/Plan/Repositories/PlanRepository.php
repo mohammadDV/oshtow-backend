@@ -5,7 +5,7 @@ namespace Domain\Plan\Repositories;
 use Application\Api\Plan\Requests\PlanRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
-use Domain\Plan\models\Plan;
+use Domain\Plan\Models\Plan;
 use Domain\Plan\Repositories\Contracts\IPlanRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -79,7 +79,7 @@ class PlanRepository implements IPlanRepository
             'status' => $request->input('status'),
             'amount' => $request->input('amount'),
             'period_count' => $request->input('period_count'),
-            'request_count' => $request->input('request_count'),
+            'claim_count' => $request->input('claim_count'),
             'project_count' => $request->input('project_count'),
             'user_id' => Auth::user()->id,
         ]);
@@ -112,7 +112,7 @@ class PlanRepository implements IPlanRepository
             'status' => $request->input('status'),
             'amount' => $request->input('amount'),
             'period_count' => $request->input('period_count'),
-            'request_count' => $request->input('request_count'),
+            'claim_count' => $request->input('claim_count'),
             'project_count' => $request->input('project_count'),
             'user_id' => Auth::user()->id,
         ]);

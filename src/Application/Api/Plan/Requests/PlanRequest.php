@@ -27,7 +27,7 @@ class PlanRequest extends BaseRequest
             'status'         => ['nullable', 'integer', 'in:0,1'],
             'amount'         => ['required', 'numeric', 'min:0', 'max:999999999999'],
             'period_count'   => ['required', 'integer', 'min:1'],
-            'request_count'  => ['required', 'integer', 'min:0', 'max:1000'],
+            'claim_count'    => ['required', 'integer', 'min:0', 'max:1000'],
             'project_count'  => ['required', 'integer', 'min:0', 'max:1000'],
         ];
     }

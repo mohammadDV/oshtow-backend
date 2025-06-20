@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('nickname')->nullable();
+            $table->text('address')->nullable();
             $table->foreignId('role_id')->unsigned();
             $table->foreignId('country_id')->nullable();
             $table->foreignId('province_id')->nullable();

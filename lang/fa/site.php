@@ -232,4 +232,11 @@ return array(
     'Foreign leagues' => 'لیگ های خارجی',
     'Domestic leagues' => 'لیگ های داخلی',
     'These credentials do not match our records.' => 'کاربر موردنظر یافت نشد.',
+    'Duplicate request'   => 'درخواست تکراری',
+    'You have already approved a claim for this project' => 'شما قبلا این درخواست را تایید کرده اید.',
+    'You have already created a claim for this project' => 'شما قبلا به این پروژه درخواست ارسال کرده اید.',
+    'The confirmation code is incorrect.' => 'کد تاییدیه اشتباه است. لطفا بعد از یک دقیقه مجددا امتحان کنید.',
+    ':days days remain to expire your subscription' => ':days روز تا انقضای اشتراک شما باقی مانده است',
+    'Your subscription has expired' => 'اشتراک شما منقضی شده است',
+    'No active subscription found' => 'هیچ اشتراک فعالی یافت نشد'
 );

@@ -4,7 +4,7 @@ use Application\Api\User\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Application\Api\Wallet\Controllers\WalletController;
-use Application\Api\Transaction\Controllers\TransactionController;
+use Application\Api\Payment\Controllers\TransactionController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();

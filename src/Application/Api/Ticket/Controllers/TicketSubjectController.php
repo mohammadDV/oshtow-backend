@@ -5,7 +5,7 @@ namespace Application\Api\Ticket\Controllers;
 use Application\Api\Ticket\Requests\SubjectRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
-use Domain\Ticket\models\TicketSubject;
+use Domain\Ticket\Models\TicketSubject;
 use Domain\Ticket\Repositories\Contracts\ITicketSubjectRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;

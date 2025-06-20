@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\Domain\Transaction\Repositories;
+namespace Domain\Transaction\Repositories;
 
-use Src\Domain\Transaction\Models\Transaction;
+use Domain\Transaction\Models\Transaction;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface ITransactionRepository

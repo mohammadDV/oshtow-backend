@@ -16,9 +16,7 @@ return new class extends Migration
             // $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->string('reference')->unique();
             $table->string('payment_method'); // credit_card, bank_transfer, etc.
-            $table->string('status',['pending', 'completed', 'failed']); // pending, completed, failed
-            $table->json('payment_details');
-            $table->json('response')->nullable();
+            $table->enum('status',['pending', 'completed', 'failed']); // pending, completed, failed
             $table->timestamp('processed_at')->nullable();
             $table->timestamps();
         });
