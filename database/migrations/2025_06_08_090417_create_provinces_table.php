@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('image', 2048)->nullable();
             $table->tinyInteger('status')->default(0);
             $table->bigInteger('country_id')->unsigned()->index();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');

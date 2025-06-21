@@ -6,6 +6,7 @@ use Application\Api\Address\Resources\CityResource;
 use Application\Api\Address\Resources\CountryResource;
 use Application\Api\Address\Resources\ProvinceResource;
 use Application\Api\Project\Resources\CategoryResource;
+use Domain\Project\Models\Project;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Morilog\Jalali\Jalalian;
 
@@ -19,6 +20,15 @@ class ProjectResource extends JsonResource
      */
     public function toArray($request)
     {
+        $destinationImage = config('image.default_project_image');
+
+        if ($this->type == Project::PASSENGER) {
+            if ($this->relationLoaded('dProvince') && $this->dProvince?->image) {
+                $destinationImage = $this->dProvince->image;
+            } elseif ($this->relationLoaded('dCountry') && $this->dCountry?->image) {
+                $destinationImage = $this->dCountry->image;
+            }
+        }
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -27,6 +37,7 @@ class ProjectResource extends JsonResource
             'amount' => $this->amount,
             'weight' => $this->weight,
             'status' => $this->status,
+            'destination_image' => $destinationImage,
             'send_date' => $this->send_date ? Jalalian::fromDateTime($this->send_date)->format('d F') : null,
             'receive_date' => $this->receive_date ? Jalalian::fromDateTime($this->receive_date)->format('d F') : null,
             'origin' => [

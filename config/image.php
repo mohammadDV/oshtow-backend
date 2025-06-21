@@ -38,4 +38,5 @@ return [
 
     'default-profile-image' => 'https://cdn.varzeshpod.com/static/profile.png',
     'default-background-image' => 'https://cdn.varzeshpod.com/static/background.png',
+    'default_project_image' => 'https://cdn.varzeshpod.com/static/background.png',
 ];
