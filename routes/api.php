@@ -21,8 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
 
     // Transaction endpoints
-    Route::get('/transactions', [TransactionController::class, 'index']);
-    Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+    // Route::get('/transactions', [TransactionController::class, 'index']);
+    // Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
 });
 
 require __DIR__.'/api/auth.php';
