@@ -111,6 +111,15 @@ class ProjectRepository implements IProjectRepository
     public function store(ProjectRequest $request) :JsonResponse
     {
 
+        $this->expireSubscriprions();
+
+        if (!$this->checkSubscriprion()) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.No active subscription found'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $project = Project::create([
             'title' => $request->input('title'),
             'type' => $request->input('type'),
@@ -159,7 +168,8 @@ class ProjectRepository implements IProjectRepository
      */
     public function update(ProjectRequest $request, Project $project) :JsonResponse
     {
-        $this->checkLevelAccess(Auth::user()->id == $project->user_id);
+        $this->checkLevelAccess(Auth::user()->level == 3);
+        // $this->checkLevelAccess(Auth::user()->id == $project->user_id);
 
         $updated = $project->update([
             'title' => $request->input('title'),

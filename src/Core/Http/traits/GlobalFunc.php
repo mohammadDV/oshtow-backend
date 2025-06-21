@@ -4,10 +4,11 @@ namespace Core\Http\traits;
 
 use App\Services\Image\ImageService;
 use Carbon\Carbon;
+use Domain\Claim\Models\Claim;
 use Domain\Plan\Models\Subscription;
+use Domain\Project\Models\Project;
 use Domain\User\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 trait GlobalFunc
 {
@@ -32,11 +33,40 @@ trait GlobalFunc
         Subscription::query()
             ->where('user_id', Auth::user()->id)
             ->whereNotNull('ends_at')
-            ->where('ends_at', '>', Carbon::now())
+            ->where('ends_at', '<', Carbon::now())
             ->update([
                 'active' => 0,
                 'ends_at' => Carbon::now()
             ]);
+    }
+
+    /**
+     * Expire the user's subscriprions
+     * @return void
+     */
+    public function checkSubscriprion($type = 'project') {
+
+        $activeSubscription = Subscription::query()
+            ->where('user_id', Auth::user()->id)
+            ->where('active', 1)
+            ->where('ends_at', '>', Carbon::now())
+            ->first();
+
+        if ($type == 'project' && $activeSubscription) {
+            return $activeSubscription->project_count > Project::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>', $activeSubscription->created_at)
+                ->count();
+        }
+
+        if ($type != 'project' && $activeSubscription) {
+            return $activeSubscription->claim_count > Claim::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>', $activeSubscription->created_at)
+                ->count();
+        }
+
+        return false;
     }
 
     /**

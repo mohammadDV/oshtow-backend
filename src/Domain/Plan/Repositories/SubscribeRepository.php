@@ -2,18 +2,17 @@
 
 namespace Domain\Plan\Repositories;
 
-use Application\Api\Plan\Requests\PlanRequest;
+use Application\Api\Plan\Resources\SubscriptionResource;
 use Carbon\Carbon;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Models\Subscription;
 use Domain\Plan\Repositories\Contracts\ISubscribeRepository;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Class PlanRepository.
@@ -25,27 +24,42 @@ class SubscribeRepository implements ISubscribeRepository
     /**
      * Get the plans pagination.
      * @param TableRequest $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
-    public function index(TableRequest $request) :LengthAwarePaginator
+    public function index(TableRequest $request) :AnonymousResourceCollection
     {
-        return Subscription::query()
+        $subscriptions = Subscription::query()
+            ->with(['plan', 'user'])
             ->when(Auth::user()->level != 3, function ($query) {
                 return $query->where('user_id', Auth::user()->id);
             })
             ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
             ->paginate($request->get('rowsPerPage', 25));
+
+        return SubscriptionResource::collection($subscriptions);
     }
 
     /**
      * Get the plans.
-     * @return Collection
+     * @return JsonResponse
      */
-    public function activeSubscription() :Collection
+    public function activeSubscription() :JsonResponse
     {
-        return Plan::query()
-            ->where('status', 1)
-            ->get();
+        $subscription = Subscription::query()
+            ->with(['plan', 'user'])
+            ->where('user_id', Auth::user()->id)
+            ->where('active', 1)
+            ->first();
+
+        if (!empty($subscription)) {
+            return response()->json(new SubscriptionResource($subscription), Response::HTTP_OK);
+        }
+
+        return response()->json([
+            'status' => 0,
+            'message' => __('site.No active subscription found')
+        ], Response::HTTP_NOT_FOUND);
+
     }
 
     /**
@@ -74,6 +88,8 @@ class SubscribeRepository implements ISubscribeRepository
             'ends_at' => $endsAt,
             'plan_id' => $plan->id,
             'user_id' => Auth::user()->id,
+            'project_count' => $plan->project_count,
+            'claim_count' => $plan->claim_count,
             'active' => 1
         ]);
 

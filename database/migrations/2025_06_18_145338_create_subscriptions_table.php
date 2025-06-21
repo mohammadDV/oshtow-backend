@@ -18,6 +18,8 @@ return new class extends Migration
             $table->bigInteger("user_id")->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamp('ends_at');
+            $table->unsignedInteger('claim_count')->default(0);
+            $table->unsignedInteger('project_count')->default(0);
             $table->tinyInteger('active')->default(1);
             $table->timestamps();
         });
