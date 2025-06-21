@@ -133,6 +133,11 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): Response
     {
 
+
+        // Add the lite and normal roles
+        // $admin = Role::updateOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        // $user = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
+
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
