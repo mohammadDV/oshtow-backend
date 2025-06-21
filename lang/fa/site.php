@@ -238,5 +238,5 @@ return array(
     'The confirmation code is incorrect.' => 'کد تاییدیه اشتباه است. لطفا بعد از یک دقیقه مجددا امتحان کنید.',
     ':days days remain to expire your subscription' => ':days روز تا انقضای اشتراک شما باقی مانده است',
     'Your subscription has expired' => 'اشتراک شما منقضی شده است',
-    'No active subscription found' => 'هیچ اشتراک فعالی یافت نشد'
+    'No active subscription found' => 'هیچ اشتراک فعالی یافت نشد',
 );

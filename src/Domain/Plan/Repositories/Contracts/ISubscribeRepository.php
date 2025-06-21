@@ -2,11 +2,11 @@
 
 namespace Domain\Plan\Repositories\Contracts;
 
+use Application\Api\Plan\Resources\SubscriptionResource;
 use Core\Http\Requests\TableRequest;
 use Domain\Plan\Models\Plan;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Interface ISubscribeRepository.
@@ -16,15 +16,15 @@ interface ISubscribeRepository
     /**
      * Get the plans pagination.
      * @param TableRequest $request
-     * @return LengthAwarePaginator
+     * @return AnonymousResourceCollection
      */
-    public function index(TableRequest $request) :LengthAwarePaginator;
+    public function index(TableRequest $request) :AnonymousResourceCollection;
 
     /**
      * Get the plans.
-     * @return Collection
+     * @return JsonResponse
      */
-    public function activeSubscription() :Collection;
+    public function activeSubscription() :JsonResponse;
 
     /**
      * Store the subscribtion.

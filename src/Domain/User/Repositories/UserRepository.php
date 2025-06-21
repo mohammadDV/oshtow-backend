@@ -48,6 +48,8 @@ class UserRepository implements IUserRepository
 
         $projectCount = 0;
         $claimCount = 0;
+        $projects = 0;
+        $claims = 0;
         $subscriptionInfo = null;
 
         if ($activeSubscription) {

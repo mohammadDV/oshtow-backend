@@ -71,6 +71,15 @@ class ClaimRepository implements IClaimRepository
      */
     public function store(ClaimRequest $request): JsonResponse
     {
+        $this->expireSubscriprions();
+
+        if (!$this->checkSubscriprion('claim')) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.No active subscription found'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $project = Project::findOrfail($request->input('project_id'));
 
         $exist = Claim::query()
@@ -85,14 +94,11 @@ class ClaimRepository implements IClaimRepository
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        // var_dump(Auth::user()->id != $project->user_id);
-
         $this->checkLevelAccess(
             Auth::user()->id != $project->user_id &&
             $project->status == Project::PENDING &&
             $project->active == 1
         );
-
 
         $address = $request->input('address');
 
@@ -103,8 +109,6 @@ class ClaimRepository implements IClaimRepository
                 $address = Auth::user()->address;
             }
         }
-
-        //todo decrease a claim
 
         $claim = Claim::create([
             'description' => $request->input('description'),

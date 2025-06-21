@@ -4,6 +4,7 @@ use Application\Api\Address\Controllers\AddressController;
 use Application\Api\Claim\Controllers\ClaimController;
 use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
+use Application\Api\Plan\Controllers\SubscribeController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
 use Application\Api\Project\Controllers\ProjectController;
 use Application\Api\Ticket\Controllers\TicketController;
@@ -32,6 +33,10 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     // activity count
     Route::get('/activity-count', [UserController::class, 'getActivityCount'])->name('profile.activity.count');
 
+    // subscribe
+    Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('profile.subscriptions');
+    Route::get('/subscription-active', [SubscribeController::class, 'activeSubscription'])->name('profile.subscriptions.active');
+    Route::get('/subscribe/{plan}', [SubscribeController::class, 'store'])->name('profile.subscribe.plan');
 
 });
 
