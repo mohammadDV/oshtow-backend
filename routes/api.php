@@ -16,9 +16,9 @@ Route::get('/test', [UserController::class, "index"]);
 // Wallet Routes
 Route::middleware('auth:sanctum')->group(function () {
     // Wallet endpoints
-    Route::get('/wallet', [WalletController::class, 'show']);
-    Route::post('/wallet/top-up', [WalletController::class, 'topUp']);
-    Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
+    // Route::get('/wallet', [WalletController::class, 'show']);
+    // Route::post('/wallet/top-up', [WalletController::class, 'topUp']);
+    // Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
 
     // Transaction endpoints
     // Route::get('/transactions', [TransactionController::class, 'index']);

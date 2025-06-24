@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wallet_transactions', function (Blueprint $table) {
+        Schema::create('withdrawal_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('wallet_id')->constrained()->onDelete('cascade');
-            $table->enum('type', ['deposit', 'withdrawal', 'transfer', 'purchase', 'refund']); // deposit, withdrawal, transfer
             $table->decimal('amount', 15, 2);
             $table->string('currency', 3)->default('IRR');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending'); // pending, completed, failed
+            $table->enum('status', ['pending', 'completed', 'reject'])->default('pending'); // pending, completed, failed
             $table->string('reference')->unique(); // Unique transaction reference
+            $table->string('card')->nullable();
+            $table->string('sheba')->nullable();
             $table->text('description')->nullable();
+            $table->string('image', 2048)->nullable();
+            $table->text('reason')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('walet_transactions');
+        Schema::dropIfExists('withdrawal_transactions');
     }
 };

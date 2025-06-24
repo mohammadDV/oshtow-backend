@@ -2,6 +2,7 @@
 
 namespace Application\Api\Plan\Controllers;
 
+use Application\Api\Plan\Requests\StoreSubscribeRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Domain\Plan\Models\Plan;
@@ -42,11 +43,12 @@ class SubscribeController extends Controller
 
     /**
      * Store the subscribtion.
+     * @param StoreSubscribeRequest $request
      * @param Plan $plan
      * @return JsonResponse
      */
-    public function store(Plan $plan) :JsonResponse
+    public function store(StoreSubscribeRequest $request, Plan $plan) :JsonResponse
     {
-        return $this->repository->store($plan);
+        return $this->repository->store($request, $plan);
     }
 }

@@ -16,4 +16,9 @@ return array(
     ':days days remain to expire your subscription' => ':days days remain to expire your subscription',
     'Your subscription has expired' => 'Your subscription has expired',
     'No active subscription found' => 'No active subscription found',
+    'Top-up successful' => 'Top-up successful',
+    'Top-up failed. Please try again.' => 'Top-up failed. Please try again.',
+    'Insufficient funds' => 'Insufficient funds',
+    'Transfer successful' => 'Transfer successful',
+    'Transfer failed. Please try again.' => 'Transfer failed. Please try again.',
 );

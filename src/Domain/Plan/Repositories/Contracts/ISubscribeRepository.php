@@ -2,7 +2,7 @@
 
 namespace Domain\Plan\Repositories\Contracts;
 
-use Application\Api\Plan\Resources\SubscriptionResource;
+use Application\Api\Plan\Requests\StoreSubscribeRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Plan\Models\Plan;
 use Illuminate\Http\JsonResponse;
@@ -28,9 +28,10 @@ interface ISubscribeRepository
 
     /**
      * Store the subscribtion.
+     * @param StoreSubscribeRequest $request
      * @param Plan $plan
      * @return JsonResponse
      * @throws \Exception
      */
-    public function store(Plan $plan) :JsonResponse;
+    public function store(StoreSubscribeRequest $request, Plan $plan) :JsonResponse;
 }

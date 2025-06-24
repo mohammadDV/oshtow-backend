@@ -40,6 +40,7 @@ class User extends Authenticatable
         'is_private',
         'is_report',
         'google_id',
+        'customer_number',
     ];
 
     /**
@@ -52,6 +53,7 @@ class User extends Authenticatable
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'customer_number',
     ];
 
     /**
@@ -112,13 +114,20 @@ class User extends Authenticatable
         return $this->hasMany(Wallet::class);
     }
 
-    public function getFullNameAttribute()
-    {
-        return !empty($this->nickname) ? $this->nickname : "{$this->first_name} {$this->last_name}";
-    }
-
     public function getStatusNameAttribute()
     {
         return $this->status == 1 ? __('site.Active') : __('site.Inactive');
+    }
+
+    public static function generateCustumerNumber(): string
+    {
+        do {
+            $number = random_int(1111111111, 9999999999);
+            $exists = self::query()
+                ->where('customer_number', $number)
+                ->exists();
+        } while ($exists);
+
+        return (string)$number;
     }
 }

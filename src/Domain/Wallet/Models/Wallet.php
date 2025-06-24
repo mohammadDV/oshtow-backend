@@ -2,9 +2,7 @@
 
 namespace Domain\Wallet\Models;
 
-use Domain\Payment\Models\PaymentHold;
-use Domain\Transaction\Models\Transaction;
-use Src\Models\User;
+use Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,12 +16,12 @@ class Wallet extends Model
         'user_id',
         'balance',
         'currency',
-        'is_active',
+        'status',
     ];
 
     protected $casts = [
         'balance' => 'decimal:2',
-        'is_active' => 'boolean',
+        'status' => 'boolean',
     ];
 
     public function user(): BelongsTo
@@ -31,27 +29,13 @@ class Wallet extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function transactions(): HasMany
+    public function walletTransaction(): HasMany
     {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function paymentHolds(): HasMany
-    {
-        return $this->hasMany(PaymentHold::class);
-    }
-
-    public function getAvailableBalanceAttribute(): float
-    {
-        $heldAmount = $this->paymentHolds()
-            ->where('status', 'pending')
-            ->sum('amount');
-
-        return $this->balance - $heldAmount;
+        return $this->hasMany(WalletTransaction::class);
     }
 
     public function canWithdraw(float $amount): bool
     {
-        return $this->available_balance >= $amount;
+        return $this->balance >= $amount;
     }
 }
