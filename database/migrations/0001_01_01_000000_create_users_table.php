@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('nickname')->nullable();
+            $table->string('customer_number');
             $table->text('address')->nullable();
             $table->foreignId('role_id')->unsigned();
             $table->foreignId('country_id')->nullable();
@@ -34,7 +35,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->string('bg_photo_path', 2048)->nullable();
             $table->boolean('is_report')->default(false);

@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Api\Payment\Requests;
+namespace Application\Api\Plan\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TransferRequest extends FormRequest
+class StoreSubscribeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,7 @@ class TransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'numeric', 'min:1'],
-            'recipient_email' => ['required', 'email', 'exists:users,email'],
-            'description' => ['nullable', 'string', 'max:255'],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'recipient_email.exists' => 'The recipient email does not exist in our system.',
+            'payment_method' => ['required', 'string', 'in:wallet,bank'],
         ];
     }
 }

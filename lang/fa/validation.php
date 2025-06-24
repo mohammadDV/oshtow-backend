@@ -188,6 +188,7 @@ return [
         "priod" => "مدت بسته",
         "amount" => "مبلغ",
         "nickname" => "نام مستعار",
+        "customer_number" => "شماره مشتری",
         "name" => "نام",
         "username" => "نام کاربری",
         "email" => "پست الکترونیکی",
