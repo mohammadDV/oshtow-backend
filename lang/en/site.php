@@ -21,4 +21,5 @@ return array(
     'Insufficient funds' => 'Insufficient funds',
     'Transfer successful' => 'Transfer successful',
     'Transfer failed. Please try again.' => 'Transfer failed. Please try again.',
+    'A claim has been created for your project.' => 'A claim has been created for your project.',
 );

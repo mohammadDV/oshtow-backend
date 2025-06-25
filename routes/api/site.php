@@ -1,6 +1,7 @@
 <?php
 
 use Application\Api\Address\Controllers\AddressController;
+use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
 use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
@@ -49,8 +50,24 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     // withdraw
     Route::post('/withdraws', [WithdrawalTransactionController::class, 'store']);
     Route::get('/withdraws', [WithdrawalTransactionController::class, 'index']);
+
+    // chats
+    Route::prefix('chats')->group(function () {
+        Route::post('/', [ChatController::class, 'indexPaginate'])->name('profile.chat.index');
+        Route::get('/{chat}', [ChatController::class, 'show'])->name('profile.chat.show');
+        Route::get('/info/{chat}', [ChatController::class, 'chatInfo'])->name('profile.chat.info');
+        // Route::post('/{user}', [ChatController::class, 'store'])->name('profile.chat.store');
+        Route::post('delete/{chat}', [ChatController::class, 'deleteMessages'])->name('profile.chat.delete.messages');
+        // Route::post('/status/{chat}', [ChatController::class, 'changeStatus'])->name('profile.chat.change-status')->middleware('permission:chat_store');
+    });
+
+
     // just for admin
     Route::patch('/withdraws/{withdrawalTransaction}/status', [WithdrawalTransactionController::class, 'updateStatus']);
+
+
+
+
 
 });
 

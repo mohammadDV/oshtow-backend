@@ -236,6 +236,7 @@ return array(
     'Duplicate request'   => 'درخواست تکراری',
     'You have already approved a claim for this project' => 'شما قبلا این درخواست را تایید کرده اید.',
     'You have already created a claim for this project' => 'شما قبلا به این پروژه درخواست ارسال کرده اید.',
+    'A claim has been created for your project.' => 'درخواست جدیدی برای پروژه شما ثبت شد.',
     'The confirmation code is incorrect.' => 'کد تاییدیه اشتباه است. لطفا بعد از یک دقیقه مجددا امتحان کنید.',
     ':days days remain to expire your subscription' => ':days روز تا انقضای اشتراک شما باقی مانده است',
     'Your subscription has expired' => 'اشتراک شما منقضی شده است',
