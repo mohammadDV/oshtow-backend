@@ -53,6 +53,11 @@ trait GlobalFunc
             ->first();
 
         if ($type == 'project' && $activeSubscription) {
+
+            if ( $activeSubscription->project_count === 0) {
+                return true;
+            }
+
             return $activeSubscription->project_count > Project::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('created_at', '>', $activeSubscription->created_at)
@@ -60,6 +65,11 @@ trait GlobalFunc
         }
 
         if ($type != 'project' && $activeSubscription) {
+
+            if ( $activeSubscription->claim_count === 0) {
+                return true;
+            }
+
             return $activeSubscription->claim_count > Claim::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('created_at', '>', $activeSubscription->created_at)

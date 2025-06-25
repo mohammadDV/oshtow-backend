@@ -2,11 +2,13 @@
 
 namespace Domain\Claim\Repositories;
 
+use Application\Api\Chat\Requests\ChatRequest;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Chat\Repositories\Contracts\IChatRepository;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Models\ClaimStep;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
@@ -123,7 +125,9 @@ class ClaimRepository implements IClaimRepository
             'sponsor_id' => $project->type == Project::PASSENGER ? Auth::user()->id : $project->user_id
         ]);
 
-        //todo create chat
+        // create chat for them
+        $this->handleClaimChat($project);
+
         //todo notification
 
         if ($claim) {
@@ -135,6 +139,27 @@ class ClaimRepository implements IClaimRepository
         }
 
         throw new \Exception();
+    }
+
+    /**
+     * Handle chat creation between claim creator and project owner.
+     *
+     * @param Project $project
+     * @return void
+     */
+    private function handleClaimChat(Project $project): void
+    {
+        // Only create chat if claim creator and project owner are different
+        if (Auth::user()->id != $project->user_id) {
+            $chatRepo = app(IChatRepository::class);
+            $chatUser = $project->user; // project owner
+
+            $chatRequest = new ChatRequest([
+                'message' => __('site.A claim has been created for your project.'),
+            ]);
+
+            $chatRepo->store($chatRequest, $chatUser);
+        }
     }
 
     /**
