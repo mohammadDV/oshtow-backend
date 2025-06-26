@@ -3,11 +3,11 @@
 use Application\Api\Address\Controllers\AddressController;
 use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
-use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
 use Application\Api\Project\Controllers\ProjectController;
+use Application\Api\Review\Controllers\ReviewController;
 use Application\Api\Ticket\Controllers\TicketController;
 use Application\Api\Ticket\Controllers\TicketSubjectController;
 use Application\Api\User\Controllers\UserController;
@@ -50,6 +50,13 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     // withdraw
     Route::post('/withdraws', [WithdrawalTransactionController::class, 'store']);
     Route::get('/withdraws', [WithdrawalTransactionController::class, 'index']);
+
+    // review
+    Route::post('/reviews/{claim}', [ReviewController::class, 'store']);
+    Route::get('/reviews/{project}', [ReviewController::class, 'getReviewsPerUser']);
+    // just for admin
+    Route::patch('/reviews/{review}', [ReviewController::class, 'update']);
+    Route::get('/reviews', [ReviewController::class, 'index']);
 
     // chats
     Route::prefix('chats')->group(function () {

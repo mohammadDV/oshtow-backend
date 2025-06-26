@@ -1,0 +1,188 @@
+<?php
+
+namespace Domain\Review\Repositories;
+
+use Application\Api\Review\Requests\ReviewRequest;
+use Core\Http\Requests\TableRequest;
+use Core\Http\traits\GlobalFunc;
+use Domain\Claim\Models\Claim;
+use Domain\Project\Models\Project;
+use Domain\Review\Models\Review;
+use Domain\Review\Repositories\Contracts\IReviewRepository;
+use Domain\User\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * Class ReviewRepository.
+ */
+class ReviewRepository implements IReviewRepository
+{
+    use GlobalFunc;
+
+    /**
+     * Get the reviews pagination.
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function index(TableRequest $request) :LengthAwarePaginator
+    {
+        $this->checkLevelAccess(Auth::user()->level == 3);
+
+        $search = $request->get('query');
+        return Review::query()
+            ->with('user:id,nickname,profile_photo_path,rate')
+            ->when(Auth::user()->level != 3, function ($query) {
+                return $query->where('user_id', Auth::user()->id);
+            })
+            ->when(!empty($search), function ($query) use ($search) {
+                return $query->where('comment', 'like', '%' . $search . '%');
+            })
+            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
+            ->paginate($request->get('rowsPerPage', 25));
+    }
+
+    /**
+     * Get the reviews per project pagination.
+     * @param Project $project
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function getReviewsPerUser(TableRequest $request, Project $project) :LengthAwarePaginator
+    {
+        return Review::query()
+            ->with('user:id,nickname,profile_photo_path,rate')
+            ->where('owner_id', $project->user_id)
+            ->where('status', 1)
+            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
+            ->paginate($request->get('rowsPerPage', 10));
+    }
+
+    /**
+     * Get the review.
+     * @param Review $review
+     * @return Review
+     */
+    public function show(Review $review) :Review
+    {
+        return Review::query()
+                ->where('id', $review->id)
+                ->first();
+    }
+
+    /**
+     * Store the review.
+     * @param Claim $claim
+     * @param ReviewRequest $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function store(Claim $claim, ReviewRequest $request) :JsonResponse
+    {
+
+        $this->checkLevelAccess(
+            in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id]) &&
+            $claim->status == Claim::DELIVERED
+        );
+
+        $owner = User::find(Auth::id() == $claim->user_id ? $claim->project->user_id : $claim->user_id);
+
+        // Check for duplicate review
+        $duplicate = Review::query()
+            ->where('claim_id', $claim->id)
+            ->where('claim_id', $claim->id)
+            ->where('owner_id', $owner->id)
+            ->where('user_id', Auth::id())
+            ->exists();
+
+        if ($duplicate) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Duplicate review error'),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+
+        try {
+            DB::beginTransaction();
+
+            $review = Review::create([
+                'comment' => $request->input('comment'),
+                'rate' => $request->input('rate'),
+                'claim_id' => $claim->id,
+                'owner_id' => $owner->id,
+                'user_id' => Auth::id(),
+                'status' => 0,
+            ]);
+
+            $owner->update([
+                'rate' => empty($owner->rate) ? $request->input('rate') : ceil((($owner->rate + $request->input('rate')) / 2))
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully'),
+                'data' => $review
+            ], Response::HTTP_CREATED);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+    }
+
+    /**
+     * Update the review.
+     * @param ReviewRequest $request
+     * @param Review $review
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function update(ReviewRequest $request, Review $review) :JsonResponse
+    {
+        $this->checkLevelAccess(Auth::user()->level == 3);
+
+        $review->update([
+            'comment' => $request->input('comment'),
+            'rate' => $request->input('rate'),
+            'status' => !empty($request->input('status')) ? 1 : 0,
+        ]);
+
+        if ($review) {
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully')
+            ], Response::HTTP_OK);
+        }
+
+        throw new \Exception();
+    }
+
+    /**
+    * Delete the review.
+    * @param UpdatePasswordRequest $request
+    * @param Review $review
+    * @return JsonResponse
+    */
+   public function destroy(Review $review) :JsonResponse
+   {
+        $this->checkLevelAccess(Auth::user()->id == $review->user_id);
+
+        $review->delete();
+
+        if ($review) {
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully')
+            ], Response::HTTP_OK);
+        }
+
+        throw new \Exception();
+   }
+}
