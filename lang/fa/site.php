@@ -248,4 +248,5 @@ return array(
     'Transfer failed. Please try again.' => 'انتقال انجام نشد. لطفا دوباره تلاش کنید.',
     'Withdrawal successful' => 'برداشت با موفقیت انجام شد',
     'Withdrawal failed. Please try again.' => 'برداشت انجام نشد. لطفا دوباره تلاش کنید.',
+    'Duplicate review error' => 'شما قبلاً برای این درخواست نظر ثبت کرده‌اید.',
 );
