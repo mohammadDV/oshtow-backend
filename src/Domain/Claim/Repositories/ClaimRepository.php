@@ -129,7 +129,6 @@ class ClaimRepository implements IClaimRepository
         $this->handleClaimChat($project);
 
         //todo notification
-
         if ($claim) {
             return response()->json([
                 'status' => 1,

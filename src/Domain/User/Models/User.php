@@ -33,6 +33,7 @@ class User extends Authenticatable
         'bg_photo_path',
         'national_code',
         'point',
+        'rate',
         'role_id',
         'level',
         'status',
@@ -77,7 +78,7 @@ class User extends Authenticatable
 
 
     protected $visible = [
-        'id','first_name','last_name','nickname', 'clubs','biography','profile_photo_path','bg_photo_path','point','role_id', 'is_private', 'is_report', 'email', 'status', 'created_at'
+        'id','first_name','last_name','nickname', 'clubs','biography','profile_photo_path','bg_photo_path','point','rate','role_id', 'is_private', 'is_report', 'email', 'status', 'created_at'
     ];
 
     /**
