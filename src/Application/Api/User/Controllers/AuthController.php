@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Domain\Wallet\Models\Wallet;
+// use Application\Api\User\Notifications\ThankYouForRegistering;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Application\Api\User\Mail\ThankYouForRegistering;
 
 class AuthController extends Controller
 {
@@ -20,10 +24,10 @@ class AuthController extends Controller
     /**
      * @param TelegramNotificationService $service
      */
-    public function __construct(protected TelegramNotificationService $service)
-    {
+    // public function __construct(protected TelegramNotificationService $service)
+    // {
 
-    }
+    // }
 
     /**
      * Log in the user.
@@ -155,6 +159,9 @@ class AuthController extends Controller
 
         $user->assignRole(['user']);
 
+        // Send thank you notification
+        // $user->notify(new \Application\Api\User\Notifications\ThankYouForRegistering());
+
         $token = $user->createToken('myapptokens')->plainTextToken;
 
          // create wallet for the user
@@ -164,6 +171,7 @@ class AuthController extends Controller
             'currency' => Wallet::IRR,
             'status' => 1
         ]);
+
 
         // $this->service->sendNotification(
         //     config('telegram.chat_id'),
@@ -192,5 +200,14 @@ class AuthController extends Controller
             'mesasge' => 'success',
             'status' => 1
         ], 201);
+    }
+
+    public function mail() {
+
+        $user = Auth::user();
+
+        $user->notify(new \Application\Api\User\Notifications\ThankYouForRegistering());
+
+        // Mail::to($user->email)->send(new ThankYouForRegistering($user));
     }
 }
