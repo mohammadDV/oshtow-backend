@@ -10,6 +10,7 @@ use Application\Api\Project\Controllers\ProjectController;
 use Application\Api\Review\Controllers\ReviewController;
 use Application\Api\Ticket\Controllers\TicketController;
 use Application\Api\Ticket\Controllers\TicketSubjectController;
+use Application\Api\User\Controllers\AuthController;
 use Application\Api\User\Controllers\UserController;
 use Application\Api\Wallet\Controllers\WalletController;
 use Application\Api\Wallet\Controllers\WithdrawalTransactionController;
@@ -79,6 +80,10 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 });
 
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() {
+
+
+    Route::get('/mail', [AuthController::class, 'mail'])->name('mail.profile');
+
     Route::post('/claims', [ClaimController::class, 'store'])->name('claim.store');
     Route::patch('/claims/{claim}', [ClaimController::class, 'update'])->name('claim.update');
     Route::get('/claims/project/{project}', [ClaimController::class, 'getClaimsPerProject'])->name('claim.index');
