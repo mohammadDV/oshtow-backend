@@ -37,6 +37,8 @@ class ProjectResource extends JsonResource
             'amount' => $this->amount,
             'weight' => $this->weight,
             'status' => $this->status,
+            'description' => $this->description,
+            'vip' => $this->vip,
             'destination_image' => $destinationImage,
             'send_date' => $this->send_date ? Jalalian::fromDateTime($this->send_date)->format('d F') : null,
             'receive_date' => $this->receive_date ? Jalalian::fromDateTime($this->receive_date)->format('d F') : null,
