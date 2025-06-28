@@ -111,4 +111,17 @@ class AddressRepository implements IAddressRepository
             ->where('status', 1)
             ->get();
     }
+
+    /**
+     * Get address from city id
+     * @param City $city
+     * @return JsonResponse
+     */
+    public function getCityDetails(City $city) :Collection
+    {
+        return City::query()
+            ->with('province.country')
+            ->where('id', $city->id)
+            ->get();
+    }
 }

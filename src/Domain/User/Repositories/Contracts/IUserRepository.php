@@ -2,6 +2,7 @@
 
 namespace Domain\User\Repositories\Contracts;
 
+use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -22,4 +23,11 @@ interface IUserRepository
      * @return string The seller object
      */
     public function getActivityCount() :JsonResponse;
+
+    /**
+     * Get the user info.
+     * @param User $project
+     * @return array
+     */
+    public function show(User $user) :array;
 }

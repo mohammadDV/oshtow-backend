@@ -3,6 +3,7 @@
 namespace Application\Api\User\Controllers;
 
 use Core\Http\Controllers\Controller;
+use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
 
@@ -30,5 +31,15 @@ class UserController extends Controller
     public function getActivityCount(): JsonResponse
     {
         return response()->json($this->repository->getActivityCount());
+    }
+
+    /**
+     * Get the user info
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function show(User $user): JsonResponse
+    {
+        return response()->json($this->repository->show($user));
     }
 }

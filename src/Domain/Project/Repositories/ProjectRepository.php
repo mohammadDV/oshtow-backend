@@ -39,7 +39,7 @@ class ProjectRepository implements IProjectRepository
                 'dCountry',
                 'dProvince',
                 'dCity',
-                'categories'
+                'categories:id,title'
             ])
             ->when(Auth::user()->level != 3, function ($query) {
                 return $query->where('user_id', Auth::user()->id);
@@ -70,7 +70,7 @@ class ProjectRepository implements IProjectRepository
                 'dCountry',
                 'dProvince',
                 'dCity',
-                'categories'
+                'categories:id,title'
             ])
             ->where('active', 1)
             ->where('status', Project::PENDING)
@@ -82,24 +82,48 @@ class ProjectRepository implements IProjectRepository
     /**
      * Get the project.
      * @param Project $project
-     * @return ProjectResource
+     * @return array
      */
-    public function show(Project $project) :ProjectResource
+    public function show(Project $project) :array
     {
         $project = Project::query()
                 ->with([
+                    'categories:id,title',
+                    'user:id,nickname,profile_photo_path,rate',
                     'oCountry',
                     'oProvince',
                     'oCity',
                     'dCountry',
                     'dProvince',
                     'dCity',
-                    'categories'
                 ])
                 ->where('id', $project->id)
                 ->first();
 
-        return new ProjectResource($project);
+        $recommended = Project::query()
+            ->with([
+                'categories:id,title',
+                'oCountry',
+                'oProvince',
+                'oCity',
+                'dCountry',
+                'dProvince',
+                'dCity',
+            ])
+            ->where('type', $project->type)
+            ->where('active', 1)
+            ->where('status', Project::PENDING)
+            ->where('send_date', '>=', now()->startOfDay())
+            ->inRandomOrder()
+            ->limit(config('project.senderLimit'))
+            ->get()
+            ->map(fn ($project) => new ProjectResource($project));
+
+        return [
+            'project' => new ProjectResource($project),
+            'recommended'=> $recommended
+        ];
+
     }
 
     /**
@@ -237,22 +261,21 @@ class ProjectRepository implements IProjectRepository
      */
     public function getFeaturedProjects(): array
     {
-        $today = now()->startOfDay();
 
         $senderProjects = Project::query()
             ->with([
+                'categories:id,title',
                 'oCountry',
                 'oProvince',
                 'oCity',
                 'dCountry',
                 'dProvince',
                 'dCity',
-                'categories'
             ])
             ->where('type', Project::SENDER)
             ->where('active', 1)
             ->where('status', Project::PENDING)
-            ->where('send_date', '>=', $today)
+            ->where('send_date', '>=', now()->startOfDay())
             ->orderBy('priority', 'desc')
             ->limit(config('project.senderLimit'))
             ->get()
@@ -260,18 +283,18 @@ class ProjectRepository implements IProjectRepository
 
         $passengerProjects = Project::query()
             ->with([
+                'categories:id,title',
                 'oCountry',
                 'oProvince',
                 'oCity',
                 'dCountry',
                 'dProvince',
                 'dCity',
-                'categories'
             ])
             ->where('type', Project::PASSENGER)
             ->where('active', 1)
             ->where('status', Project::PENDING)
-            ->where('send_date', '>=', $today)
+            ->where('send_date', '>=', now()->startOfDay())
             ->orderBy('priority', 'desc')
             ->limit(config('project.passengerLimit'))
             ->get()
@@ -314,13 +337,13 @@ class ProjectRepository implements IProjectRepository
         // return cache()->remember($cacheKey, now()->addMinutes(5), function () use ($request, $today) {
             $query = Project::query()
                 ->with([
+                    'categories:id,title',
                     'oCountry',
                     'oProvince',
                     'oCity',
                     'dCountry',
                     'dProvince',
                     'dCity',
-                    'categories'
                 ])
                 ->where('active', 1)
                 ->where('status', Project::PENDING)
