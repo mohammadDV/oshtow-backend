@@ -4,6 +4,7 @@ namespace Application\Api\Address\Controllers;
 
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
+use Domain\Address\Models\City;
 use Domain\Address\Models\Country;
 use Domain\Address\Models\Province;
 use Domain\Address\Repositories\Contracts\IAddressRepository;
@@ -53,5 +54,16 @@ class AddressController extends Controller
     public function activeCities(Province $province, TableRequest $request): JsonResponse
     {
         return response()->json($this->repository->activeCities($province, $request), Response::HTTP_OK);
+    }
+
+    /**
+     * Get the address from city id
+     * @param City $city
+     *
+     * @return JsonResponse
+     */
+    public function getCityDetails(City $city): JsonResponse
+    {
+        return response()->json($this->repository->getCityDetails($city), Response::HTTP_OK);
     }
 }

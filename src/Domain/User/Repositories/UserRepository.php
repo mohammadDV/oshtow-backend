@@ -2,11 +2,14 @@
 
 namespace Domain\User\Repositories;
 
+use Application\Api\Project\Resources\ProjectResource;
+use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
 use Domain\Plan\Models\Subscription;
 use Domain\Project\Models\Project;
+use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +30,67 @@ class UserRepository implements IUserRepository
     public function index() :JsonResponse
     {
         return response()->json([]);
+    }
+
+    /**
+     * Get the user info.
+     * @param User $project
+     * @return array
+     */
+    public function show(User $user) :array
+    {
+
+        $senderQuery = Project::query()
+            ->with([
+                'categories:id,title',
+                'oCountry',
+                'oProvince',
+                'oCity',
+                'dCountry',
+                'dProvince',
+                'dCity',
+            ])
+            ->where('user_id', $user->id)
+            ->where('type', Project::SENDER)
+            ->where('active', 1)
+            ->orderBy('id', 'desc');
+
+        $senderProjects = $senderQuery
+            ->limit(4)
+            ->get()
+            ->map(fn ($project) => new ProjectResource($project));
+
+        $senderProjectsCount = $senderQuery->count();
+
+        $passengerQuery = Project::query()
+            ->with([
+                'categories:id,title',
+                'oCountry',
+                'oProvince',
+                'oCity',
+                'dCountry',
+                'dProvince',
+                'dCity',
+            ])
+            ->where('user_id', $user->id)
+            ->where('type', Project::PASSENGER)
+            ->where('active', 1)
+            ->orderBy('id', 'desc');
+
+        $passengerProjects = $passengerQuery
+            ->limit(4)
+            ->get()
+            ->map(fn ($project) => new ProjectResource($project));
+
+        $passengerProjectsCount = $passengerQuery->count();
+
+        return [
+            'user' => new UserResource($user),
+            'sender_projects' => $senderProjects,
+            'sender_projects_count' => $senderProjectsCount,
+            'passenger_projects' => $passengerProjects,
+            'passenger_projects_count' => $passengerProjectsCount
+        ];
     }
 
     /**

@@ -19,11 +19,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/countries', [AddressController::class, 'activeCountries'])->name('active-countries');
 Route::get('/provinces/{country}', [AddressController::class, 'activeProvinces'])->name('active-provinces');
 Route::get('/cities/{province}', [AddressController::class, 'activeCities'])->name('active-cities');
+Route::get('/cities/{city}/details', [AddressController::class, 'getCityDetails'])->name('city-details');
 
 // Plan
 Route::get('/active-plans', [PlanController::class, 'activePlans'])->name('active-plans');
 Route::get('/active-project-categories', [ProjectCategoryController::class, 'activeProjectCategories'])->name('active-project-categories');
 Route::get('/active-projects', [ProjectController::class, 'activeProjects'])->name('active-projects');
+Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
+Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/active-subjects', [TicketSubjectController::class, 'activeSubjects'])->name('active-subjects');
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
     Route::resource('plans', PlanController::class);

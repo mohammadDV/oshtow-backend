@@ -32,9 +32,9 @@ interface IProjectRepository
     /**
      * Get the project.
      * @param Project $project
-     * @return ProjectResource
+     * @return array
      */
-    public function show(Project $project) :ProjectResource;
+    public function show(Project $project) :array;
 
     /**
      * Store the project.
