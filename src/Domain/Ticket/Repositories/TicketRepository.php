@@ -37,8 +37,8 @@ class TicketRepository implements ITicketRepository {
                 // return $query->where('title', 'like', '%' . $search . '%')
                 //     ->orWhere('alias_title','like','%' . $search . '%');
             })
-            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
-            ->paginate($request->get('rowsPerPage', 25));
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 25));
     }
 
     /**

@@ -24,12 +24,6 @@ interface IProjectRepository
     public function index(TableRequest $request) :LengthAwarePaginator;
 
     /**
-     * Get the active projects.
-     * @return Collection
-     */
-    public function activeProjects() :Collection;
-
-    /**
      * Get the project.
      * @param Project $project
      * @return array

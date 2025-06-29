@@ -1,0 +1,57 @@
+<?php
+
+namespace Domain\IdentityRecord\Repositories\Contracts;
+
+use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
+use Core\Http\Requests\TableRequest;
+use Domain\IdentityRecord\Models\IdentityRecord;
+use Domain\IdentityRecord\Models\IdentityRecord;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+/**
+ * Interface IIdentityRecordRepository.
+ */
+interface IIdentityRecordRepository
+{
+    /**
+     * Get the identityRecords pagination.
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function index(TableRequest $request) :LengthAwarePaginator;
+
+    /**
+     * Get the identityRecord.
+     * @param IdentityRecord $identityRecord
+     * @return IdentityRecord
+     */
+    public function show(IdentityRecord $identityRecord) :IdentityRecord;
+
+    /**
+     * Store the identityRecord.
+     * @param IdentityRecordRequest $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function store(IdentityRecordRequest $request) :JsonResponse;
+
+    /**
+     * Update the identityRecord.
+     * @param IdentityRecordRequest $request
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function update(IdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse;
+
+    /**
+    * Delete the identityRecord.
+    * @param UpdatePasswordRequest $request
+    * @param IdentityRecord $identityRecord
+    * @return JsonResponse
+    */
+   public function destroy(IdentityRecord $identityRecord) :JsonResponse;
+
+}

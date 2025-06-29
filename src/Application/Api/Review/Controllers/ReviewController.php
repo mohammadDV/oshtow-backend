@@ -9,6 +9,7 @@ use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
 use Domain\Review\Models\Review;
 use Domain\Review\Repositories\Contracts\IReviewRepository;
+use Domain\User\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -35,14 +36,14 @@ class ReviewController extends Controller
     }
 
     /**
-     * Get the reviews per project pagination.
+     * Get the reviews per user pagination.
      * @param TableRequest $request
-     * @param Project $project
+     * @param User $user
      * @return JsonResponse
      */
-    public function getReviewsPerUser(TableRequest $request, Project $project): JsonResponse
+    public function getReviewsPerUser(TableRequest $request, User $user): JsonResponse
     {
-        return response()->json($this->repository->getReviewsPerUser($request, $project), Response::HTTP_OK);
+        return response()->json($this->repository->getReviewsPerUser($request, $user), Response::HTTP_OK);
     }
 
     /**

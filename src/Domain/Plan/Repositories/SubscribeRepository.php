@@ -41,8 +41,8 @@ class SubscribeRepository implements ISubscribeRepository
             ->when(Auth::user()->level != 3, function ($query) {
                 return $query->where('user_id', Auth::user()->id);
             })
-            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
-            ->paginate($request->get('rowsPerPage', 25));
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 25));
 
         return SubscriptionResource::collection($subscriptions);
     }

@@ -1,0 +1,75 @@
+<?php
+
+namespace Application\Api\IdentityRecord\Controllers;
+
+use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
+use Core\Http\Controllers\Controller;
+use Core\Http\Requests\TableRequest;
+use Domain\IdentityRecord\Models\IdentityRecord;
+use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+
+
+class IdentityRecordController extends Controller
+{
+
+    /**
+     * @param IIdentityRecordRepository $repository
+     */
+    public function __construct(protected IIdentityRecordRepository $repository)
+    {
+
+    }
+
+    /**
+     * Get all of identityRecords with pagination
+     * @param TableRequest $request
+     * @return JsonResponse
+     */
+    public function index(TableRequest $request): JsonResponse
+    {
+        return response()->json($this->repository->index($request), Response::HTTP_OK);
+    }
+
+    /**
+     * Get the identityRecord.
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     */
+    public function show(IdentityRecord $identityRecord) :JsonResponse
+    {
+        return response()->json($this->repository->show($identityRecord), Response::HTTP_OK);
+    }
+
+    /**
+     * Store the identityRecord.
+     * @param IdentityRecordRequest $request
+     * @return JsonResponse
+     */
+    public function store(IdentityRecordRequest $request) :JsonResponse
+    {
+        return $this->repository->store($request);
+    }
+
+    /**
+     * Update the identityRecord.
+     * @param IdentityRecordRequest $request
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     */
+    public function update(IdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse
+    {
+        return $this->repository->update($request, $identityRecord);
+    }
+
+    /**
+     * Delete the identityRecord.
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     */
+    public function destroy(IdentityRecord $identityRecord) :JsonResponse
+    {
+        return $this->repository->destroy($identityRecord);
+    }
+}

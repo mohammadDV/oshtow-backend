@@ -41,24 +41,32 @@ class ReviewRepository implements IReviewRepository
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('comment', 'like', '%' . $search . '%');
             })
-            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
-            ->paginate($request->get('rowsPerPage', 25));
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 25));
     }
 
     /**
-     * Get the reviews per project pagination.
-     * @param Project $project
+     * Get the reviews per user pagination.
+     * @param User $user
      * @param TableRequest $request
      * @return LengthAwarePaginator
      */
-    public function getReviewsPerUser(TableRequest $request, Project $project) :LengthAwarePaginator
+    public function getReviewsPerUser(TableRequest $request, User $user) :LengthAwarePaginator
     {
+
+        $search = $request->get('query');
+
+        $search = in_array($search, [1,2,3,4,5]) ?? 0;
+
         return Review::query()
             ->with('user:id,nickname,profile_photo_path,rate')
-            ->where('owner_id', $project->user_id)
+            ->where('owner_id', $user->id)
             ->where('status', 1)
-            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
-            ->paginate($request->get('rowsPerPage', 10));
+            ->when(!empty($search), function ($query) use ($search) {
+                return $query->where('rate', $search);
+            })
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 10));
     }
 
     /**

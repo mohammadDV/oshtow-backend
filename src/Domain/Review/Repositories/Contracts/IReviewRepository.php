@@ -7,6 +7,7 @@ use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
 use Domain\Review\Models\Review;
+use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -22,13 +23,13 @@ interface IReviewRepository
      */
     public function index(TableRequest $request) :LengthAwarePaginator;
 
-     /**
-     * Get the reviews per project pagination.
-     * @param Project $project
+    /**
+     * Get the reviews per user pagination.
+     * @param User $user
      * @param TableRequest $request
      * @return LengthAwarePaginator
      */
-    public function getReviewsPerUser(TableRequest $request, Project $project) :LengthAwarePaginator;
+    public function getReviewsPerUser(TableRequest $request, User $user) :LengthAwarePaginator;
 
     /**
      * Get the review.

@@ -98,7 +98,7 @@ class ChatRepository implements IChatRepository {
                 });
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate($request->get('rowsPerPage', 50));
+            ->paginate($request->get('count', 50));
     }
 
     /**
