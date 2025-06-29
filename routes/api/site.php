@@ -102,5 +102,5 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
 // Projects
 Route::prefix('projects')->group(function () {
     Route::get('featured', [ProjectController::class, 'featured']);
-    Route::post('search', [ProjectController::class, 'search']);
+    Route::get('search', [ProjectController::class, 'search']);
 });
