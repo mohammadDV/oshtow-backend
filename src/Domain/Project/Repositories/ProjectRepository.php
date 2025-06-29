@@ -50,33 +50,10 @@ class ProjectRepository implements IProjectRepository
             ->when(!empty($status), function ($query) use ($status) {
                 return $query->where('status', $status);
             })
-            ->orderBy($request->get('sortBy', 'id'), $request->get('sortType', 'desc'))
-            ->paginate($request->get('rowsPerPage', 25));
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 25));
 
         return $projects->through(fn ($project) => new ProjectResource($project));
-    }
-
-    /**
-     * Get the active projects.
-     * @return Collection
-     */
-    public function activeProjects() :Collection
-    {
-        $projects = Project::query()
-            ->with([
-                'oCountry',
-                'oProvince',
-                'oCity',
-                'dCountry',
-                'dProvince',
-                'dCity',
-                'categories:id,title'
-            ])
-            ->where('active', 1)
-            ->where('status', Project::PENDING)
-            ->get();
-
-        return $projects->map(fn ($project) => new ProjectResource($project));
     }
 
     /**
@@ -313,7 +290,6 @@ class ProjectRepository implements IProjectRepository
      */
     public function search(SearchProjectRequest $request): LengthAwarePaginator
     {
-        $today = now()->startOfDay();
 
         // Generate a unique cache key based on all search parameters
         $cacheKey = 'project_search_' . md5(json_encode([
@@ -347,7 +323,7 @@ class ProjectRepository implements IProjectRepository
                 ])
                 ->where('active', 1)
                 ->where('status', Project::PENDING)
-                ->where('send_date', '>=', $today)
+                ->where('send_date', '>=', now()->startOfDay())
                 ->where('type', $request->input('type'))
                 ->orderBy('priority', 'desc');
 
@@ -403,7 +379,8 @@ class ProjectRepository implements IProjectRepository
                 });
             }
 
-            $projects = $query->paginate(9);
+            $projects = $query->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+                ->paginate($request->get('count', 25));
 
             return $projects->through(fn ($project) => new ProjectResource($project));
         // });

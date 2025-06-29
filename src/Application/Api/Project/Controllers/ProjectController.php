@@ -36,15 +36,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * Get all of projects
-     * @return JsonResponse
-     */
-    public function activeProjects(TableRequest $request): JsonResponse
-    {
-        return response()->json($this->repository->activeProjects($request), Response::HTTP_OK);
-    }
-
-    /**
      * Get the project.
      * @param Project $project
      * @return JsonResponse

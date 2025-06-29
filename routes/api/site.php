@@ -3,6 +3,7 @@
 use Application\Api\Address\Controllers\AddressController;
 use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
+use Application\Api\IdentityRecord\Controllers\IdentityRecordController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
@@ -24,12 +25,14 @@ Route::get('/cities/{city}/details', [AddressController::class, 'getCityDetails'
 // Plan
 Route::get('/active-plans', [PlanController::class, 'activePlans'])->name('active-plans');
 Route::get('/active-project-categories', [ProjectCategoryController::class, 'activeProjectCategories'])->name('active-project-categories');
-Route::get('/active-projects', [ProjectController::class, 'activeProjects'])->name('active-projects');
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
 Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/active-subjects', [TicketSubjectController::class, 'activeSubjects'])->name('active-subjects');
+Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser']);
+
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
     Route::resource('plans', PlanController::class);
+    Route::resource('identity_records', IdentityRecordController::class);
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('tickets', TicketController::class);
@@ -57,7 +60,6 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     // review
     Route::post('/reviews/{claim}', [ReviewController::class, 'store']);
-    Route::get('/reviews/{project}', [ReviewController::class, 'getReviewsPerUser']);
     // just for admin
     Route::patch('/reviews/{review}', [ReviewController::class, 'update']);
     Route::get('/reviews', [ReviewController::class, 'index']);
@@ -100,5 +102,5 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
 // Projects
 Route::prefix('projects')->group(function () {
     Route::get('featured', [ProjectController::class, 'featured']);
-    Route::get('search', [ProjectController::class, 'search']);
+    Route::post('search', [ProjectController::class, 'search']);
 });
