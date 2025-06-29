@@ -2,11 +2,11 @@
 
 namespace Domain\IdentityRecord\Repositories\Contracts;
 
+use Application\Api\IdentityRecord\Requests\ChangeStatusRequest;
 use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
+use Application\Api\IdentityRecord\Requests\UpdateIdentityRecordRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\IdentityRecord\Models\IdentityRecord;
-use Domain\IdentityRecord\Models\IdentityRecord;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -39,12 +39,21 @@ interface IIdentityRecordRepository
 
     /**
      * Update the identityRecord.
-     * @param IdentityRecordRequest $request
+     * @param UpdateIdentityRecordRequest $request
      * @param IdentityRecord $identityRecord
      * @return JsonResponse
      * @throws \Exception
      */
-    public function update(IdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse;
+    public function update(UpdateIdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse;
+
+    /**
+     * Change the status of identityRecord.
+     * @param ChangeStatusRequest $request
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function changeStatus(ChangeStatusRequest $request, IdentityRecord $identityRecord) :JsonResponse;
 
     /**
     * Delete the identityRecord.

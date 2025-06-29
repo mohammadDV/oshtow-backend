@@ -35,9 +35,13 @@ class SearchProjectRequest extends BaseRequest
             'path_type' => ['nullable', 'string', 'in:land,sea,air'],
             'categories' => ['nullable', 'array'],
             'categories.*' => ['exists:project_categories,id'],
-            'page' => ['nullable', 'integer', 'min:1'],
             'min_weight' => ['nullable', 'integer', 'min:0'],
             'max_weight' => ['nullable', 'integer', 'min:0', 'gte:min_weight'],
+            'query' => ['nullable', 'string', 'min:1', 'max:50'],
+            'column' => ['nullable', 'string', 'min:2', 'max:50'],
+            'sort' => ['nullable', 'string', 'in:desc,asc'],
+            'page' => ['nullable','integer'],
+            'count' => ['nullable','integer', 'min:5','max:200']
         ];
     }
 }

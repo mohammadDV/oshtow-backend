@@ -2,7 +2,9 @@
 
 namespace Application\Api\IdentityRecord\Controllers;
 
+use Application\Api\IdentityRecord\Requests\ChangeStatusRequest;
 use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
+use Application\Api\IdentityRecord\Requests\UpdateIdentityRecordRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Domain\IdentityRecord\Models\IdentityRecord;
@@ -54,13 +56,24 @@ class IdentityRecordController extends Controller
 
     /**
      * Update the identityRecord.
-     * @param IdentityRecordRequest $request
+     * @param UpdateIdentityRecordRequest $request
      * @param IdentityRecord $identityRecord
      * @return JsonResponse
      */
-    public function update(IdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse
+    public function update(UpdateIdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse
     {
         return $this->repository->update($request, $identityRecord);
+    }
+
+    /**
+     * Change the status of identityRecord.
+     * @param ChangeStatusRequest $request
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     */
+    public function changeStatus(ChangeStatusRequest $request, IdentityRecord $identityRecord) :JsonResponse
+    {
+        return $this->repository->changeStatus($request, $identityRecord);
     }
 
     /**

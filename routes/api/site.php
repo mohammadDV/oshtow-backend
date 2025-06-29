@@ -32,7 +32,8 @@ Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser'
 
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
     Route::resource('plans', PlanController::class);
-    Route::resource('identity_records', IdentityRecordController::class);
+    Route::resource('identity-records', IdentityRecordController::class);
+    Route::post('identity-records/{identityRecord}/change-status', [IdentityRecordController::class, 'changeStatus']);
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
     Route::resource('tickets', TicketController::class);

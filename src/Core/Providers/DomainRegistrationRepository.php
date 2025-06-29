@@ -76,7 +76,10 @@ class DomainRegistrationRepository extends ServiceProvider
     protected function getImplementationClassname(string $domainPath, string $basePath, \SplFileInfo $file): string
     {
         $namespace = "Domain\\{$domainPath}\\{$basePath}";
-        $className = ltrim(str_replace('.php', '', $file->getFilename()), 'I');
+        $className = str_replace('.php', '', $file->getFilename());
+        if (str_starts_with($className, 'I')) {
+            $className = substr($className, 1);
+        }
         return "$namespace\\$className";
     }
 
