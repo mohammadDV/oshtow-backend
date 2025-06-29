@@ -2,7 +2,10 @@
 
 namespace Domain\IdentityRecord\Repositories;
 
+use Application\Api\IdentityRecord\Requests\ChangeStatusRequest;
 use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
+use Application\Api\IdentityRecord\Requests\UpdateIdentityRecordRequest;
+use Carbon\Carbon;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\IdentityRecord\Models\IdentityRecord;
@@ -71,14 +74,14 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'national_code' => $request->input('national_code'),
             'mobile' => $request->input('mobile'),
             'birthday' => $request->input('birthday'),
-            'email' => $request->input('amountemail'),
+            'email' => $request->input('email'),
             'country' => $request->input('country'),
             'postal_code' => $request->input('postal_code'),
             'address' => $request->input('address'),
             'image_national_code_front' => $request->input('image_national_code_front'),
             'image_national_code_back' => $request->input('image_national_code_back'),
             'video' => $request->input('video'),
-            'status' => $request->input('status'),
+            'status' => IdentityRecord::PENDING,
             'user_id' => Auth::user()->id,
         ]);
 
@@ -94,12 +97,49 @@ class IdentityRecordRepository implements IIdentityRecordRepository
 
     /**
      * Update the identityRecord.
-     * @param IdentityRecordRequest $request
+     * @param ChangeStatusRequest $request
      * @param IdentityRecord $identityRecord
      * @return JsonResponse
      * @throws \Exception
      */
-    public function update(IdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse
+    public function changeStatus(ChangeStatusRequest $request, IdentityRecord $identityRecord) :JsonResponse
+    {
+        $this->checkLevelAccess(Auth::user()->level == 3);
+
+
+        if ($request->input('status') == IdentityRecord::COMPLETED) {
+
+            $identityRecord->user->update([
+                'verified_at' => Carbon::now()
+            ]);
+
+            $identityRecord->update([
+                'status' => IdentityRecord::COMPLETED,
+            ]);
+        }
+
+        if ($request->input('status') == IdentityRecord::REJECT) {
+            $identityRecord->delete();
+        }
+
+        if ($identityRecord) {
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully')
+            ], Response::HTTP_OK);
+        }
+
+        throw new \Exception();
+    }
+
+    /**
+     * Update the identityRecord.
+     * @param UpdateIdentityRecordRequest $request
+     * @param IdentityRecord $identityRecord
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function update(UpdateIdentityRecordRequest $request, IdentityRecord $identityRecord) :JsonResponse
     {
         $this->checkLevelAccess(Auth::user()->level == 3);
 
@@ -108,14 +148,13 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'national_code' => $request->input('national_code'),
             'mobile' => $request->input('mobile'),
             'birthday' => $request->input('birthday'),
-            'email' => $request->input('amountemail'),
+            'email' => $request->input('email'),
             'country' => $request->input('country'),
             'postal_code' => $request->input('postal_code'),
             'address' => $request->input('address'),
             'image_national_code_front' => $request->input('image_national_code_front'),
             'image_national_code_back' => $request->input('image_national_code_back'),
             'video' => $request->input('video'),
-            'status' => $request->input('status'),
         ]);
 
         if ($identityRecord) {

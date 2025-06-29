@@ -30,7 +30,7 @@ class RegisterRequest extends FormRequest
             'mobile' => ['required', 'regex:/(09)[0-9]{9}/', 'digits:11', 'numeric', 'unique:users,mobile'],
             'nickname' => ['required', 'string', 'min:3', 'max:255', 'unique:users,nickname', new NicknameCheck],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'regex:/^[a-zA-Z0-9_!@#$%^&*-]+$/'],
+            'password' => ['required', 'confirmed', 'string', 'min:8', 'regex:/^[a-zA-Z0-9_!@#$%^&*-]+$/'],
             // 'token' => [new Recaptcha],
         ];
     }

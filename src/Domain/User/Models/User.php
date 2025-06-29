@@ -32,6 +32,8 @@ class User extends Authenticatable
         'profile_photo_path',
         'bg_photo_path',
         'national_code',
+        'verified_at',
+        'email_verified_at',
         'point',
         'rate',
         'role_id',
@@ -66,6 +68,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -78,7 +81,7 @@ class User extends Authenticatable
 
 
     protected $visible = [
-        'id','first_name','last_name','nickname', 'clubs','biography','profile_photo_path','bg_photo_path','point','rate','role_id', 'is_private', 'is_report', 'email', 'status', 'created_at'
+        'id','first_name','last_name','nickname', 'clubs','biography','profile_photo_path','bg_photo_path','point','rate','role_id', 'is_private', 'is_report', 'email', 'status', 'created_at','verified_at', 'email_verified_at'
     ];
 
     /**
