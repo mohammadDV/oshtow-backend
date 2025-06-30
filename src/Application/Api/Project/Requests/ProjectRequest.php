@@ -30,6 +30,7 @@ class ProjectRequest extends BaseRequest
             'path_type' => ['nullable', 'string', 'in:land,sea,air'],
             'amount' => ['required', 'integer', 'min:0'],
             'weight' => ['required', 'integer', 'min:0'],
+            'dimensions' => ['nullable', 'string'],
             'status' => ['nullable', 'integer', 'in:0,1'],
             'vip' => ['nullable', 'integer', 'in:0,1'],
             'priority' => ['nullable', 'integer', 'max:101'],

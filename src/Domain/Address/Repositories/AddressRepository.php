@@ -83,15 +83,14 @@ class AddressRepository implements IAddressRepository
 
     /**
      * Get the provinces pagination.
-     * @param Province $province
      * @param TableRequest $request
      * @return LengthAwarePaginator
      */
-    public function getCitiesPaginate(Province $province, TableRequest $request) :LengthAwarePaginator
+    public function getCitiesPaginate(TableRequest $request) :LengthAwarePaginator
     {
         $search = $request->get('query');
         return City::query()
-            ->where('province_id', $province->id)
+            ->with('province.country')
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('title', 'like', '%' . $search . '%');
             })

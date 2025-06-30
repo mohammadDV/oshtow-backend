@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('type', ['passenger', 'sender']);
             $table->enum('path_type', ['land', 'sea', 'air'])->nullable();
             $table->string('image', 2048)->nullable();
+            $table->string('dimensions', 255)->nullable();
             $table->decimal('amount', 15, 2);
             $table->unsignedBigInteger('weight');
             $table->tinyInteger('active')->default(0);

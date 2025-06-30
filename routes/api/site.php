@@ -21,6 +21,7 @@ Route::get('/countries', [AddressController::class, 'activeCountries'])->name('a
 Route::get('/provinces/{country}', [AddressController::class, 'activeProvinces'])->name('active-provinces');
 Route::get('/cities/{province}', [AddressController::class, 'activeCities'])->name('active-cities');
 Route::get('/cities/{city}/details', [AddressController::class, 'getCityDetails'])->name('city-details');
+Route::get('/cities', [AddressController::class, 'getCitiesPaginate'])->name('city-search');
 
 // Plan
 Route::get('/active-plans', [PlanController::class, 'activePlans'])->name('active-plans');
@@ -30,6 +31,8 @@ Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
 Route::get('/active-subjects', [TicketSubjectController::class, 'activeSubjects'])->name('active-subjects');
 Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser']);
 
+
+// ->middleware(['auth', 'verified'])
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
     Route::resource('plans', PlanController::class);
     Route::resource('identity-records', IdentityRecordController::class);

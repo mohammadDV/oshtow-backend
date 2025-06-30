@@ -36,7 +36,7 @@ return [
 
     'default-current-index-image' => 'medium',
 
-    'default-profile-image' => 'https://cdn.varzeshpod.com/static/profile.png',
-    'default-background-image' => 'https://cdn.varzeshpod.com/static/background.png',
-    'default_project_image' => 'https://cdn.varzeshpod.com/static/background.png',
+    'default-profile-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-avatar.jpg',
+    'default-background-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-user-banner.jpg',
+    'default_project_image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-destination1.jpeg',
 ];

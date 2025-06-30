@@ -28,6 +28,7 @@ class Project extends Model
         'path_type',
         'amount',
         'weight',
+        'dimensions',
         'active',
         'status',
         'vip',

@@ -9,6 +9,7 @@ use Application\Api\Project\Resources\CategoryResource;
 use Domain\Project\Models\Project;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Morilog\Jalali\Jalalian;
+use Application\Api\User\Resources\UserResource;
 
 class ProjectResource extends JsonResource
 {
@@ -36,6 +37,7 @@ class ProjectResource extends JsonResource
             'path_type' => $this->path_type,
             'amount' => $this->amount,
             'weight' => $this->weight,
+            'dimensions' => $this->dimensions,
             'status' => $this->status,
             'description' => $this->description,
             'vip' => $this->vip,
@@ -53,6 +55,7 @@ class ProjectResource extends JsonResource
                 'city' => new CityResource($this->whenLoaded('dCity')),
             ],
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'user' => new UserResource($this->whenLoaded('user')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

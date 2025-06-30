@@ -66,4 +66,15 @@ class AddressController extends Controller
     {
         return response()->json($this->repository->getCityDetails($city), Response::HTTP_OK);
     }
+
+    /**
+     * Get cities with search title
+     * @param TableRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function getCitiesPaginate(TableRequest $request): JsonResponse
+    {
+        return response()->json($this->repository->getCitiesPaginate($request), Response::HTTP_OK);
+    }
 }

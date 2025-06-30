@@ -33,6 +33,7 @@ class ProjectRepository implements IProjectRepository
         $status = $request->get('status');
         $projects = Project::query()
             ->with([
+                'user:id,nickname,profile_photo_path,rate',
                 'oCountry',
                 'oProvince',
                 'oCity',
@@ -79,6 +80,7 @@ class ProjectRepository implements IProjectRepository
 
         $recommended = Project::query()
             ->with([
+                'user:id,nickname,profile_photo_path,rate',
                 'categories:id,title',
                 'oCountry',
                 'oProvince',
@@ -129,6 +131,7 @@ class ProjectRepository implements IProjectRepository
             'description' => $request->input('description'),
             'address' => $request->input('address'),
             'weight' => $request->input('weight'),
+            'dimensions' => $request->input('dimensions'),
             'active' => 1,
             'status' => Project::PENDING,
             'vip' => $request->input('vip'),
@@ -180,6 +183,7 @@ class ProjectRepository implements IProjectRepository
             'description' => $request->input('description'),
             'address' => $request->input('address'),
             'weight' => $request->input('weight'),
+            'dimensions' => $request->input('dimensions'),
             'active' => $request->input('active'),
             'status' => $request->input('status'),
             'vip' => $request->input('vip'),
@@ -242,6 +246,7 @@ class ProjectRepository implements IProjectRepository
         $senderProjects = Project::query()
             ->with([
                 'categories:id,title',
+                'user:id,nickname,profile_photo_path,rate',
                 'oCountry',
                 'oProvince',
                 'oCity',
@@ -314,6 +319,7 @@ class ProjectRepository implements IProjectRepository
             $query = Project::query()
                 ->with([
                     'categories:id,title',
+                    'user:id,nickname,profile_photo_path,rate',
                     'oCountry',
                     'oProvince',
                     'oCity',
@@ -324,8 +330,7 @@ class ProjectRepository implements IProjectRepository
                 ->where('active', 1)
                 ->where('status', Project::PENDING)
                 ->where('send_date', '>=', now()->startOfDay())
-                ->where('type', $request->input('type'))
-                ->orderBy('priority', 'desc');
+                ->where('type', $request->input('type'));
 
             // Apply filters
             if ($request->has('o_city_id')) {

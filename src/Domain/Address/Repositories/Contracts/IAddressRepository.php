@@ -46,11 +46,10 @@ interface IAddressRepository
 
     /**
      * Get the provinces pagination.
-     * @param Province $province
      * @param TableRequest $request
      * @return LengthAwarePaginator
      */
-    public function getCitiesPaginate(Province $province, TableRequest $request) :LengthAwarePaginator;
+    public function getCitiesPaginate(TableRequest $request) :LengthAwarePaginator;
 
     /**
      * Get the cities.

@@ -178,6 +178,7 @@ return [
         "path_type" => "نوع سفر",
         "type" => "نوع",
         "weight" => "وزن",
+        "dimensions" => "ابعاد",
         "o_country_id" => "کشور مبدا",
         "o_province_id" => "استان مبدا",
         "o_city_id" => "شهر مبدا",
