@@ -54,9 +54,8 @@ class ReviewRepository implements IReviewRepository
     public function getReviewsPerUser(TableRequest $request, User $user) :LengthAwarePaginator
     {
 
-        $search = $request->get('query');
 
-        $search = in_array($search, [1,2,3,4,5]) ?? 0;
+        $search = in_array($request->get('query'), [1,2,3,4,5]) ? $request->get('query') : 0;
 
         return Review::query()
             ->with('user:id,nickname,profile_photo_path,rate')
