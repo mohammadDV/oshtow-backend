@@ -17,6 +17,8 @@ use Domain\Wallet\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Application\Api\User\Mail\ThankYouForRegistering;
+use Application\Api\User\Resources\UserResource;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -172,6 +174,7 @@ class AuthController extends Controller
             'status' => 1
         ]);
 
+        event(new Registered($user));
 
         // $this->service->sendNotification(
         //     config('telegram.chat_id'),
@@ -184,6 +187,7 @@ class AuthController extends Controller
         // );
 
         return response([
+            'user' => new UserResource($user),
             'token' => $token,
             'status' => 1
         ], Response::HTTP_CREATED);
@@ -209,5 +213,43 @@ class AuthController extends Controller
         $user->notify(new \Application\Api\User\Notifications\ThankYouForRegistering());
 
         // Mail::to($user->email)->send(new ThankYouForRegistering($user));
+    }
+
+    /**
+     * Log in the user.
+     */
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return response()->json(['message' => 'Invalid verification link'], 400);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return response()->json(['message' => 'Email already verified'], 200);
+        }
+
+        $user->markEmailAsVerified();
+        event(new \Illuminate\Auth\Events\Verified($user));
+
+        return response()->json(['message' => 'Email verified successfully'], 200);
+    }
+
+    public function resendVerification(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'Already verified'
+            ], 400);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Verification link sent!'
+        ]);
     }
 }
