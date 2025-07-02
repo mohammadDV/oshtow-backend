@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Application\Api\Project\Requests\SearchProjectRequest;
+use Domain\Claim\Models\Claim;
 
 /**
  * Class ProjectRepository.
@@ -285,6 +286,43 @@ class ProjectRepository implements IProjectRepository
         return [
             'sender' => $senderProjects,
             'passenger' => $passengerProjects
+        ];
+    }
+
+    /**
+     * Checking claim for the project.
+     * @return array
+     */
+    public function checkRequestForClaim(Project $project): array
+    {
+
+        $requestEnable = true;
+        $chatEnable = false;
+
+        if (Auth::check()) {
+            $claim = Claim::query()
+                ->where('project_id', $project->id)
+                ->where('user_id', Auth::id())
+                ->first();
+
+            if ($claim || Auth::id() == $project->user_id ||
+                $project->status != Project::PENDING ||
+                $project->active != 1) {
+
+                $requestEnable = false;
+            }
+
+            if ($claim) {
+                $chatEnable = true;
+            }
+
+        } else {
+            $requestEnable = false;
+        }
+
+        return [
+            'request_enable' => $requestEnable,
+            'chat_enable' => $chatEnable
         ];
     }
 

@@ -98,4 +98,14 @@ class ProjectController extends Controller
     {
         return response()->json($this->repository->search($request), Response::HTTP_OK);
     }
+
+    /**
+     * Check request for claiming
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function checkRequestForClaim(Project $project): JsonResponse
+    {
+        return response()->json($this->repository->checkRequestForClaim($project), Response::HTTP_OK);
+    }
 }
