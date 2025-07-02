@@ -66,4 +66,10 @@ interface IProjectRepository
      * @return LengthAwarePaginator
      */
     public function search(SearchProjectRequest $request): LengthAwarePaginator;
+
+    /**
+     * Checking claim for the project.
+     * @return array
+     */
+    public function checkRequestForClaim(Project $project): array;
 }
