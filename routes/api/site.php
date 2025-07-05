@@ -3,6 +3,7 @@
 use Application\Api\Address\Controllers\AddressController;
 use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
+use Application\Api\File\Controllers\FileController;
 use Application\Api\IdentityRecord\Controllers\IdentityRecordController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
@@ -103,6 +104,13 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
     Route::get('/claims/{claim}/paid', [ClaimController::class, 'paidClaim'])->name('claim.paid');
     Route::post('/claims/{claim}/inprogress', [ClaimController::class, 'inprogressClaim'])->name('claim.inprogress');
     Route::post('/claims/{claim}/delivered', [ClaimController::class, 'deliveredClaim'])->name('claim.delivered');
+});
+
+// upload files
+Route::middleware(['auth:sanctum', 'auth', 'throttle:10,1'])->group(function() {
+    Route::post('/upload-image', [FileController::class, 'uploadImage'])->name('site.upload-image');
+    Route::post('/upload-video', [FileController::class, 'uploadVideo'])->name('site.upload-video');
+    Route::post('/upload-file', [FileController::class, 'uploadFile'])->name('site.upload-file');
 });
 
 // Projects
