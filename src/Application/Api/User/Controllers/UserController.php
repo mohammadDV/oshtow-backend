@@ -42,4 +42,13 @@ class UserController extends Controller
     {
         return response()->json($this->repository->show($user));
     }
+
+    /**
+     * Get the user info
+     * @return JsonResponse
+     */
+    public function checkVerification(): JsonResponse
+    {
+        return response()->json($this->repository->checkVerification());
+    }
 }
