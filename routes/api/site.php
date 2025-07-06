@@ -35,6 +35,10 @@ Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser'
 
 // ->middleware(['auth', 'verified'])
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
+
+    Route::get('/check-verification', [UserController::class, 'checkVerification'])->name('user.check.verification');
+
+
     Route::resource('plans', PlanController::class);
     Route::resource('identity-records', IdentityRecordController::class);
     Route::post('identity-records/{identityRecord}/change-status', [IdentityRecordController::class, 'changeStatus']);
@@ -95,7 +99,6 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
 
 
     Route::get('/mail', [AuthController::class, 'mail'])->name('mail.profile');
-
     Route::post('/claims', [ClaimController::class, 'store'])->name('claim.store');
     Route::patch('/claims/{claim}', [ClaimController::class, 'update'])->name('claim.update');
     Route::get('/claims/project/{project}', [ClaimController::class, 'getClaimsPerProject'])->name('claim.index');

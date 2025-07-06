@@ -26,8 +26,14 @@ interface IUserRepository
 
     /**
      * Get the user info.
-     * @param User $project
+     * @param User $user
      * @return array
      */
     public function show(User $user) :array;
+
+    /**
+     * Get verification of the user
+     * @return array
+     */
+    public function checkVerification() :array;
 }

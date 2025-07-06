@@ -34,7 +34,7 @@ class UserRepository implements IUserRepository
 
     /**
      * Get the user info.
-     * @param User $project
+     * @param User $user
      * @return array
      */
     public function show(User $user) :array
@@ -90,6 +90,20 @@ class UserRepository implements IUserRepository
             'sender_projects_count' => $senderProjectsCount,
             'passenger_projects' => $passengerProjects,
             'passenger_projects_count' => $passengerProjectsCount
+        ];
+    }
+
+    /**
+     * Get verification of the user
+     * @return array
+     */
+    public function checkVerification() :array
+    {
+
+        return [
+            'verify_email' => !empty(Auth::user()->email_verified_at),
+            'verify_access' => !empty(Auth::user()->verified_at),
+            'user' => new UserResource(Auth::user())
         ];
     }
 
