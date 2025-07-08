@@ -49,6 +49,7 @@ class AuthController extends Controller
         $token = $user->createToken('finybotokenapp')->plainTextToken;
 
         return response([
+            'is_admin' => $user->level == 3,
             'token' => $token,
             'verify_email' => !empty($user->email_verified_at),
             'verify_access' => !empty($user->verified_at),
@@ -111,7 +112,8 @@ class AuthController extends Controller
             return response([
                 'token' => $token,
                 'status' => 1,
-                'data' => $user
+                'data' => $user,
+                'is_admin' => $user->level == 3,
             ], Response::HTTP_ACCEPTED);
 
 
@@ -190,6 +192,7 @@ class AuthController extends Controller
         // );
 
         return response([
+            'is_admin' => $user->level == 3,
             'user' => new UserResource($user),
             'token' => $token,
             'status' => 1

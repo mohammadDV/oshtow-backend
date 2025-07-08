@@ -101,6 +101,7 @@ class UserRepository implements IUserRepository
     {
 
         return [
+            'is_admin' => Auth::user()->level == 3,
             'verify_email' => !empty(Auth::user()->email_verified_at),
             'verify_access' => !empty(Auth::user()->verified_at),
             'user' => new UserResource(Auth::user())
