@@ -46,6 +46,7 @@ class PlanRepository implements IPlanRepository
     public function activePlans() :Collection
     {
         return Plan::query()
+            ->where('id', '!=', config('plan.default_plan_id'))
             ->where('status', 1)
             ->get();
     }

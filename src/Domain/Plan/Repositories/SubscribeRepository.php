@@ -10,8 +10,9 @@ use Core\Http\traits\GlobalFunc;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Models\Subscription;
 use Domain\Plan\Repositories\Contracts\ISubscribeRepository;
+use Domain\User\Models\User;
 use Domain\Wallet\Models\WalletTransaction;
-use Domain\Wallet\Repositories\IWalletRepository;
+use Domain\Wallet\Repositories\Contracts\IWalletRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -67,7 +68,6 @@ class SubscribeRepository implements ISubscribeRepository
             'status' => 0,
             'message' => __('site.No active subscription found')
         ], Response::HTTP_NOT_FOUND);
-
     }
 
     /**
@@ -83,9 +83,19 @@ class SubscribeRepository implements ISubscribeRepository
         }
 
         // TODO: Implement bank payment gateway
-        return $this->createSubscription($plan);
+
+        return response()->json([
+            'status' => 0,
+            'message' => __('site.Transfer failed. Please try again.')
+        ], Response::HTTP_BAD_REQUEST);
     }
 
+    /**
+     * Pay with wallet.
+     * @param Plan $plan
+     * @return JsonResponse
+     * @throws \Exception
+     */
     private function payWithWallet(Plan $plan): JsonResponse
     {
         $wallet = $this->walletRepository->findByUserId(Auth::id());
@@ -100,7 +110,7 @@ class SubscribeRepository implements ISubscribeRepository
         try {
             DB::beginTransaction();
 
-            $this->createSubscription($plan);
+            $this->createSubscription($plan, Auth::user());
 
             WalletTransaction::createTransaction(
                 $wallet,
@@ -121,11 +131,17 @@ class SubscribeRepository implements ISubscribeRepository
         }
     }
 
-    private function createSubscription(Plan $plan): JsonResponse
+    /**
+     * Create a subscription
+     * @param Plan $plan
+     * @param User $user
+     * @return array
+     */
+    public function createSubscription(Plan $plan, User $user): array
     {
         Subscription::query()
             ->where('active', 1)
-            ->where('user_id', Auth::id())
+            ->where('user_id', $user->id)
             ->update([
                 'active' => 0,
                 'ends_at' => now()
@@ -140,19 +156,22 @@ class SubscribeRepository implements ISubscribeRepository
         $subscribe = Subscription::create([
             'ends_at' => $endsAt,
             'plan_id' => $plan->id,
-            'user_id' => Auth::id(),
+            'user_id' => $user->id,
             'project_count' => $plan->project_count,
             'claim_count' => $plan->claim_count,
             'active' => 1
         ]);
 
         if ($subscribe) {
-            return response()->json([
+            return [
                 'status' => 1,
-                'message' => __('site.The operation has been successfully')
-            ], Response::HTTP_CREATED);
+                'subscription' => $subscribe
+            ];
         }
 
-        throw new \Exception('Could not create subscription');
+        return [
+            'status' => 0,
+            'subscription' => '',
+        ];
     }
 }

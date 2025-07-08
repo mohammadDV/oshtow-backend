@@ -50,6 +50,9 @@ class AuthController extends Controller
 
         return response([
             'token' => $token,
+            'verify_email' => !empty($user->email_verified_at),
+            'verify_access' => !empty($user->verified_at),
+            'user' => new UserResource($user),
             'mesasge' => 'success',
             'status' => 1
         ], 200);

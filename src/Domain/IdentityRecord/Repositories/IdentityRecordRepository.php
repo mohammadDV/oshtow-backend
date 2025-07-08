@@ -10,10 +10,14 @@ use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
+use Domain\Plan\Models\Plan;
+use Domain\Plan\Repositories\SubscribeRepository;
+use Domain\User\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class IdentityRecordRepository.
@@ -106,30 +110,40 @@ class IdentityRecordRepository implements IIdentityRecordRepository
     {
         $this->checkLevelAccess(Auth::user()->level == 3);
 
-
         if ($request->input('status') == IdentityRecord::COMPLETED) {
 
-            $identityRecord->user->update([
-                'verified_at' => Carbon::now()
-            ]);
+            try {
+                DB::beginTransaction();
+                $identityRecord->user->update([
+                    'verified_at' => Carbon::now()
+                ]);
 
-            $identityRecord->update([
-                'status' => IdentityRecord::COMPLETED,
-            ]);
+                $identityRecord->update([
+                    'status' => IdentityRecord::COMPLETED,
+                ]);
+
+                $user = User::find($identityRecord->user_id);
+
+                // Add the default plan
+                app(SubscribeRepository::class)->createSubscription(
+                    Plan::find(config('plan.default_plan_id')), $user
+                );
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
         }
 
         if ($request->input('status') == IdentityRecord::REJECT) {
             $identityRecord->delete();
         }
 
-        if ($identityRecord) {
-            return response()->json([
-                'status' => 1,
-                'message' => __('site.The operation has been successfully')
-            ], Response::HTTP_OK);
-        }
-
-        throw new \Exception();
+        return response()->json([
+            'status' => 1,
+            'message' => __('site.The operation has been successfully')
+        ], Response::HTTP_OK);
     }
 
     /**
