@@ -38,6 +38,9 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     Route::get('/check-verification', [UserController::class, 'checkVerification'])->name('user.check.verification');
 
+    // update user
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('user.update');
+
 
     Route::resource('plans', PlanController::class);
     Route::resource('identity-records', IdentityRecordController::class);

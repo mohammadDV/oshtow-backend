@@ -2,6 +2,7 @@
 
 namespace Domain\User\Repositories\Contracts;
 
+use Application\Api\User\Requests\UpdateUserRequest;
 use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 
@@ -36,4 +37,12 @@ interface IUserRepository
      * @return array
      */
     public function checkVerification() :array;
+
+    /**
+     * Update the user.
+     * @param UpdateUserRequest $request
+     * @param User $user
+     * @return array
+     */
+    public function update(UpdateUserRequest $request, User $user) :array;
 }

@@ -3,6 +3,7 @@
 namespace Domain\User\Repositories;
 
 use Application\Api\Project\Resources\ProjectResource;
+use Application\Api\User\Requests\UpdateUserRequest;
 use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
 use Core\Http\traits\GlobalFunc;
@@ -12,6 +13,7 @@ use Domain\Project\Models\Project;
 use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -173,5 +175,77 @@ class UserRepository implements IUserRepository
             'claims' => $claims,
             'subscription' => $subscriptionInfo
         ]);
+    }
+
+     /**
+     * Update the user.
+     * @param UpdateUserRequest $request
+     * @param User $user
+     * @return array
+     */
+    public function update(UpdateUserRequest $request, User $user) :array
+    {
+
+        $this->checkLevelAccess($user->id == Auth::user()->id);
+
+        // $role_id = !empty($request->input('role_id')) ? $request->input('role_id') : Auth::user()->role_id;
+
+        // if ($user->id == Auth::user()->id) {
+        //     $role_id = Auth::user()->role_id;
+        // }
+
+        // if ($role_id == 1 && Auth::user()->role_id != 1) {
+        //     throw New \Exception('Unauthorized', 403);
+        // }
+
+        if (!$this->checkNickname($request->input('nickname'), $user->id)) {
+            return [
+                'status' => 0,
+                'message' => __('site.The Nickname is invalid')
+            ];
+        }
+
+        $update = $user->update([
+            'first_name'            => $request->input('first_name'),
+            'last_name'             => $request->input('last_name'),
+            'nickname'              => $request->input('nickname'),
+            'address'               => $request->input('address'),
+            'country_id'            => $request->input('country_id'),
+            'province_id'           => $request->input('province_id'),
+            'city_id'               => $request->input('city_id'),
+            'status'                => $user->level == 3 ? $request->input('status') : $user->status,
+            // 'is_private'            => $request->input('is_private', false),
+            'mobile'                => $request->input('mobile'),
+            'biography'             => $request->input('biography'),
+            'profile_photo_path'    => $request->input('profile_photo_path', config('image.default-profile-image')),
+            'bg_photo_path'         => $request->input('bg_photo_path', config('image.default-background-image')),
+        ]);
+
+        if ($update) {
+
+            // $role = Role::findOrFail($role_id);
+            // $user->syncRoles([$role->name]);
+
+            // $this->service->sendNotification(
+            //     config('telegram.chat_id'),
+            //     'ویرایش اطلاعات برای کاربر' . PHP_EOL .
+            //     'first_name ' . $request->input('first_name') . PHP_EOL .
+            //     'last_name ' . $request->input('last_name'),
+            //     'nickname ' . $request->input('nickname'),
+            //     'mobile ' . $request->input('mobile'),
+            //     'national_code ' . $request->input('national_code'),
+            //     'biography ' . $request->input('biography'),
+            //     'profile_photo_path ' . $request->input('profile_photo_path', config('image.default-profile-image')),
+            //     'bg_photo_path ' . $request->input('bg_photo_path', config('image.default-background-image')),
+            // );
+
+            return [
+                'status' => 1,
+                'message' => __('site.The data has been updated'),
+                'user' => $user
+            ];
+        }
+
+        throw new \Exception();
     }
 }

@@ -24,7 +24,7 @@ class IdentityRecordRequest extends BaseRequest
         return [
             'fullname' => 'required|string|max:255',
             'national_code' => 'required|string|max:20|unique:identity_records,national_code',
-            'mobile' => 'required|string|max:11|min:11|unique:identity_records,email',
+            'mobile' => 'required|string|max:11|min:11|unique:identity_records,mobile',
             'birthday' => 'required|date',
             'email' => 'required|email|max:255|unique:identity_records,email',
             'country' => 'required|string|max:100',

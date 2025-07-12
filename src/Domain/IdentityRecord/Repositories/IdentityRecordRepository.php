@@ -71,7 +71,17 @@ class IdentityRecordRepository implements IIdentityRecordRepository
      */
     public function store(IdentityRecordRequest $request) :JsonResponse
     {
-        $this->checkLevelAccess();
+
+        $exist = IdentityRecord::query()
+            ->where('user_id', Auth::user()->id)
+            ->first();
+
+        if ($exist) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Duplicate request')
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $identityRecord = IdentityRecord::create([
             'fullname' => $request->input('fullname'),
