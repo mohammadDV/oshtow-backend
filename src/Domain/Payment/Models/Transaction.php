@@ -33,4 +33,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Wallet::class);
     }
+
+    public static function generateHash(string $id): string
+    {
+        return md5('sys#65687' . $id . '$#$rstg@3');
+    }
 }

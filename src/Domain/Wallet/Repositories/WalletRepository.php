@@ -58,7 +58,7 @@ class WalletRepository implements IWalletRepository
         $amount = intval($request->input('amount'));
 
         // Create transaction record
-        $transaction = WalletTransaction::create([
+        $walletTransaction = WalletTransaction::create([
             'wallet_id' => $wallet->id,
             'type' => 'deposit',
             'amount' => $amount,
@@ -68,31 +68,27 @@ class WalletRepository implements IWalletRepository
             'description' => 'Wallet top-up',
         ]);
 
-        $request = Toman::amount($request->input('amount'))
-            ->description('Topup the wallet')
-            ->callback(route('user.payment.callback'))
-            ->mobile(Auth::user()->mobile)
-            ->email(Auth::user()->email)
-            ->request();
+        $transaction = Transaction::create([
+            'status' => Transaction::PENDING,
+            'model_id' => $walletTransaction->id,
+            'model_type' => Transaction::WALLET,
+            'amount' => $amount,
+            'user_id' => Auth::user()->id,
+        ]);
 
-        if ($request->successful()) {
+        $code = Transaction::generateHash($transaction->id);
 
-            Transaction::create([
-                'bank_transaction_id' => $request->transactionId(),
-                'status' => Transaction::PENDING,
-                'model_id' => $transaction->id,
-                'model_type' => Transaction::WALLET,
-                'amount' => $amount,
-                'user_id' => Auth::user()->id,
-            ]);
-
-            return $request->pay();
+        if ($transaction) {
+            return [
+                'status' => 1,
+                'url' => route('user.payment') . '?transaction=' . $transaction->id . '&sign=' . $code
+            ];
         }
 
         return response()->json([
             'status' => 0,
             'message' => __('site.Top-up failed. Please try again.'),
-        ], 500);
+        ], Response::HTTP_BAD_REQUEST);
 
     }
 
