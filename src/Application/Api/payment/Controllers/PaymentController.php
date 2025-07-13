@@ -7,17 +7,13 @@ use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
-use Domain\Payment\Models\PaymentSecure;
 use Domain\Payment\Models\Transaction;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
 use Domain\Wallet\Repositories\WalletRepository;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
-use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -87,7 +83,6 @@ class PaymentController extends Controller
 
                 $this->processHandling($transaction);
 
-                return redirect()->to('/payment/result');
             }
 
             if ($payment->alreadyVerified()) {
@@ -97,6 +92,7 @@ class PaymentController extends Controller
                     'messsage' => $payment->message(),
                     'reference' => $payment->referenceId(),
                 ]);
+
             }
 
             if ($payment->failed()) {
@@ -106,17 +102,10 @@ class PaymentController extends Controller
                     'description' => $payment->message(),
                 ]);
 
-                return response()->json([
-                    'status' => 0,
-                    'messsage' => __("site.not_paid"),
-                ]);
             }
         }
 
-        return response()->json([
-            'status' => 0,
-            'messsage' => __("site.unexpected"),
-        ]);
+        return redirect()->to('/payment/result/' . $request->transactionId());
 
     }
 
