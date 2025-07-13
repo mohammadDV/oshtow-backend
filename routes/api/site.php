@@ -33,8 +33,9 @@ Route::get('/user-info/{user}', [UserController::class, 'getUserInfo'])->name('u
 Route::get('/active-subjects', [TicketSubjectController::class, 'activeSubjects'])->name('active-subjects');
 Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser']);
 
-Route::get('/payment', [PaymentController::class, 'payment'])->name('user.payment');
 Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('user.payment.callback');
+Route::get('/payment', [PaymentController::class, 'payment'])->name('user.payment');
+Route::get('/payment/result/{id}', [PaymentController::class, 'show'])->name('user.payment.result');
 
 // ->middleware(['auth', 'verified'])
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {

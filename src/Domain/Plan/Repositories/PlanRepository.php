@@ -76,7 +76,6 @@ class PlanRepository implements IPlanRepository
         $plan = Plan::create([
             'title' => $request->input('title'),
             'priod' => $request->input('priod'),
-            'type' => $request->input('type'),
             'status' => $request->input('status'),
             'amount' => $request->input('amount'),
             'period_count' => $request->input('period_count'),
@@ -88,7 +87,8 @@ class PlanRepository implements IPlanRepository
         if ($plan) {
             return response()->json([
                 'status' => 1,
-                'message' => __('site.The operation has been successfully')
+                'message' => __('site.The operation has been successfully'),
+                'plan' =>  $plan
             ], Response::HTTP_CREATED);
         }
 

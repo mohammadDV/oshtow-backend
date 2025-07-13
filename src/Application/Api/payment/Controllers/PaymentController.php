@@ -3,17 +3,19 @@
 namespace Application\Api\Payment\Controllers;
 
 use Core\Http\Controllers\Controller;
+use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
-use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
 use Domain\Payment\Models\Transaction;
+use Domain\Payment\Repositories\Contracts\IPaymentRepository;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
 use Domain\Wallet\Repositories\WalletRepository;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -21,42 +23,66 @@ class PaymentController extends Controller
     use GlobalFunc;
 
     public function __construct(
-        protected IClaimRepository $claimRepository,
+        protected IPaymentRepository $repository,
     ) {}
 
 
+    /**
+     * Get the transaction pagination.
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function index(TableRequest $request) :JsonResponse
+    {
+        return response()->json($this->repository->index($request));
+    }
+
+    /**
+     * Get the transaction result.
+     * @param string $bankTransactionId
+     * @return array
+     */
+    public function show(string $id) : JsonResponse
+    {
+        return response()->json($this->repository->show($id));
+    }
 
     /**
      * Display a listing of the resource.
      */
-    public function payment()
+    public function payment(Request $request)
     {
-        $amount = 1000;
+        $code = Transaction::generateHash($request->input('transaction'));
 
-        $request = Toman::amount(1000)
-            ->description('Subscribing to Plan A')
+        if ($code != $request->input('sign')) {
+            return [
+                'status' => 0,
+                'message' => 'درخواست نامعتبر است.'
+            ];
+        }
+
+        $transaction = Transaction::findOrfail($request->input('transaction'));
+
+        $user = User::findOrfail($transaction->user_id);
+
+        $tomanRequest = Toman::amount($transaction->amount)
+            ->description('Subscribe the first plan')
             ->callback(route('user.payment.callback'))
-            ->mobile('09350000000')
-            ->email('amirreza@example.com')
+            ->mobile($user->mobile)
+            ->email($user->email)
             ->request();
 
-        if ($request->successful()) {
+        if ($tomanRequest->successful()) {
 
-            Transaction::create([
-                'bank_transaction_id' => $request->transactionId(),
-                'status' => Transaction::PENDING,
-                'model_id' => 14,
-                'model_type' => Transaction::WALLET,
-                'amount' => $amount,
-                'user_id' => 10,
+            $transaction->update([
+                'bank_transaction_id' => $tomanRequest->transactionId()
             ]);
 
-            return $request->pay(); // Redirect to payment URL
+            return $tomanRequest->pay(); // Redirect to payment URL
         }
 
-        if ($request->failed()) {
-            // Handle transaction request failure; Probably showing proper error to user.
-        }
+        return redirect()->to('/payment/result/' . $request->transactionId());
+
     }
 
     /**

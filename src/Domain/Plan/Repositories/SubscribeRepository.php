@@ -97,25 +97,21 @@ class SubscribeRepository implements ISubscribeRepository
     {
         $amount = intval($plan->amount);
 
-        $request = Toman::amount($amount)
-            ->description('Subscribe the plan')
-            ->callback(route('user.payment.callback'))
-            ->mobile(Auth::user()->mobile)
-            ->email(Auth::user()->email)
-            ->request();
+        $transaction = Transaction::create([
+            'status' => Transaction::PENDING,
+            'model_id' => $plan->id,
+            'model_type' => Transaction::PLAN,
+            'amount' => $amount,
+            'user_id' => Auth::user()->id,
+        ]);
 
-        if ($request->successful()) {
+        $code = Transaction::generateHash($transaction->id);
 
-            Transaction::create([
-                'bank_transaction_id' => $request->transactionId(),
-                'status' => Transaction::PENDING,
-                'model_id' => $plan->id,
-                'model_type' => Transaction::PLAN,
-                'amount' => $amount,
-                'user_id' => Auth::user()->id,
-            ]);
-
-            return $request->pay();
+        if ($transaction) {
+            return [
+                'status' => 1,
+                'url' => route('user.payment') . '?transaction=' . $transaction->id . '&sign=' . $code
+            ];
         }
 
         return response()->json([
