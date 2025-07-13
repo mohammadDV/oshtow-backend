@@ -45,9 +45,8 @@ class SubscribeController extends Controller
      * Store the subscribtion.
      * @param StoreSubscribeRequest $request
      * @param Plan $plan
-     * @return JsonResponse
      */
-    public function store(StoreSubscribeRequest $request, Plan $plan) :JsonResponse
+    public function store(StoreSubscribeRequest $request, Plan $plan)
     {
         return $this->repository->store($request, $plan);
     }

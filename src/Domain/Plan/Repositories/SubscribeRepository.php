@@ -7,12 +7,14 @@ use Application\Api\Plan\Resources\SubscriptionResource;
 use Carbon\Carbon;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Payment\Models\Transaction;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Models\Subscription;
 use Domain\Plan\Repositories\Contracts\ISubscribeRepository;
 use Domain\User\Models\User;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Repositories\Contracts\IWalletRepository;
+use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -73,22 +75,55 @@ class SubscribeRepository implements ISubscribeRepository
     /**
      * Store the subscription.
      * @param Plan $plan
-     * @return JsonResponse
      * @throws \Exception
      */
-    public function store(StoreSubscribeRequest $request, Plan $plan): JsonResponse
+    public function store(StoreSubscribeRequest $request, Plan $plan)
     {
         if ($request->input('payment_method') === 'wallet') {
             return $this->payWithWallet($plan);
         }
 
         // TODO: Implement bank payment gateway
+        return $this->payWithBank($plan);
+
+    }
+
+    /**
+     * Pay with wallet.
+     * @param Plan $plan
+     * @throws \Exception
+     */
+    private function payWithBank(Plan $plan)
+    {
+        $amount = intval($plan->amount);
+
+        $request = Toman::amount($amount)
+            ->description('Subscribe the plan')
+            ->callback(route('user.payment.callback'))
+            ->mobile(Auth::user()->mobile)
+            ->email(Auth::user()->email)
+            ->request();
+
+        if ($request->successful()) {
+
+            Transaction::create([
+                'bank_transaction_id' => $request->transactionId(),
+                'status' => Transaction::PENDING,
+                'model_id' => $plan->id,
+                'model_type' => Transaction::PLAN,
+                'amount' => $amount,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            return $request->pay();
+        }
 
         return response()->json([
             'status' => 0,
-            'message' => __('site.Transfer failed. Please try again.')
-        ], Response::HTTP_BAD_REQUEST);
+            'message' => __('site.Top-up failed. Please try again.'),
+        ], 500);
     }
+
 
     /**
      * Pay with wallet.

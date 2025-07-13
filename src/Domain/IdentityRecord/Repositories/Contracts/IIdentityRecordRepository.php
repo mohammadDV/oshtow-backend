@@ -7,6 +7,7 @@ use Application\Api\IdentityRecord\Requests\IdentityRecordRequest;
 use Application\Api\IdentityRecord\Requests\UpdateIdentityRecordRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\IdentityRecord\Models\IdentityRecord;
+use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -25,17 +26,23 @@ interface IIdentityRecordRepository
     /**
      * Get the identityRecord.
      * @param IdentityRecord $identityRecord
-     * @return IdentityRecord
+     * @return ?IdentityRecord
      */
-    public function show(IdentityRecord $identityRecord) :IdentityRecord;
+    public function show(IdentityRecord $identityRecord) : ?IdentityRecord;
+
+    /**
+     * Get the identityRecord from the user.
+     * @param User $user
+     * @return ?IdentityRecord
+     */
+    public function getIdentityInfo(User $user) : ?IdentityRecord;
 
     /**
      * Store the identityRecord.
      * @param IdentityRecordRequest $request
-     * @return JsonResponse
      * @throws \Exception
      */
-    public function store(IdentityRecordRequest $request) :JsonResponse;
+    public function store(IdentityRecordRequest $request);
 
     /**
      * Update the identityRecord.

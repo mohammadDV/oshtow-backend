@@ -23,10 +23,10 @@ class IdentityRecordRequest extends BaseRequest
     {
         return [
             'fullname' => 'required|string|max:255',
-            'national_code' => 'required|string|max:20|unique:identity_records,national_code',
-            'mobile' => 'required|string|max:11|min:11|unique:identity_records,mobile',
+            'national_code' => 'required|string|max:20',
+            'mobile' => 'required|string|max:11|min:11',
             'birthday' => 'required|date',
-            'email' => 'required|email|max:255|unique:identity_records,email',
+            'email' => 'required|email|max:255',
             'country' => 'required|string|max:100',
             'postal_code' => 'required|string|max:20',
             'address' => 'required|string|max:500',

@@ -9,6 +9,7 @@ use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
+use Domain\User\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -45,11 +46,20 @@ class IdentityRecordController extends Controller
     }
 
     /**
-     * Store the identityRecord.
-     * @param IdentityRecordRequest $request
+     * Get the identityRecord from the user.
+     * @param User $user
      * @return JsonResponse
      */
-    public function store(IdentityRecordRequest $request) :JsonResponse
+    public function getIdentityInfo(User $user) :JsonResponse
+    {
+        return response()->json($this->repository->getIdentityInfo($user), Response::HTTP_OK);
+    }
+
+    /**
+     * Store the identityRecord.
+     * @param IdentityRecordRequest $request
+     */
+    public function store(IdentityRecordRequest $request)
     {
         return $this->repository->store($request);
     }

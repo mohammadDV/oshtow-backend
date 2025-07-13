@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('fullname');
             $table->string('national_code');
-            $table->string('mobile')->unique();
+            $table->string('mobile');
             $table->date('birthday');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('country');
             $table->string('postal_code');
             $table->string('address');

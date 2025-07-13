@@ -10,9 +10,11 @@ use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
+use Domain\Payment\Models\Transaction;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
+use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -51,9 +53,9 @@ class IdentityRecordRepository implements IIdentityRecordRepository
     /**
      * Get the identityRecord.
      * @param IdentityRecord $identityRecord
-     * @return IdentityRecord
+     * @return ?IdentityRecord
      */
-    public function show(IdentityRecord $identityRecord) :IdentityRecord
+    public function show(IdentityRecord $identityRecord) : ?IdentityRecord
     {
 
         $this->checkLevelAccess(Auth::user()->id == $identityRecord->user_id);
@@ -64,12 +66,26 @@ class IdentityRecordRepository implements IIdentityRecordRepository
     }
 
     /**
+     * Get the identityRecord from the user.
+     * @param User $user
+     * @return ?IdentityRecord
+     */
+    public function getIdentityInfo(User $user) : ?IdentityRecord
+    {
+
+        $this->checkLevelAccess(Auth::user()->id == $user->id);
+
+        return IdentityRecord::query()
+                ->where('user_id', $user->id)
+                ->first();
+    }
+
+    /**
      * Store the identityRecord.
      * @param IdentityRecordRequest $request
-     * @return JsonResponse
      * @throws \Exception
      */
-    public function store(IdentityRecordRequest $request) :JsonResponse
+    public function store(IdentityRecordRequest $request)
     {
 
         $exist = IdentityRecord::query()
@@ -77,6 +93,11 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             ->first();
 
         if ($exist) {
+
+            if ($exist->status == IdentityRecord::PENDING) {
+                return $this->redirectToGateway($exist);
+            }
+
             return response()->json([
                 'status' => 0,
                 'message' => __('site.Duplicate request')
@@ -99,14 +120,42 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'user_id' => Auth::user()->id,
         ]);
 
-        if ($identityRecord) {
-            return response()->json([
-                'status' => 1,
-                'message' => __('site.The operation has been successfully')
-            ], Response::HTTP_CREATED);
-        }
+        return $this->redirectToGateway($identityRecord);
 
-        throw new \Exception();
+    }
+
+
+
+    /**
+     * Redirect to Gateway.
+     * @param IdentityRecord $identityRecord
+     */
+    public function redirectToGateway(IdentityRecord $identityRecord)
+    {
+        $plan = Plan::find(config('plan.default_plan_id'));
+
+        $amount = intval($plan->amount);
+
+        $request = Toman::amount($amount)
+            ->description('Subscribe the first plan')
+            ->callback(route('user.payment.callback'))
+            ->mobile(Auth::user()->mobile)
+            ->email(Auth::user()->email)
+            ->request();
+
+        if ($request->successful()) {
+
+            Transaction::create([
+                'bank_transaction_id' => $request->transactionId(),
+                'status' => Transaction::PENDING,
+                'model_id' => $identityRecord->id,
+                'model_type' => Transaction::WALLET,
+                'amount' => $amount,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            return $request->pay();
+        }
     }
 
     /**
@@ -154,6 +203,17 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'status' => 1,
             'message' => __('site.The operation has been successfully')
         ], Response::HTTP_OK);
+    }
+
+    /**
+     * Update the identityRecord.
+     * @param int $identityRecordId
+     */
+    public function changeStatusToPaid(int $identityRecordId)
+    {
+        IdentityRecord::where('id', $identityRecordId)->update([
+            'status' => IdentityRecord::PAID,
+        ]);
     }
 
     /**

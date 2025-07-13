@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3334fbf79f77dbd581f20b6cf45f3415",
+    "content-hash": "10d192b5b72bd6dd378a388cea95c755",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -727,6 +727,90 @@
                 }
             ],
             "time": "2025-03-06T22:45:56+00:00"
+        },
+        {
+            "name": "evryn/laravel-toman",
+            "version": "v4.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evryn/laravel-toman.git",
+                "reference": "c8f8046aa96154a1974161af4a644eb458756d68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/evryn/laravel-toman/zipball/c8f8046aa96154a1974161af4a644eb458756d68",
+                "reference": "c8f8046aa96154a1974161af4a644eb458756d68",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.8",
+                "laravel/framework": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^9.0|^10.0",
+                "phpunit/phpunit": "^10.5|^11.0",
+                "sempro/phpunit-pretty-print": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Payment": "Evryn\\LaravelToman\\Facades\\Payment"
+                    },
+                    "providers": [
+                        "Evryn\\LaravelToman\\LaravelTomanServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Evryn\\LaravelToman\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Amirreza Nasiri",
+                    "email": "nasiri.amirreza.96@gmail.com",
+                    "homepage": "https://amirreza.in"
+                }
+            ],
+            "description": "A simple stable Laravel package to handle popular payment gateways in Iran including ZarinPal and IDPay.",
+            "homepage": "https://github.com/evryn/laravel-toman",
+            "keywords": [
+                "gateway",
+                "idpay",
+                "laravel",
+                "laravel-toman",
+                "laraveltoman",
+                "payment",
+                "toman",
+                "zarinpal",
+                "آیدی پی",
+                "درگاه",
+                "زرین پال",
+                "پرداخت"
+            ],
+            "support": {
+                "issues": "https://github.com/evryn/laravel-toman/issues",
+                "source": "https://github.com/evryn/laravel-toman/tree/v4.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://yekpay.me/en/AmirrezaNasiri",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://zarinp.al/@amirrezan",
+                    "type": "custom"
+                }
+            ],
+            "time": "2025-07-06T17:07:53+00:00"
         },
         {
             "name": "firebase/php-jwt",

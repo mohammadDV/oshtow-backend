@@ -5,6 +5,7 @@ use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
 use Application\Api\File\Controllers\FileController;
 use Application\Api\IdentityRecord\Controllers\IdentityRecordController;
+use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
@@ -28,10 +29,12 @@ Route::get('/cities', [AddressController::class, 'getCitiesPaginate'])->name('ci
 Route::get('/active-plans', [PlanController::class, 'activePlans'])->name('active-plans');
 Route::get('/active-project-categories', [ProjectCategoryController::class, 'activeProjectCategories'])->name('active-project-categories');
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
-Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+Route::get('/user-info/{user}', [UserController::class, 'getUserInfo'])->name('user.show');
 Route::get('/active-subjects', [TicketSubjectController::class, 'activeSubjects'])->name('active-subjects');
 Route::get('/user/{user}/reviews', [ReviewController::class, 'getReviewsPerUser']);
 
+Route::get('/payment', [PaymentController::class, 'payment'])->name('user.payment');
+Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('user.payment.callback');
 
 // ->middleware(['auth', 'verified'])
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
@@ -40,10 +43,14 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     // update user
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('user.show');
+
+    // payment
 
 
     Route::resource('plans', PlanController::class);
     Route::resource('identity-records', IdentityRecordController::class);
+    Route::get('identity-records-info/{user}', [IdentityRecordController::class, 'getIdentityInfo']);
     Route::post('identity-records/{identityRecord}/change-status', [IdentityRecordController::class, 'changeStatus']);
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);

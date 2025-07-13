@@ -46,6 +46,16 @@ class UserController extends Controller
 
     /**
      * Get the user info
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function getUserInfo(User $user): JsonResponse
+    {
+        return response()->json($this->repository->getUserInfo($user));
+    }
+
+    /**
+     * Get the user info
      * @return JsonResponse
      */
     public function checkVerification(): JsonResponse
