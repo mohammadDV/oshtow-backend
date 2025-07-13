@@ -7,16 +7,19 @@ use Application\Api\Wallet\Requests\TransferRequest;
 use Application\Api\Wallet\Requests\WithdrawRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Payment\Models\Transaction;
 use Domain\User\Models\User;
 use Domain\Wallet\Models\Wallet;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Models\WithdrawalTransaction;
 use Domain\Wallet\Repositories\Contracts\IWalletRepository;
+use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class WalletRepository implements IWalletRepository
@@ -46,56 +49,75 @@ class WalletRepository implements IWalletRepository
     /**
      * TopUp the balance
      * @param TopUpRequest $request
-     * @return JsonResponse
      */
-    public function topUp(TopUpRequest $request) :JsonResponse
+    public function topUp(TopUpRequest $request)
+    {
+        // Get the wallet
+        $wallet = $this->findByUserId(Auth::id());
+
+        $amount = intval($request->input('amount'));
+
+        // Create transaction record
+        $transaction = WalletTransaction::create([
+            'wallet_id' => $wallet->id,
+            'type' => 'deposit',
+            'amount' => $amount,
+            'currency' => Wallet::IRR,
+            'status' => WalletTransaction::PENDING,
+            'reference' => WalletTransaction::generateReference(),
+            'description' => 'Wallet top-up',
+        ]);
+
+        $request = Toman::amount($request->input('amount'))
+            ->description('Topup the wallet')
+            ->callback(route('user.payment.callback'))
+            ->mobile(Auth::user()->mobile)
+            ->email(Auth::user()->email)
+            ->request();
+
+        if ($request->successful()) {
+
+            Transaction::create([
+                'bank_transaction_id' => $request->transactionId(),
+                'status' => Transaction::PENDING,
+                'model_id' => $transaction->id,
+                'model_type' => Transaction::WALLET,
+                'amount' => $amount,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            return $request->pay();
+        }
+
+        return response()->json([
+            'status' => 0,
+            'message' => __('site.Top-up failed. Please try again.'),
+        ], 500);
+
+    }
+
+    /**
+     * Complete the topup
+     * @param int $walletTransactionId
+     * @return void
+     */
+    public function completeTopUp(int $walletTransactionId) :void
     {
         try {
             DB::beginTransaction();
 
-            // Get the wallet
-            $wallet = $this->findByUserId(Auth::id());
-
             // Create transaction record
-            $transaction = WalletTransaction::create([
-                'wallet_id' => $wallet->id,
-                'type' => 'deposit',
-                'amount' => $request->input('amount'),
-                'currency' => Wallet::IRR,
-                'status' => WalletTransaction::PENDING,
-                'reference' => WalletTransaction::generateReference(),
-                'description' => 'Wallet top-up',
-            ]);
-
-            // TODO: Integrate with actual bank gateway
-            // For now, we'll simulate a successful payment
-            // $bankTransaction->markAsProcessed();
-
+            $walletTransaction = WalletTransaction::find($walletTransactionId);
             // Update wallet balance
-            $this->incrementBalance($wallet, $request->input('amount'));
+            $this->incrementBalance($walletTransaction->wallet, $walletTransaction->amount);
 
             // Update transaction status
-            $this->update($transaction, ['status' => 'completed']);
+            $this->update($walletTransaction, ['status' => 'completed']);
 
             DB::commit();
 
-            return response()->json([
-                'status' => 1,
-                'message' => __('site.Top-up successful'),
-                'data' => [
-                    'transaction_reference' => $transaction->reference,
-                    'new_balance' => $wallet->balance,
-                ],
-            ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Wallet top-up failed: ' . $e->getMessage());
-
-            return response()->json([
-                'status' => 0,
-                'message' => __('site.Top-up failed. Please try again.'),
-            ], 500);
         }
     }
 
@@ -161,7 +183,7 @@ class WalletRepository implements IWalletRepository
             return response()->json([
                 'status' => 0,
                 'message' => __('site.Transfer failed. Please try again.'),
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -241,7 +263,7 @@ class WalletRepository implements IWalletRepository
                 return response()->json([
                     'status' => 0,
                     'message' => __('site.Insufficient funds'),
-                ], 422);
+                ], Response::HTTP_BAD_REQUEST);
             }
 
             $transaction = WalletTransaction::createTransaction(
@@ -282,7 +304,7 @@ class WalletRepository implements IWalletRepository
             return response()->json([
                 'status' => 0,
                 'message' => __('site.Withdrawal failed. Please try again.'),
-            ], 500);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -64,7 +64,7 @@ class WalletController extends Controller
         //
     }
 
-    public function topUp(TopUpRequest $request): JsonResponse
+    public function topUp(TopUpRequest $request)
     {
         return $this->repository->topUp($request);
     }

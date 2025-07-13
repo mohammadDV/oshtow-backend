@@ -33,6 +33,13 @@ interface IUserRepository
     public function show(User $user) :array;
 
     /**
+     * Get the user info.
+     * @param User $user
+     * @return array
+     */
+    public function getUserInfo(User $user) :array;
+
+    /**
      * Get verification of the user
      * @return array
      */

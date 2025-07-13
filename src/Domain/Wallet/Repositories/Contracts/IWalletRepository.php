@@ -24,9 +24,8 @@ interface IWalletRepository
      * Top up the balance for a wallet.
      *
      * @param TopUpRequest $request
-     * @return JsonResponse
      */
-    public function topUp(TopUpRequest $request): JsonResponse;
+    public function topUp(TopUpRequest $request);
 
     /**
      * Transfer the balance to a wallet.

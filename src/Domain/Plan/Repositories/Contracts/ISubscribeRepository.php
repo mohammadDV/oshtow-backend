@@ -30,8 +30,7 @@ interface ISubscribeRepository
      * Store the subscribtion.
      * @param StoreSubscribeRequest $request
      * @param Plan $plan
-     * @return JsonResponse
      * @throws \Exception
      */
-    public function store(StoreSubscribeRequest $request, Plan $plan) :JsonResponse;
+    public function store(StoreSubscribeRequest $request, Plan $plan);
 }

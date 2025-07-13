@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Application\Api\User\Mail\ThankYouForRegistering;
 use Application\Api\User\Resources\UserResource;
+use Domain\IdentityRecord\Models\IdentityRecord;
 use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
@@ -48,11 +49,22 @@ class AuthController extends Controller
 
         $token = $user->createToken('finybotokenapp')->plainTextToken;
 
+        $identityRecord = IdentityRecord::query()
+            ->where('user_id', $user->id)
+            ->first();
+
+        $status = false;
+
+        if ($identityRecord) {
+            $status = $identityRecord->status;
+        }
+
         return response([
             'is_admin' => $user->level == 3,
             'token' => $token,
             'verify_email' => !empty($user->email_verified_at),
             'verify_access' => !empty($user->verified_at),
+            'status_approval' => $status,
             'user' => new UserResource($user),
             'mesasge' => 'success',
             'status' => 1

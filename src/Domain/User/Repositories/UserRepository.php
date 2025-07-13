@@ -8,12 +8,12 @@ use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
+use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\Plan\Models\Subscription;
 use Domain\Project\Models\Project;
 use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -39,7 +39,7 @@ class UserRepository implements IUserRepository
      * @param User $user
      * @return array
      */
-    public function show(User $user) :array
+    public function getUserInfo(User $user) :array
     {
 
         $senderQuery = Project::query()
@@ -96,16 +96,56 @@ class UserRepository implements IUserRepository
     }
 
     /**
+     * Get the user info.
+     * @param User $user
+     * @return array
+     */
+    public function show(User $user) :array
+    {
+        $this->checkLevelAccess($user->id == Auth::user()->id);
+
+        return [
+            'user' => [
+                'id' => $user->id,
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'nickname' => $user->nickname,
+                'address' => $user->address,
+                'country_id' => $user->country_id,
+                'province_id' => $user->province_id,
+                'city_id' => $user->city_id,
+                'mobile' => $user->mobile,
+                'biography' => $user->biography,
+                'profile_photo_path' => $user->profile_photo_path,
+                'bg_photo_path' => $user->bg_photo_path,
+                'rate' => $user->rate,
+                'point' => $user->point,
+            ]
+        ];
+    }
+
+    /**
      * Get verification of the user
      * @return array
      */
     public function checkVerification() :array
     {
+        $identityRecord = IdentityRecord::query()
+            ->where('user_id', Auth::user()->id)
+            ->first();
+
+        $status = false;
+
+        if ($identityRecord) {
+            $status = $identityRecord->status;
+        }
 
         return [
             'is_admin' => Auth::user()->level == 3,
             'verify_email' => !empty(Auth::user()->email_verified_at),
             'verify_access' => !empty(Auth::user()->verified_at),
+            'status_approval' => $status,
             'user' => new UserResource(Auth::user())
         ];
     }
