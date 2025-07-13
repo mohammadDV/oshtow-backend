@@ -4,6 +4,7 @@ namespace Application\Api\Plan\Resources;
 
 use Application\Api\User\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Morilog\Jalali\Jalalian;
 
 class SubscriptionResource extends JsonResource
 {
@@ -19,7 +20,7 @@ class SubscriptionResource extends JsonResource
             'id' => $this->id,
             'user' => new UserResource($this->whenLoaded('user')),
             'plan' => new PlanResource($this->whenLoaded('plan')),
-            'ends_at' => $this->ends_at,
+            'ends_at' => Jalalian::fromDateTime($this->ends_at)->format('d F'),
             'active' => $this->active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

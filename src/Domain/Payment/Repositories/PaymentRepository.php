@@ -7,6 +7,7 @@ use Domain\Payment\Models\Transaction;
 use Domain\Payment\Repositories\Contracts\IPaymentRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
 
 class PaymentRepository implements IPaymentRepository
 {
@@ -46,7 +47,8 @@ class PaymentRepository implements IPaymentRepository
             'bank_transaction_id' => $transaction->bank_transaction_id,
             'reference' => $transaction->reference,
             'status' => $transaction->status,
-            'message' => $transaction->message
+            'message' => $transaction->message,
+            'date' => Jalalian::fromDateTime($transaction->created_at)->format('Y-m-d H:i:s'),
         ];
     }
 
