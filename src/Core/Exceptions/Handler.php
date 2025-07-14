@@ -58,6 +58,10 @@ class Handler extends ExceptionHandler
         // Handle other exceptions
         $statusCode = $e instanceof HttpException ? $e->getStatusCode() : 500;
 
+        if (in_array($e->getMessage(), ['Unauthorized', 'Unauthenticated.'])) {
+            $statusCode = 401;
+        }
+
         return response()->json([
             'status' => 0,
             'message' => $e->getMessage() ?: 'Server Error',

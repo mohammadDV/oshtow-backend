@@ -28,6 +28,7 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
     public function index(TableRequest $request) :LengthAwarePaginator
     {
         $search = $request->get('query');
+        $status = $request->get('status');
 
         // Get the wallet
         $wallet = Wallet::query()
@@ -37,6 +38,9 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
         return WithdrawalTransaction::query()
             ->when(Auth::user()->level != 3, function ($query) use ($wallet) {
                 return $query->where('wallet_id', $wallet->id);
+            })
+            ->when(!empty($status), function ($query) use ($status) {
+                return $query->where('status', $status);
             })
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('description', 'like', '%' . $search . '%')
