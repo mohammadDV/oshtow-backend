@@ -25,7 +25,9 @@ class TableRequest extends BaseRequest
             'sort' => !empty($this->get('sort')) ? ['required', 'string', 'in:desc,asc'] : 'sometimes',
             'page' => !empty($this->get('page')) ? ['required','integer'] : 'sometimes',
             'search' => !empty($this->get('search')) ? ['required','string', 'max:255'] : 'sometimes',
-            'count' => !empty($this->get('count')) ? ['required','integer', 'min:5','max:200'] : 'sometimes'
+            'count' => !empty($this->get('count')) ? ['required','integer', 'min:5','max:200'] : 'sometimes',
+            'type' => ['nullable','string','max:100'],
+            'status' => ['nullable','string','max:100']
         ];
     }
 }

@@ -16,6 +16,7 @@ use Application\Api\Ticket\Controllers\TicketSubjectController;
 use Application\Api\User\Controllers\AuthController;
 use Application\Api\User\Controllers\UserController;
 use Application\Api\Wallet\Controllers\WalletController;
+use Application\Api\Wallet\Controllers\WalletTransactionController;
 use Application\Api\Wallet\Controllers\WithdrawalTransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::get('/wallet', [WalletController::class, 'show']);
     Route::post('/wallet/top-up', [WalletController::class, 'topUp']);
     Route::post('/wallet/transfer', [WalletController::class, 'transfer']);
+
+    Route::get('/wallet-transaction/{wallet}', [WalletTransactionController::class, 'index']);
 
     // withdraw
     Route::post('/withdraws', [WithdrawalTransactionController::class, 'store']);
