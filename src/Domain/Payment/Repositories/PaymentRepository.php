@@ -47,6 +47,7 @@ class PaymentRepository implements IPaymentRepository
             'bank_transaction_id' => $transaction->bank_transaction_id,
             'reference' => $transaction->reference,
             'status' => $transaction->status,
+            'amount' => $transaction->amount,
             'message' => $transaction->message,
             'date' => Jalalian::fromDateTime($transaction->created_at)->format('Y-m-d H:i:s'),
         ];
