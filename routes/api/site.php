@@ -67,7 +67,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     // subscribe
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('profile.subscriptions');
     Route::get('/subscription-active', [SubscribeController::class, 'activeSubscription'])->name('profile.subscriptions.active');
-    Route::get('/subscribe/{plan}', [SubscribeController::class, 'store'])->name('profile.subscribe.plan');
+    Route::post('/subscribe/{plan}', [SubscribeController::class, 'store'])->name('profile.subscribe.plan');
 
     // wallet
     Route::get('/wallets', [WalletController::class, 'index']);
