@@ -6,6 +6,7 @@ use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
+use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
 use Domain\Payment\Models\Transaction;
 use Domain\Payment\Repositories\Contracts\IPaymentRepository;
@@ -24,6 +25,7 @@ class PaymentController extends Controller
 
     public function __construct(
         protected IPaymentRepository $repository,
+        protected IClaimRepository $claimRepository,
     ) {}
 
 
