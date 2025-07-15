@@ -18,6 +18,7 @@ use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class PaymentController extends Controller
 {
@@ -83,7 +84,7 @@ class PaymentController extends Controller
             return $tomanRequest->pay(); // Redirect to payment URL
         }
 
-        return redirect()->to('/payment/result/' . $request->transactionId());
+        return Redirect::to('http://localhost:3000/payment/result/' . $request->transactionId());
 
     }
 
@@ -133,8 +134,7 @@ class PaymentController extends Controller
             }
         }
 
-        return redirect()->to('/payment/result/' . $request->transactionId());
-
+        return Redirect::to('http://localhost:3000/payment/result/' . $request->transactionId());
     }
 
     /**
