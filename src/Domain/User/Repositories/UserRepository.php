@@ -54,6 +54,7 @@ class UserRepository implements IUserRepository
             ])
             ->where('user_id', $user->id)
             ->where('type', Project::SENDER)
+            ->where('status', '!=', Project::REJECT)
             ->where('active', 1)
             ->orderBy('id', 'desc');
 
@@ -76,6 +77,7 @@ class UserRepository implements IUserRepository
             ])
             ->where('user_id', $user->id)
             ->where('type', Project::PASSENGER)
+            ->where('status', '!=', Project::REJECT)
             ->where('active', 1)
             ->orderBy('id', 'desc');
 
@@ -178,6 +180,7 @@ class UserRepository implements IUserRepository
             // Get projects count
             $projectCount = Project::query()
                 ->where('user_id', Auth::user()->id)
+                ->where('status', '!=', Project::REJECT)
                 ->where('created_at', '>', $activeSubscription->created_at)
                 ->count();
 

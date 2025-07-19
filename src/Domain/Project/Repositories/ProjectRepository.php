@@ -3,6 +3,7 @@
 namespace Domain\Project\Repositories;
 
 use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Project\Requests\RejectProjectRequest;
 use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
@@ -135,8 +136,8 @@ class ProjectRepository implements IProjectRepository
             'dimensions' => $request->input('dimensions'),
             'active' => 1,
             'status' => Project::PENDING,
-            'vip' => $request->input('vip'),
-            'priority' => $request->input('priority'),
+            'vip' => 0,
+            'priority' => 0,
             'send_date' => $request->input('send_date'),
             'receive_date' => $request->input('receive_date'),
             'o_country_id' => $request->input('o_country_id'),
@@ -173,22 +174,23 @@ class ProjectRepository implements IProjectRepository
      */
     public function update(ProjectRequest $request, Project $project) :JsonResponse
     {
-        $this->checkLevelAccess(Auth::user()->level == 3);
-        // $this->checkLevelAccess(Auth::user()->id == $project->user_id);
+        $this->checkLevelAccess(Auth::user()->id == $project->user_id);
+
+        if (Auth::user()->level != 3 && $project->status != Project::PENDING) {
+            throw New \Exception('Unauthorized', 403);
+        }
 
         $updated = $project->update([
             'title' => $request->input('title'),
-            'type' => $request->input('type'),
             'path_type' => $request->input('path_type'),
             'amount' => $request->input('amount'),
             'description' => $request->input('description'),
             'address' => $request->input('address'),
             'weight' => $request->input('weight'),
             'dimensions' => $request->input('dimensions'),
-            'active' => $request->input('active'),
-            'status' => $request->input('status'),
-            'vip' => $request->input('vip'),
-            'priority' => $request->input('priority'),
+            'vip' => Auth::user()->level != 3 ? $project->vip : $request->input('vip'),
+            'priority' => Auth::user()->level != 3 ? $project->priority : $request->input('priority'),
+            'active' => Auth::user()->level != 3 ? $project->active : $request->input('active'),
             'send_date' => $request->input('send_date'),
             'receive_date' => $request->input('receive_date'),
             'o_country_id' => $request->input('o_country_id'),
@@ -197,7 +199,6 @@ class ProjectRepository implements IProjectRepository
             'd_country_id' => $request->input('d_country_id'),
             'd_province_id' => $request->input('d_province_id'),
             'd_city_id' => $request->input('d_city_id'),
-            'user_id' => Auth::user()->id,
         ]);
 
         if ($updated) {
@@ -205,6 +206,33 @@ class ProjectRepository implements IProjectRepository
             if ($request->has('categories')) {
                 $project->categories()->sync($request->input('categories'));
             }
+
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully'),
+                'data' => new ProjectResource($project)
+            ], Response::HTTP_OK);
+        }
+
+        throw new \Exception();
+    }
+
+    /**
+     * Reject the project.
+     * @param RejectProjectRequest $request
+     * @param Project $project
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function reject(RejectProjectRequest $request, Project $project) :JsonResponse
+    {
+
+        $updated = $project->update([
+            'reason' => $request->input('reason'),
+            'status' => Project::REJECT,
+        ]);
+
+        if ($updated) {
 
             return response()->json([
                 'status' => 1,

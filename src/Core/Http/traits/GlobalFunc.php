@@ -60,6 +60,7 @@ trait GlobalFunc
 
             return $activeSubscription->project_count > Project::query()
                 ->where('user_id', Auth::user()->id)
+                ->where('status', '!=', Project::REJECT)
                 ->where('created_at', '>', $activeSubscription->created_at)
                 ->count();
         }

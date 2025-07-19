@@ -3,6 +3,7 @@
 namespace Domain\Project\Repositories\Contracts;
 
 use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Project\Requests\RejectProjectRequest;
 use Application\Api\Project\Requests\SearchProjectRequest;
 use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
@@ -37,6 +38,15 @@ interface IProjectRepository
      * @throws \Exception
      */
     public function store(ProjectRequest $request) :JsonResponse;
+
+    /**
+     * Reject the project.
+     * @param RejectProjectRequest $request
+     * @param Project $project
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function reject(RejectProjectRequest $request, Project $project) :JsonResponse;
 
     /**
      * Update the project.

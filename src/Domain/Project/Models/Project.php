@@ -20,6 +20,7 @@ class Project extends Model
     const INPROGRESS = "in_progress";
     const COMPLETED = "completed";
     const CANCELLED = "canceled";
+    const REJECT = "reject";
     const FAILED = "failed";
 
     protected $fillable = [

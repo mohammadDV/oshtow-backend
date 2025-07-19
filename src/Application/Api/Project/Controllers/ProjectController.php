@@ -3,6 +3,7 @@
 namespace Application\Api\Project\Controllers;
 
 use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Project\Requests\RejectProjectRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Domain\Project\Models\Project;
@@ -64,6 +65,17 @@ class ProjectController extends Controller
     public function update(ProjectRequest $request, Project $project) :JsonResponse
     {
         return $this->repository->update($request, $project);
+    }
+
+    /**
+     * Update the project.
+     * @param RejectProjectRequest $request
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function reject(RejectProjectRequest $request, Project $project) :JsonResponse
+    {
+        return $this->repository->reject($request, $project);
     }
 
     /**
