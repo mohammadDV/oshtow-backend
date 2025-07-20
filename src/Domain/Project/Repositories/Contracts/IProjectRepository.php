@@ -5,7 +5,6 @@ namespace Domain\Project\Repositories\Contracts;
 use Application\Api\Project\Requests\ProjectRequest;
 use Application\Api\Project\Requests\RejectProjectRequest;
 use Application\Api\Project\Requests\SearchProjectRequest;
-use Application\Api\Project\Resources\ProjectResource;
 use Core\Http\Requests\TableRequest;
 use Domain\Project\Models\Project;
 use Illuminate\Database\Eloquent\Collection;
@@ -54,6 +53,14 @@ interface IProjectRepository
      * @throws \Exception
      */
     public function reject(RejectProjectRequest $request, Project $project) :JsonResponse;
+
+    /**
+     * Approve the project.
+     * @param Project $project
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function approve(Project $project) :JsonResponse;
 
     /**
      * Update the project.

@@ -17,6 +17,7 @@ class Project extends Model
     const PASSENGER = "passenger";
     const SENDER = "sender";
     const PENDING = "pending";
+    const APPROVED = "approved";
     const INPROGRESS = "in_progress";
     const COMPLETED = "completed";
     const CANCELLED = "canceled";

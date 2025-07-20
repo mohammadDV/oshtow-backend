@@ -57,9 +57,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
     Route::post('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
-    Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])
-        ->middleware('check.admin')
-        ->name('project.reject');
+    Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])->middleware('check.admin')->name('project.reject');
+    Route::post('/projects/{project}/approve', [ProjectController::class, 'approve'])->middleware('check.admin')->name('project.approve');
     Route::resource('tickets', TicketController::class);
     Route::post('/ticket-status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status');
     Route::resource('ticket-subjects', TicketSubjectController::class);

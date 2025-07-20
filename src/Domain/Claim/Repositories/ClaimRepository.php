@@ -98,7 +98,7 @@ class ClaimRepository implements IClaimRepository
 
         $this->checkLevelAccess(
             Auth::user()->id != $project->user_id &&
-            $project->status == Project::PENDING &&
+            $project->status == Project::APPROVED &&
             $project->active == 1
         );
 

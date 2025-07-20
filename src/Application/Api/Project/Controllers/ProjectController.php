@@ -78,7 +78,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the project.
+     * Reject the project.
      * @param RejectProjectRequest $request
      * @param Project $project
      * @return JsonResponse
@@ -86,6 +86,16 @@ class ProjectController extends Controller
     public function reject(RejectProjectRequest $request, Project $project) :JsonResponse
     {
         return $this->repository->reject($request, $project);
+    }
+
+    /**
+     * Approve the project.
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function approve(Project $project) :JsonResponse
+    {
+        return $this->repository->approve($project);
     }
 
     /**

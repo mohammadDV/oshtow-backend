@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->unsignedBigInteger('weight');
             $table->tinyInteger('active')->default(0);
-            $table->enum('status',['pending', 'in_progress', 'completed', 'canceled', 'failed', 'reject'])->default('pending'); // pending, completed, failed
+            $table->enum('status',['pending', 'approved', 'in_progress', 'completed', 'canceled', 'failed', 'reject'])->default('pending'); // pending, completed, failed
             $table->tinyInteger('vip')->default(0);
             $table->tinyInteger('priority')->default(0);
             $table->date('send_date')->nullable();

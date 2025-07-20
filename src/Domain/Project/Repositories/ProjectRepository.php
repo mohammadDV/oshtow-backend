@@ -95,7 +95,7 @@ class ProjectRepository implements IProjectRepository
             ])
             ->where('type', $project->type)
             ->where('active', 1)
-            ->where('status', Project::PENDING)
+            ->where('status', Project::APPROVED)
             ->where('send_date', '>=', now()->startOfDay())
             ->inRandomOrder()
             ->limit(config('project.senderLimit'))
@@ -272,6 +272,31 @@ class ProjectRepository implements IProjectRepository
     }
 
     /**
+     * Approve the project.
+     * @param Project $project
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function approve(Project $project) :JsonResponse
+    {
+
+        $updated = $project->update([
+            'status' => Project::APPROVED,
+        ]);
+
+        if ($updated) {
+
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully'),
+                'data' => new ProjectResource($project)
+            ], Response::HTTP_OK);
+        }
+
+        throw new \Exception();
+    }
+
+    /**
      * Delete the project.
      * @param Project $project
      * @return JsonResponse
@@ -312,7 +337,7 @@ class ProjectRepository implements IProjectRepository
             ])
             ->where('type', Project::SENDER)
             ->where('active', 1)
-            ->where('status', Project::PENDING)
+            ->where('status', Project::APPROVED)
             ->where('send_date', '>=', now()->startOfDay())
             ->orderBy('priority', 'desc')
             ->limit(config('project.senderLimit'))
@@ -331,7 +356,7 @@ class ProjectRepository implements IProjectRepository
             ])
             ->where('type', Project::PASSENGER)
             ->where('active', 1)
-            ->where('status', Project::PENDING)
+            ->where('status', Project::APPROVED)
             ->where('send_date', '>=', now()->startOfDay())
             ->orderBy('priority', 'desc')
             ->limit(config('project.passengerLimit'))
@@ -361,7 +386,7 @@ class ProjectRepository implements IProjectRepository
                 ->first();
 
             if ($claim || Auth::id() == $project->user_id ||
-                $project->status != Project::PENDING ||
+                $project->status != Project::APPROVED ||
                 $project->active != 1) {
 
                 $requestEnable = false;
@@ -421,7 +446,7 @@ class ProjectRepository implements IProjectRepository
                     'dCity',
                 ])
                 ->where('active', 1)
-                ->where('status', Project::PENDING)
+                ->where('status', Project::APPROVED)
                 ->where('send_date', '>=', now()->startOfDay())
                 ->where('type', $request->input('type'));
 
