@@ -33,6 +33,7 @@ class ProjectRepository implements IProjectRepository
     {
         $search = $request->get('query');
         $status = $request->get('status');
+        $type = $request->get('type', 'sender');
         $projects = Project::query()
             ->with([
                 'user:id,nickname,profile_photo_path,rate',
@@ -53,6 +54,7 @@ class ProjectRepository implements IProjectRepository
             ->when(!empty($status), function ($query) use ($status) {
                 return $query->where('status', $status);
             })
+            ->where('type', $type)
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
 
