@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Application\Api\Project\Requests\SearchProjectRequest;
 use Domain\Claim\Models\Claim;
+use Laravel\Sanctum\PersonalAccessToken;
 
 /**
  * Class ProjectRepository.
@@ -379,23 +380,32 @@ class ProjectRepository implements IProjectRepository
         $requestEnable = true;
         $chatEnable = false;
 
-        if (Auth::check()) {
-            $claim = Claim::query()
+        $token = request()->bearerToken();
+        $user = null;
+
+        if ($token) {
+            $accessToken = PersonalAccessToken::findToken($token);
+            if ($accessToken) {
+                $user = $accessToken->tokenable; // The authenticated user
+
+                $claim = Claim::query()
                 ->where('project_id', $project->id)
-                ->where('user_id', Auth::id())
+                ->where('user_id', $user->id)
                 ->first();
 
-            if ($claim || Auth::id() == $project->user_id ||
-                $project->status != Project::APPROVED ||
-                $project->active != 1) {
+                if ($claim || $user->id == $project->user_id ||
+                    $project->status != Project::APPROVED ||
+                    $project->active != 1) {
 
+                    $requestEnable = false;
+                }
+
+                if ($claim) {
+                    $chatEnable = true;
+                }
+            } else {
                 $requestEnable = false;
             }
-
-            if ($claim) {
-                $chatEnable = true;
-            }
-
         } else {
             $requestEnable = false;
         }

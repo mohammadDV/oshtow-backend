@@ -110,7 +110,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
 });
 
-Route::middleware('auth:api')->get('/project/{project}/check-request', [ProjectController::class, 'checkRequestForClaim']);
+// check with token
+Route::get('/project/{project}/check-request', [ProjectController::class, 'checkRequestForClaim']);
 
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() {
 
