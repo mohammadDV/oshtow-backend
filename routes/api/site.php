@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::post('identity-records/{identityRecord}/change-status', [IdentityRecordController::class, 'changeStatus']);
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
+    Route::post('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
     Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])
         ->middleware('check.admin')
         ->name('project.reject');

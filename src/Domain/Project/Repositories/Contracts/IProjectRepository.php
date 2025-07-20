@@ -25,6 +25,13 @@ interface IProjectRepository
     public function index(TableRequest $request) :LengthAwarePaginator;
 
     /**
+     * Edit the project.
+     * @param Project $project
+     * @return Project
+     */
+    public function edit(Project $project) :Project;
+
+    /**
      * Get the project.
      * @param Project $project
      * @return array

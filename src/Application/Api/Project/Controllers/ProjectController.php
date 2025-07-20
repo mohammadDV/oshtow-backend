@@ -47,6 +47,16 @@ class ProjectController extends Controller
     }
 
     /**
+     * Edit the project.
+     * @param Project $project
+     * @return JsonResponse
+     */
+    public function edit(Project $project) :JsonResponse
+    {
+        return response()->json($this->repository->edit($project), Response::HTTP_OK);
+    }
+
+    /**
      * Store the project.
      * @param ProjectRequest $request
      * @return JsonResponse

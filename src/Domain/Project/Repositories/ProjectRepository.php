@@ -110,6 +110,31 @@ class ProjectRepository implements IProjectRepository
     }
 
     /**
+     * Edit the project.
+     * @param Project $project
+     * @return Project
+     */
+    public function edit(Project $project) :Project
+    {
+        $this->checkLevelAccess(Auth::user()->id == $project->user_id);
+
+        return Project::query()
+                ->with([
+                    'categories:id,title',
+                    'user:id,nickname,profile_photo_path,rate',
+                    'oCountry',
+                    'oProvince',
+                    'oCity',
+                    'dCountry',
+                    'dProvince',
+                    'dCity',
+                ])
+                ->where('id', $project->id)
+                ->first();
+
+    }
+
+    /**
      * Store the project.
      * @param ProjectRequest $request
      * @return JsonResponse
