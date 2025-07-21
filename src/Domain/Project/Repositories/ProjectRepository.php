@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Application\Api\Project\Requests\SearchProjectRequest;
 use Domain\Claim\Models\Claim;
+use Domain\Notification\Services\NotificationService;
 use Laravel\Sanctum\PersonalAccessToken;
 
 /**
@@ -261,6 +262,13 @@ class ProjectRepository implements IProjectRepository
         ]);
 
         if ($updated) {
+
+            NotificationService::create([
+                'title' => 'رد شدن آگهی توسط مدیریت',
+                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' :از طرف مدیریت رد شده است. علت رد شدن ' . $request->input('reason'),
+                'id' => $project->id,
+                'type' => $project->type,
+            ], $project->user);
 
             return response()->json([
                 'status' => 1,
