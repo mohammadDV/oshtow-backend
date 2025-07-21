@@ -32,6 +32,13 @@ interface IClaimRepository
     public function store(ClaimRequest $request): JsonResponse;
 
     /**
+     * Get the status of the claim.
+     * @param Claim $claim
+     * @return array
+     */
+    public function getStatus(Claim $claim): array;
+
+    /**
      * Store a new claim.
      * @param ClaimRequest $request
      * @return JsonResponse

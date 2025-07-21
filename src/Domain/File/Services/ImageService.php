@@ -30,26 +30,29 @@ class ImageService extends ImageToolsService
             // if(env('APP_ENV') == "production") {
                 // $result = Image::make($image->getRealPath())->encode($this->getImageFormat());
 
-                $result = Storage::disk('liara')->put($this->getFinalImageDirectory(), $image);
+                // $result = Storage::disk('liara')->put($this->getFinalImageDirectory(), $image);
+                $result = Storage::disk('s3')->put($this->getFinalImageDirectory(), $image, 'public');
 
 
-                $url = Storage::disk('liara')->url($result);
+                $url = Storage::disk('s3')->url($result);
                 $path = parse_url($url, PHP_URL_PATH);
 
                 if (!empty($thumb)) {
                     $fileName = '/thumbnails/' . basename($path);
                     $resizedImage = Image::make($image)->resize(150, 100)->encode('jpg');
-                    Storage::disk('liara')->put($this->getFinalImageDirectory() . $fileName, $resizedImage);
+                    // Storage::disk('liara')->put($this->getFinalImageDirectory() . $fileName, $resizedImage);
+                    Storage::disk('s3')->put($this->getFinalImageDirectory() . $fileName, $resizedImage, 'public');
 
                     $fileName = '/slides/' . basename($path);
                     $resizedImage = Image::make($image)->resize(455, 303)->encode('jpg');
-                    Storage::disk('liara')->put($this->getFinalImageDirectory() . $fileName, $resizedImage);
+                    // Storage::disk('liara')->put($this->getFinalImageDirectory() . $fileName, $resizedImage);
+                    Storage::disk('s3')->put($this->getFinalImageDirectory() . $fileName, $resizedImage, 'public');
                 }
 
 
                 // $result = Storage::disk('liara')->put($this->getFinalImageDirectory(), $image);
             // return  $S3Path = str_replace('https://storage.iran.liara.space', 'https://cdn.varzeshpod.com/' , Storage::disk('liara')->url($result));
-        return  str_replace('prod-data-sport.storage.iran.liara.space', config('image.url-upload-file'), Storage::disk('liara')->url($result));
+        return  str_replace('prod-data-sport.storage.iran.liara.space', config('image.url-upload-file'), Storage::disk('s3')->url($result));
             // }else{
             //     $result = Image::make($image->getRealPath())->save(public_path($this->getImageAddress()), null, $this->getImageFormat());
             // }

@@ -50,6 +50,16 @@ class ClaimController extends Controller
     }
 
     /**
+     * Get the status of the claim.
+     * @param Claim $claim
+     * @return JsonResponse
+     */
+    public function getStatus(Claim $claim) :JsonResponse
+    {
+        return response()->json($this->repository->getStatus($claim), Response::HTTP_OK);
+    }
+
+    /**
      * Store the claim.
      * @param ClaimRequest $request
      * @return JsonResponse

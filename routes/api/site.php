@@ -129,6 +129,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
     Route::get('/claims/{claim}/paid', [ClaimController::class, 'paidClaim'])->name('claim.paid');
     Route::post('/claims/{claim}/inprogress', [ClaimController::class, 'inprogressClaim'])->name('claim.inprogress');
     Route::post('/claims/{claim}/delivered', [ClaimController::class, 'deliveredClaim'])->name('claim.delivered');
+    Route::get('/claims/{claim}/status', [ClaimController::class, 'getStatus'])->name('claim.status');
 });
 
 // upload files

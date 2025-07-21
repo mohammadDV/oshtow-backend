@@ -67,6 +67,26 @@ class ClaimRepository implements IClaimRepository
     }
 
     /**
+     * Get the status of the claim.
+     * @param Claim $claim
+     * @return array
+     */
+    public function getStatus(Claim $claim): array
+    {
+        $this->checkLevelAccess(in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id]));
+
+
+        $type = $claim->user_id == Auth::id() ? Project::SENDER : Project::PASSENGER;
+
+        return [
+            'type' => $type,
+            'sponsor' => $claim->sponsor_id == Auth::id(),
+            'status' => $claim->status,
+            'confirmed_code' => $type == Project::SENDER ? $claim->confirmed_code ?? '' : '',
+        ];
+    }
+
+    /**
      * Store a new claim.
      * @param ClaimRequest $request
      * @return JsonResponse
