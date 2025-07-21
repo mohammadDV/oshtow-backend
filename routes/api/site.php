@@ -5,6 +5,7 @@ use Application\Api\Chat\Controllers\ChatController;
 use Application\Api\Claim\Controllers\ClaimController;
 use Application\Api\File\Controllers\FileController;
 use Application\Api\IdentityRecord\Controllers\IdentityRecordController;
+use Application\Api\Notification\Controllers\NotificationController;
 use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
@@ -49,6 +50,9 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     // payment
 
+    Route::resource('notifications', NotificationController::class);
+    Route::get('/notifications-unread', [NotificationController::class, 'unread'])->name('unread-notifications');
+    Route::get('/notifications-read-all', [NotificationController::class, 'readAll'])->name('read-all-notifications');
 
     Route::resource('plans', PlanController::class);
     Route::resource('identity-records', IdentityRecordController::class);
