@@ -6,6 +6,7 @@ use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
+use Domain\Claim\Repositories\ClaimRepository;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
 use Domain\Payment\Models\Transaction;
@@ -146,6 +147,7 @@ class PaymentController extends Controller
             Transaction::WALLET => app(WalletRepository::class)->completeTopUp($transaction->model_id),
             Transaction::PLAN => app(SubscribeRepository::class)->createSubscription($transaction->model_id, User::find($transaction->user_id)),
             Transaction::IDENTITY => app(IdentityRecordRepository::class)->changeStatusToPaid($transaction->model_id),
+            Transaction::SECURE => app(ClaimRepository::class)->createPaymentSecure(Claim::find($transaction->model_id)),
         };
     }
 

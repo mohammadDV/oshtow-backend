@@ -38,6 +38,7 @@ class ProjectRepository implements IProjectRepository
         $type = $request->get('type', 'sender');
         $projects = Project::query()
             ->with([
+                'claims.user',
                 'user:id,nickname,profile_photo_path,rate',
                 'oCountry',
                 'oProvince',
@@ -47,6 +48,7 @@ class ProjectRepository implements IProjectRepository
                 'dCity',
                 'categories:id,title'
             ])
+            ->withCount('claims')
             ->when(Auth::user()->level != 3, function ($query) {
                 return $query->where('user_id', Auth::user()->id);
             })

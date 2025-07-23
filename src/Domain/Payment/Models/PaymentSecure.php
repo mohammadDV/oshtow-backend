@@ -13,6 +13,8 @@ class PaymentSecure extends Model
     const PENDING = 'pending';
     const RELEASED = 'released';
     const CANCELLED = 'cancelled';
+    const WALLET = 'wallet';
+    const BANK = 'bank';
 
     protected $guarded = [];
 

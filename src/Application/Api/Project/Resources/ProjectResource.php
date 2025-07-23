@@ -5,6 +5,7 @@ namespace Application\Api\Project\Resources;
 use Application\Api\Address\Resources\CityResource;
 use Application\Api\Address\Resources\CountryResource;
 use Application\Api\Address\Resources\ProvinceResource;
+use Application\Api\Claim\Resources\ClaimResource;
 use Application\Api\Project\Resources\CategoryResource;
 use Domain\Project\Models\Project;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -56,6 +57,8 @@ class ProjectResource extends JsonResource
             ],
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'user' => new UserResource($this->whenLoaded('user')),
+            'claims' => ClaimResource::collection($this->whenLoaded('claims')),
+            'claims_count' => $this->whenLoaded('claims') ? $this->claims->count() : ($this->claims_count ?? 0),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

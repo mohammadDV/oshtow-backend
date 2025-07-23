@@ -33,10 +33,10 @@ class PlanController extends Controller
     }
 
     /**
-     * Get all of Countries
+     * Get all active plans
      * @return JsonResponse
      */
-    public function unread(TableRequest $request): JsonResponse
+    public function activePlans(TableRequest $request): JsonResponse
     {
         return response()->json($this->repository->activePlans($request), Response::HTTP_OK);
     }

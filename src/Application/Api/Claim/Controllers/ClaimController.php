@@ -5,17 +5,14 @@ namespace Application\Api\Claim\Controllers;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
-use Application\Api\Project\Requests\ProjectRequest;
+use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
-use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\Project\Models\Project;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ClaimController extends Controller
 {
@@ -90,15 +87,15 @@ class ClaimController extends Controller
         return $this->repository->approveClaim($claim);
     }
 
-    public function paidClaim(Claim $claim): JsonResponse
+    /**
+     * Approve the claim.
+     * @param PaymentSecureRequest $request
+     * @param Claim $claim
+     * @return JsonResponse
+     */
+    public function paidClaim(PaymentSecureRequest $request, Claim $claim)
     {
-
-        $this->repository->paidClaim($claim);
-
-        return response()->json([
-            'status' => 1,
-            'message' => __('site.The operation has been successfully'),
-        ]);
+        return $this->repository->paidClaim($request, $claim);
     }
 
     /**

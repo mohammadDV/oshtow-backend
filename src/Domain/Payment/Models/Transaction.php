@@ -15,6 +15,7 @@ class Transaction extends Model
     const WALLET = 'wallet';
     const PLAN = 'plan';
     const IDENTITY = 'identity';
+    const SECURE = 'secure';
 
 
     protected $fillable = [

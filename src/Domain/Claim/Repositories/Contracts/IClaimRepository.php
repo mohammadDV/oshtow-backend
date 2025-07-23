@@ -5,6 +5,7 @@ namespace Domain\Claim\Repositories\Contracts;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
@@ -54,10 +55,10 @@ interface IClaimRepository
 
     /**
      * Paid a claim.
+     * @param PaymentSecureRequest $request
      * @param Claim $claim
-     * @return void
      */
-    public function paidClaim(Claim $claim): void;
+    public function paidClaim(PaymentSecureRequest $request, Claim $claim);
 
     /**
      * Get the claim.

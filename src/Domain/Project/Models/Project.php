@@ -5,6 +5,7 @@ namespace Domain\Project\Models;
 use Domain\Address\Models\City;
 use Domain\Address\Models\Country;
 use Domain\Address\Models\Province;
+use Domain\Claim\Models\Claim;
 use Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +62,11 @@ class Project extends Model
     public function categories()
     {
         return $this->belongsToMany(ProjectCategory::class, 'category_project', 'project_id', 'category_id');
+    }
+
+    public function claims()
+    {
+        return $this->hasMany(Claim::class);
     }
 
     public function user()

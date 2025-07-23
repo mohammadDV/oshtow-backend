@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Api\Wallet\Requests;
+namespace Application\Api\Payment\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TopUpRequest extends FormRequest
+class PaymentSecureRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class TopUpRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'payment_method' => ['required', 'string', 'in:wallet,bank'],
             'amount' => ['required', 'numeric', 'min:1000'],
         ];
     }

@@ -6,6 +6,7 @@ use Application\Api\Chat\Requests\ChatRequest;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Chat\Repositories\Contracts\IChatRepository;
@@ -13,13 +14,17 @@ use Domain\Claim\Models\Claim;
 use Domain\Claim\Models\ClaimStep;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\Payment\Models\PaymentSecure;
+use Domain\Payment\Models\Transaction;
 use Domain\Project\Models\Project;
+use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Domain\Wallet\Models\Wallet;
+use Domain\Wallet\Models\WalletTransaction;
+use Domain\Wallet\Repositories\Contracts\IWalletRepository;
 
 /**
  * Class ClaimRepository.
@@ -27,6 +32,10 @@ use Domain\Wallet\Models\Wallet;
 class ClaimRepository implements IClaimRepository
 {
     use GlobalFunc;
+
+    public function __construct(protected IWalletRepository $walletRepository)
+    {
+    }
 
     /**
      * Get all claims for a specific project.
@@ -284,10 +293,10 @@ class ClaimRepository implements IClaimRepository
 
     /**
      * Paid a claim.
+     * @param PaymentSecureRequest $request
      * @param Claim $claim
-     * @return void
      */
-    public function paidClaim(Claim $claim): void
+    public function paidClaim(PaymentSecureRequest $request ,Claim $claim)
     {
         // Check if user has already approved a claim for this project
         $existingApprovedClaim = ClaimStep::query()
@@ -301,6 +310,123 @@ class ClaimRepository implements IClaimRepository
             !$existingApprovedClaim
         );
 
+        if ($request->input('payment_method') === PaymentSecure::WALLET) {
+            return $this->payWithWallet($claim, $request->input('amount'));
+        }
+
+        // TODO: Implement bank payment gateway
+        return $this->payWithBank($claim, $request->input('amount'));
+
+    }
+
+    /**
+     * Pay with wallet.
+     * @param Plan $plan
+     * @throws \Exception
+     */
+    private function payWithBank(Claim $claim, $amount)
+    {
+        $amount = intval($amount);
+
+        $transaction = Transaction::create([
+            'status' => Transaction::PENDING,
+            'model_id' => $claim->id,
+            'model_type' => Transaction::SECURE,
+            'amount' => $amount,
+            'user_id' => Auth::user()->id,
+        ]);
+
+        $code = Transaction::generateHash($transaction->id);
+
+        if ($transaction) {
+            return [
+                'status' => 1,
+                'url' => route('user.payment') . '?transaction=' . $transaction->id . '&sign=' . $code
+            ];
+        }
+
+        return response()->json([
+            'status' => 0,
+            'message' => __('site.Top-up failed. Please try again.'),
+        ], 500);
+    }
+
+    /**
+     * Pay with wallet.
+     * @param Claim $claim
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    private function payWithWallet(Claim $claim, $amount): JsonResponse
+    {
+        $wallet = $this->walletRepository->findByUserId(Auth::id());
+
+        if ($wallet->balance < $amount) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Insufficient funds'),
+            ], Response::HTTP_PAYMENT_REQUIRED);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Create claim step
+            ClaimStep::create([
+                'step_id' => 2,
+                'claim_id' => $claim->id,
+                'data' => $claim->image,
+                'description' => 'Claim paid: project #' . $claim->project->id,
+            ]);
+
+            // Get the wallet of the user that created this project
+            $wallet = Wallet::query()
+                ->where('currency', Wallet::IRR)
+                ->where('user_id', Auth::user()->id)
+                ->firstOrFail();
+
+            // Create payment secure
+            PaymentSecure::create([
+                'claim_id' => $claim->id,
+                'wallet_id' => $wallet->id,
+                'amount' => $amount,
+                'status' => PaymentSecure::PENDING,
+                'expires_at' => now()->addDays(15),
+                'description' => 'Payment secure for claim #' . $claim->id,
+                'user_id' => Auth::user()->id,
+            ]);
+
+            // Update claim status
+            $claim->update(['status' => Claim::PAID]);
+
+            WalletTransaction::createTransaction(
+                $wallet,
+                -$amount,
+                WalletTransaction::PURCHASE,
+                'Payment Secure: ' . $claim->id
+            );
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 1,
+                'message' => __('site.The operation has been successfully')
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Create a subscription
+     * @param Plan $plan
+     * @param User $user
+     * @return array
+     */
+    public function createPaymentSecure(Claim $claim): array
+    {
+
         try {
             DB::beginTransaction();
 
@@ -308,9 +434,10 @@ class ClaimRepository implements IClaimRepository
             $claim->update(['status' => Claim::PAID]);
 
             // Create claim step
-            ClaimStep::create([
+            ClaimStep::updateOrCreate([
                 'step_id' => 2,
                 'claim_id' => $claim->id,
+            ],[
                 'data' => $claim->image,
                 'description' => 'Claim paid: project #' . $claim->project->id,
             ]);
@@ -324,14 +451,14 @@ class ClaimRepository implements IClaimRepository
                 ->firstOrFail();
 
             // Create payment secure
-            PaymentSecure::create([
+            $payment = PaymentSecure::create([
                 'claim_id' => $claim->id,
                 'wallet_id' => $wallet->id,
                 'amount' => $claim->amount,
                 'status' => PaymentSecure::PENDING,
-                'expires_at' => now()->addDays(7),
+                'expires_at' => now()->addDays(15),
                 'description' => 'Payment secure for claim #' . $claim->id,
-                'user_id' => Auth::user()->id,
+                'user_id' => $walletOwnerId,
             ]);
 
             DB::commit();
@@ -340,6 +467,19 @@ class ClaimRepository implements IClaimRepository
             DB::rollBack();
             throw $e;
         }
+
+
+        if ($payment) {
+            return [
+                'status' => 1,
+                'payment_secure' => $payment
+            ];
+        }
+
+        return [
+            'status' => 0,
+            'payment_secure' => '',
+        ];
     }
 
     /**
