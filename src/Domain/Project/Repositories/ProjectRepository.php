@@ -38,7 +38,7 @@ class ProjectRepository implements IProjectRepository
         $type = $request->get('type', 'sender');
         $projects = Project::query()
             ->with([
-                'claims.user',
+                'claimsLimit.user',
                 'user:id,nickname,profile_photo_path,rate',
                 'oCountry',
                 'oProvince',

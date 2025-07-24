@@ -58,6 +58,7 @@ class ProjectResource extends JsonResource
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'user' => new UserResource($this->whenLoaded('user')),
             'claims' => ClaimResource::collection($this->whenLoaded('claims')),
+            'claimsLimit' => ClaimResource::collection($this->whenLoaded('claimsLimit')),
             'claims_count' => $this->whenLoaded('claims') ? $this->claims->count() : ($this->claims_count ?? 0),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

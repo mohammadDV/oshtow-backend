@@ -69,6 +69,11 @@ class Project extends Model
         return $this->hasMany(Claim::class);
     }
 
+    public function claimsLimit()
+    {
+        return $this->hasMany(Claim::class)->limit(3);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
