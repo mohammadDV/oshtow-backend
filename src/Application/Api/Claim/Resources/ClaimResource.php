@@ -4,6 +4,7 @@ namespace Application\Api\Claim\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Application\Api\User\Resources\UserResource;
+use Application\Api\Project\Resources\ProjectResource;
 
 class ClaimResource extends JsonResource
 {
@@ -25,6 +26,7 @@ class ClaimResource extends JsonResource
             'image' => $this->image,
             'status' => $this->status,
             'user' => new UserResource($this->whenLoaded('user')),
+            'project' => new ProjectResource($this->whenLoaded('project')),
             'sponsor_id' => $this->sponsor_id,
             'created_at' => $this->created_at,
         ];

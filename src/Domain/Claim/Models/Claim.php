@@ -45,6 +45,7 @@ class Claim extends Model
      */
     protected $hidden = [
         'delivery_code',
+        'confirmed_code',
     ];
 
     /**

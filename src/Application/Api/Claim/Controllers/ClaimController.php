@@ -11,6 +11,7 @@ use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\Project\Models\Project;
+use Domain\User\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 
@@ -34,6 +35,17 @@ class ClaimController extends Controller
     public function getClaimsPerProject(Project $project, TableRequest $request): JsonResponse
     {
         return response()->json($this->repository->getClaimsPerProject($project, $request), Response::HTTP_OK);
+    }
+
+    /**
+     * Get all of projects with pagination
+     * @param User $user
+     * @param TableRequest $request
+     * @return JsonResponse
+     */
+    public function getClaimsPerUser(User $user, TableRequest $request): JsonResponse
+    {
+        return response()->json($this->repository->getClaimsPerUser($user, $request), Response::HTTP_OK);
     }
 
     /**

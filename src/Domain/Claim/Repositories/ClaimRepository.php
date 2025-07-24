@@ -6,6 +6,7 @@ use Application\Api\Chat\Requests\ChatRequest;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Claim\Resources\ClaimResource;
 use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
@@ -48,7 +49,7 @@ class ClaimRepository implements IClaimRepository
         $this->checkLevelAccess(Auth::user()->id == $project->user_id);
 
         $search = $request->get('query');
-        $projects = Claim::query()
+        $claims = Claim::query()
             ->with(['project', 'user:id,nickname,bg_photo_path,profile_photo_path'])
             ->where('project_id', $project->id)
             ->when(!empty($search), function ($query) use ($search) {
@@ -57,7 +58,28 @@ class ClaimRepository implements IClaimRepository
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
 
-        return $projects;
+        return $claims->through(fn ($claim) => new ClaimResource($claim));
+
+    }
+
+    /**
+     * Get all claims for a specific user.
+     * @param User $user
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function getClaimsPerUser(User $user, TableRequest $request): LengthAwarePaginator
+    {
+        $this->checkLevelAccess(Auth::user()->id == $user->id);
+
+        // $search = $request->get('query');
+        $claims = Claim::query()
+            ->with(['project.user', 'user:id,nickname,bg_photo_path,profile_photo_path'])
+            ->where('user_id', $user->id)
+            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->paginate($request->get('count', 25));
+
+        return $claims->through(fn ($claim) => new ClaimResource($claim));
     }
 
     /**

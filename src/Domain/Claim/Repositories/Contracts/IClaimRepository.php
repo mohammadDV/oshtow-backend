@@ -9,6 +9,7 @@ use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
+use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -24,6 +25,14 @@ interface IClaimRepository
      * @return LengthAwarePaginator
      */
     public function getClaimsPerProject(Project $project, TableRequest $request): LengthAwarePaginator;
+
+    /**
+     * Get all claims for a specific user.
+     * @param User $user
+     * @param TableRequest $request
+     * @return LengthAwarePaginator
+     */
+    public function getClaimsPerUser(User $user, TableRequest $request): LengthAwarePaginator;
 
     /**
      * Store a new claim.

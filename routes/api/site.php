@@ -123,7 +123,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
     Route::get('/mail', [AuthController::class, 'mail'])->name('mail.profile');
     Route::post('/claims', [ClaimController::class, 'store'])->name('claim.store');
     Route::patch('/claims/{claim}', [ClaimController::class, 'update'])->name('claim.update');
-    Route::get('/claims/project/{project}', [ClaimController::class, 'getClaimsPerProject'])->name('claim.index');
+    Route::get('/claims/project/{project}', [ClaimController::class, 'getClaimsPerProject'])->name('claim.project.index');
+    Route::get('/claims/user/{user}', [ClaimController::class, 'getClaimsPerUser'])->name('claim.user.index');
     Route::get('/claims/{claim}', [ClaimController::class, 'show'])->name('claim.show');
     Route::get('/claims/{claim}/approve', [ClaimController::class, 'approveClaim'])->name('claim.approve');
     Route::post('/claims/{claim}/paid', [ClaimController::class, 'paidClaim'])->name('claim.paid');
