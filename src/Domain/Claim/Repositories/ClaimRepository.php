@@ -72,10 +72,13 @@ class ClaimRepository implements IClaimRepository
     {
         $this->checkLevelAccess(Auth::user()->id == $user->id);
 
-        // $search = $request->get('query');
+        $status = $request->get('status');
         $claims = Claim::query()
             ->with(['project.user', 'user:id,nickname,bg_photo_path,profile_photo_path'])
             ->where('user_id', $user->id)
+            ->when(!empty($status), function ($query) use ($status) {
+                return $query->where('status', $status);
+            })
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
 
