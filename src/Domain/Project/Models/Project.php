@@ -69,6 +69,11 @@ class Project extends Model
         return $this->hasMany(Claim::class);
     }
 
+    public function claimSelected()
+    {
+        return $this->hasMany(Claim::class)->where('status', '!=', Claim::PENDING);
+    }
+
     public function claimsLimit()
     {
         return $this->hasMany(Claim::class)->limit(3);

@@ -39,6 +39,7 @@ class ProjectRepository implements IProjectRepository
         $projects = Project::query()
             ->with([
                 'claimsLimit.user',
+                'claimSelected',
                 'user:id,nickname,profile_photo_path,rate',
                 'oCountry',
                 'oProvince',
