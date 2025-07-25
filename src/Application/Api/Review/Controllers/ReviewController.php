@@ -47,6 +47,16 @@ class ReviewController extends Controller
     }
 
     /**
+     * Get the reviews per claim pagination.
+     * @param Claim $claim
+     * @return JsonResponse
+     */
+    public function getReviewsPerClaim(Claim $claim): JsonResponse
+    {
+        return response()->json($this->repository->getReviewsPerClaim($claim), Response::HTTP_OK);
+    }
+
+    /**
      * Get the review.
      * @param
      * @return JsonResponse

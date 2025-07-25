@@ -3,6 +3,7 @@
 namespace Domain\Review\Repositories;
 
 use Application\Api\Review\Requests\ReviewRequest;
+use Application\Api\Review\Resources\ReviewResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
@@ -14,6 +15,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -54,10 +56,9 @@ class ReviewRepository implements IReviewRepository
     public function getReviewsPerUser(TableRequest $request, User $user) :LengthAwarePaginator
     {
 
-
         $search = in_array($request->get('query'), [1,2,3,4,5]) ? $request->get('query') : 0;
 
-        return Review::query()
+        $reviews = Review::query()
             ->with('user:id,nickname,profile_photo_path,rate')
             ->where('owner_id', $user->id)
             ->where('status', 1)
@@ -66,18 +67,43 @@ class ReviewRepository implements IReviewRepository
             })
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 10));
+
+        return $reviews->through(fn ($review) => new ReviewResource($review));
     }
 
     /**
      * Get the review.
      * @param Review $review
-     * @return Review
+     * @return ReviewResource
      */
-    public function show(Review $review) :Review
+    public function show(Review $review) :ReviewResource
     {
-        return Review::query()
+        $this->checkLevelAccess(Auth::user()->level == 3);
+
+        $review = Review::query()
                 ->where('id', $review->id)
                 ->first();
+
+        return new ReviewResource($review);
+    }
+
+    /**
+     * Get the review per claim.
+     * @param Claim $claim
+     * @return Collection
+     */
+    public function getReviewsPerClaim(Claim $claim) :Collection
+    {
+        $this->checkLevelAccess(
+            in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id])
+        );
+
+        $reviews = Review::query()
+                ->where('claim_id', $claim->id)
+                ->where('status', 1)
+                ->get();
+
+        return $reviews->map(fn ($review) => new ReviewResource($review));
     }
 
     /**
@@ -100,8 +126,6 @@ class ReviewRepository implements IReviewRepository
         // Check for duplicate review
         $duplicate = Review::query()
             ->where('claim_id', $claim->id)
-            ->where('claim_id', $claim->id)
-            ->where('owner_id', $owner->id)
             ->where('user_id', Auth::id())
             ->exists();
 

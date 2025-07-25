@@ -35,6 +35,16 @@ class UserController extends Controller
     }
 
     /**
+     * Get the dashboard info.
+     */
+    public function getDashboardInfo(): JsonResponse
+    {
+        return response()->json($this->repository->getDashboardInfo());
+    }
+
+
+
+    /**
      * Get the user info
      * @param User $user
      * @return JsonResponse

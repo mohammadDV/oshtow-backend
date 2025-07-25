@@ -26,6 +26,13 @@ interface IUserRepository
     public function getActivityCount() :JsonResponse;
 
     /**
+     * Get the dashboard info
+     *
+     * @return array The seller object
+     */
+    public function getDashboardInfo() :array;
+
+    /**
      * Get the user info.
      * @param User $user
      * @return array

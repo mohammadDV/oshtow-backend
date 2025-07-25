@@ -70,6 +70,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     // activity count
     Route::get('/activity-count', [UserController::class, 'getActivityCount'])->name('profile.activity.count');
+    Route::get('/dashboard-info', [UserController::class, 'getDashboardInfo'])->name('profile.dashboard.info');
 
     // subscribe
     Route::get('/subscriptions', [SubscribeController::class, 'index'])->name('profile.subscriptions');
@@ -90,6 +91,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     // review
     Route::post('/reviews/{claim}', [ReviewController::class, 'store']);
+    Route::get('/claim/{claim}/reviews', [ReviewController::class, 'getReviewsPerClaim']);
     // just for admin
     Route::patch('/reviews/{review}', [ReviewController::class, 'update']);
     Route::get('/reviews', [ReviewController::class, 'index']);

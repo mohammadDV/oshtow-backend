@@ -3,13 +3,14 @@
 namespace Domain\Review\Repositories\Contracts;
 
 use Application\Api\Review\Requests\ReviewRequest;
+use Application\Api\Review\Resources\ReviewResource;
 use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
-use Domain\Project\Models\Project;
 use Domain\Review\Models\Review;
 use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 /**
  * Interface IReviewRepository.
@@ -34,9 +35,16 @@ interface IReviewRepository
     /**
      * Get the review.
      * @param Review $review
-     * @return Review
+     * @return ReviewResource
      */
-    public function show(Review $review) :Review;
+    public function show(Review $review) :ReviewResource;
+
+    /**
+     * Get the review per claim.
+     * @param Claim $claim
+     * @return Collection
+     */
+    public function getReviewsPerClaim(Claim $claim) :Collection;
 
     /**
      * Store the review.

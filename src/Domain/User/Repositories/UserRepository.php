@@ -7,10 +7,13 @@ use Application\Api\User\Requests\UpdateUserRequest;
 use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
 use Core\Http\traits\GlobalFunc;
+use Domain\Chat\Models\Chat;
+use Domain\Chat\Models\ChatMessage;
 use Domain\Claim\Models\Claim;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\Plan\Models\Subscription;
 use Domain\Project\Models\Project;
+use Domain\Ticket\Models\Ticket;
 use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
@@ -149,6 +152,61 @@ class UserRepository implements IUserRepository
             'verify_access' => !empty(Auth::user()->verified_at),
             'status_approval' => $status,
             'user' => new UserResource(Auth::user())
+        ];
+    }
+
+    /**
+     * Get the dashboard info
+     *
+     * @return array The seller object
+     */
+    public function getDashboardInfo() :array
+    {
+        $senderCount = Project::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('type', Project::SENDER)
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        $passengerCount = Project::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('type', Project::PASSENGER)
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        $claimCount = Claim::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        $receiveClaimCount = Claim::query()
+                ->whereHas('project', function ($query) {
+                    $query->where('user_id', Auth::user()->id);
+                })
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        $ticketCount = Ticket::query()
+                ->where('user_id', Auth::user()->id)
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        $messageCount = ChatMessage::query()
+                ->whereHas('chat', function ($query) {
+                    return $query->where('user_id', Auth::user()->id)
+                        ->orWhere('target_id', Auth::user()->id);
+                })
+                ->where('user_id', '!=', Auth::user()->id)
+                ->where('created_at', '>', Carbon::now()->subMonth())
+                ->count();
+
+        return [
+            'senders' => $senderCount,
+            'passengers' => $passengerCount,
+            'claims' => $claimCount,
+            'receive_claims' => $receiveClaimCount,
+            'tickets' => $ticketCount,
+            'messages' => $messageCount,
         ];
     }
 

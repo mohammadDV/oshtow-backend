@@ -17,6 +17,7 @@ use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\Payment\Models\PaymentSecure;
 use Domain\Payment\Models\Transaction;
 use Domain\Project\Models\Project;
+use Domain\Review\Models\Review;
 use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -109,14 +110,27 @@ class ClaimRepository implements IClaimRepository
     {
         $this->checkLevelAccess(in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id]));
 
-
         $type = $claim->user_id == Auth::id() ? Project::SENDER : Project::PASSENGER;
+
+        $showCommentForm = false;
+
+        if ($claim->status == Claim::DELIVERED) {
+            $review = Review::query()
+                ->where('user_id', Auth::id())
+                ->where('claim_id', $claim->id)
+                ->first();
+
+            if (!$review) {
+                $showCommentForm = true;
+            }
+        }
 
         return [
             'type' => $type,
             'sponsor' => $claim->sponsor_id == Auth::id(),
             'status' => $claim->status,
             'confirmed_code' => $type == Project::SENDER ? $claim->confirmed_code ?? '' : '',
+            'show_review_form' => $showCommentForm,
         ];
     }
 
