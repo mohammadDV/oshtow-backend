@@ -110,7 +110,12 @@ class ClaimRepository implements IClaimRepository
     {
         $this->checkLevelAccess(in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id]));
 
-        $type = $claim->user_id == Auth::id() ? Project::SENDER : Project::PASSENGER;
+        if ($claim->project->user_id == Auth::id()) {
+            $type = $claim->project->status;
+        } else {
+            $type = $claim->project->status == Project::PASSENGER ? Project::SENDER : Project::PASSENGER;
+        }
+
 
         $showCommentForm = false;
 
