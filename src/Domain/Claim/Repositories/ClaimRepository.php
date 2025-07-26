@@ -134,7 +134,7 @@ class ClaimRepository implements IClaimRepository
             'type' => $type,
             'sponsor' => $claim->sponsor_id == Auth::id(),
             'status' => $claim->status,
-            'confirmed_code' => $type == Project::SENDER ? $claim->confirmed_code ?? '' : '',
+            'delivery_code' => $type == Project::SENDER ? $claim->delivery_code ?? '' : '',
             'show_review_form' => $showCommentForm,
         ];
     }
