@@ -146,7 +146,7 @@ class ReviewRepository implements IReviewRepository
                 'claim_id' => $claim->id,
                 'owner_id' => $owner->id,
                 'user_id' => Auth::id(),
-                'status' => 0,
+                'status' => 1,
             ]);
 
             $owner->update([
