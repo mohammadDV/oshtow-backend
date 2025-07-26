@@ -99,6 +99,7 @@ class ReviewRepository implements IReviewRepository
         );
 
         $reviews = Review::query()
+                ->with('user')
                 ->where('claim_id', $claim->id)
                 ->where('status', 1)
                 ->get();
