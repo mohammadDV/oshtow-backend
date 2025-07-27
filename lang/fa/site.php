@@ -267,4 +267,29 @@ return array(
     'request_archived' => 'درخواست مورد نظر آرشیو شده است.',
     'operation_succeed' => 'عملیات با موفقیت انجام شد.',
     'already_verified' => 'عملیات پرداخت موفق بوده و قبلاً تایید صحت تراکنش آن انجام شده است.',
+
+    // Password Reset Messages
+    'Password reset link sent to your email.' => 'لینک بازنشانی رمز عبور به ایمیل شما ارسال شد.',
+    'We could not find a user with that email address.' => 'کاربری با این آدرس ایمیل یافت نشد.',
+    'Invalid reset token.' => 'توکن بازنشانی نامعتبر است.',
+    'Reset token has expired.' => 'توکن بازنشانی منقضی شده است.',
+    'Token is valid.' => 'توکن معتبر است.',
+    'Password has been reset successfully.' => 'رمز عبور با موفقیت بازنشانی شد.',
+    'Password reset request' => 'درخواست بازنشانی رمز عبور',
+    'Hello' => 'سلام',
+    'You are receiving this email because we received a password reset request for your account.' => 'شما این ایمیل را دریافت می‌کنید زیرا درخواست بازنشانی رمز عبور برای حساب کاربری شما دریافت شده است.',
+    'Reset Password' => 'بازنشانی رمز عبور',
+    'This password reset link will expire in 60 minutes.' => 'این لینک بازنشانی رمز عبور تا ۶۰ دقیقه معتبر است.',
+    'If you did not request a password reset, no further action is required.' => 'اگر شما درخواست بازنشانی رمز عبور نداده‌اید، هیچ اقدامی لازم نیست.',
+    'If you\'re having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:' => 'اگر در کلیک روی دکمه "بازنشانی رمز عبور" مشکل دارید، لینک زیر را در مرورگر خود کپی و جایگذاری کنید:',
+    'Thanks' => 'با تشکر',
+    'The' => 'تیم',
+    'Team' => 'تیم',
+
+    // Email Verification Messages
+    'Invalid verification link' => 'لینک تایید نامعتبر است.',
+    'Email already verified' => 'ایمیل قبلاً تایید شده است.',
+    'Email verified successfully' => 'ایمیل با موفقیت تایید شد.',
+    'Already verified' => 'قبلاً تایید شده است.',
+    'Verification link sent!' => 'لینک تایید ارسال شد!',
 );

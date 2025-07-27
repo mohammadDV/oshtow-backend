@@ -27,6 +27,20 @@ Route::post('/google/verify', [AuthController::class, 'verify'])
 Route::middleware(['auth:sanctum'])->get('/logout', [AuthController::class, 'logout'])
                 ->middleware('auth')
                 ->name('logout');
+
+// Password Reset Routes
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])
+                ->middleware('guest')
+                ->name('password.email');
+
+Route::post('/verify-reset-token', [AuthController::class, 'verifyResetToken'])
+                ->middleware('guest')
+                ->name('password.verify');
+
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])
+                ->middleware('guest')
+                ->name('password.reset');
+
 // Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
 //                 ->middleware('guest')
 //                 ->name('password.email');
