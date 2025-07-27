@@ -2,6 +2,7 @@
 
 namespace Application\Api\User\Controllers;
 
+use Application\Api\User\Requests\ChangePasswordRequest;
 use Application\Api\User\Requests\UpdateUserRequest;
 use Core\Http\Controllers\Controller;
 use Domain\User\Models\User;
@@ -82,5 +83,16 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user) :JsonResponse
     {
         return response()->json($this->repository->update($request, $user));
+    }
+
+    /**
+     * Change the user password.
+     * @param ChangePasswordRequest $request
+     * @param User $user
+     * @return JsonResponse
+     */
+    public function changePassword(ChangePasswordRequest $request, User $user) :JsonResponse
+    {
+        return response()->json($this->repository->changePassword($request, $user));
     }
 }

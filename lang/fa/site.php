@@ -292,4 +292,13 @@ return array(
     'Email verified successfully' => 'ایمیل با موفقیت تایید شد.',
     'Already verified' => 'قبلاً تایید شده است.',
     'Verification link sent!' => 'لینک تایید ارسال شد!',
+
+    // Change Password Messages
+    'Current password is required' => 'رمز عبور فعلی الزامی است.',
+    'New password is required' => 'رمز عبور جدید الزامی است.',
+    'Password confirmation does not match' => 'تایید رمز عبور مطابقت ندارد.',
+    'Password must be at least 8 characters' => 'رمز عبور باید حداقل ۸ کاراکتر باشد.',
+    'Password must contain at least one capital letter and one symbol' => 'رمز عبور باید حداقل شامل یک حرف بزرگ و یک نماد باشد.',
+    'Current password is incorrect' => 'رمز عبور فعلی اشتباه است.',
+    'Password has been changed successfully' => 'رمز عبور با موفقیت تغییر یافت.',
 );

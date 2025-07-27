@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     // update user
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::patch('/users/{user}/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
 
     // payment
 

@@ -13,7 +13,7 @@
 
     {{ __('site.If you did not request a password reset, no further action is required.') }}
 
-    {{ __('site.If you\'re having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:') }}
+    {{ __('site.If you are having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:') }}
 
     {{ $resetUrl }}
 
