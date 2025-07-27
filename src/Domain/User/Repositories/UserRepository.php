@@ -3,6 +3,7 @@
 namespace Domain\User\Repositories;
 
 use Application\Api\Project\Resources\ProjectResource;
+use Application\Api\User\Requests\ChangePasswordRequest;
 use Application\Api\User\Requests\UpdateUserRequest;
 use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ use Domain\User\Models\User;
 use Domain\User\Repositories\Contracts\IUserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class UserRepository.
@@ -344,6 +346,39 @@ class UserRepository implements IUserRepository
                 'status' => 1,
                 'message' => __('site.The data has been updated'),
                 'user' => $user
+            ];
+        }
+
+        throw new \Exception();
+    }
+
+    /**
+     * Change the user password.
+     * @param ChangePasswordRequest $request
+     * @param User $user
+     * @return array
+     */
+    public function changePassword(ChangePasswordRequest $request, User $user) :array
+    {
+        $this->checkLevelAccess($user->id == Auth::user()->id);
+
+        // Verify current password
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            return [
+                'status' => 0,
+                'message' => __('site.Current password is incorrect')
+            ];
+        }
+
+        // Update password
+        $update = $user->update([
+            'password' => Hash::make($request->input('password'))
+        ]);
+
+        if ($update) {
+            return [
+                'status' => 1,
+                'message' => __('site.Password has been changed successfully')
             ];
         }
 

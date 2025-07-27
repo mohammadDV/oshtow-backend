@@ -2,6 +2,7 @@
 
 namespace Domain\User\Repositories\Contracts;
 
+use Application\Api\User\Requests\ChangePasswordRequest;
 use Application\Api\User\Requests\UpdateUserRequest;
 use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -59,4 +60,12 @@ interface IUserRepository
      * @return array
      */
     public function update(UpdateUserRequest $request, User $user) :array;
+
+    /**
+     * Change the user password.
+     * @param ChangePasswordRequest $request
+     * @param User $user
+     * @return array
+     */
+    public function changePassword(ChangePasswordRequest $request, User $user) :array;
 }

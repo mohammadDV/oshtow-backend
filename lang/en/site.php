@@ -22,4 +22,13 @@ return array(
     'Transfer successful' => 'Transfer successful',
     'Transfer failed. Please try again.' => 'Transfer failed. Please try again.',
     'A claim has been created for your project.' => 'A claim has been created for your project.',
+
+    // Change Password Messages
+    'Current password is required' => 'Current password is required.',
+    'New password is required' => 'New password is required.',
+    'Password confirmation does not match' => 'Password confirmation does not match.',
+    'Password must be at least 8 characters' => 'Password must be at least 8 characters.',
+    'Password must contain at least one capital letter and one symbol' => 'Password must contain at least one capital letter and one symbol.',
+    'Current password is incorrect' => 'Current password is incorrect.',
+    'Password has been changed successfully' => 'Password has been changed successfully.',
 );

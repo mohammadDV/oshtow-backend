@@ -8,7 +8,6 @@ use Application\Api\User\Requests\ForgotPasswordRequest;
 use Application\Api\User\Requests\ResetPasswordRequest;
 use Application\Api\User\Mail\PasswordResetMail;
 use Core\Http\Controllers\Controller;
-use Domain\User\Models\Role;
 use Domain\User\Models\User;
 use Domain\User\Services\TelegramNotificationService;
 use Google_Client;
