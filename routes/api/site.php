@@ -9,6 +9,7 @@ use Application\Api\Notification\Controllers\NotificationController;
 use Application\Api\Payment\Controllers\PaymentController;
 use Application\Api\Plan\Controllers\PlanController;
 use Application\Api\Plan\Controllers\SubscribeController;
+use Application\Api\Post\Controllers\PostController;
 use Application\Api\Project\Controllers\ProjectCategoryController;
 use Application\Api\Project\Controllers\ProjectController;
 use Application\Api\Review\Controllers\ReviewController;
@@ -39,6 +40,9 @@ Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('u
 Route::get('/payment', [PaymentController::class, 'payment'])->name('user.payment');
 Route::get('/payment/result/{id}', [PaymentController::class, 'show'])->name('user.payment.result');
 
+Route::get('/posts', [PostController::class, 'getPosts'])->name('site.posts.index');
+Route::get('/post/{post}', [PostController::class, 'getPostInfo'])->name('site.post.info');
+
 // ->middleware(['auth', 'verified'])
 Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')->name('profile.')->group(function() {
 
@@ -61,11 +65,10 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('project-categories', ProjectCategoryController::class);
     Route::resource('projects', ProjectController::class);
     Route::post('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
-    Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])->middleware('check.admin')->name('project.reject');
-    Route::post('/projects/{project}/approve', [ProjectController::class, 'approve'])->middleware('check.admin')->name('project.approve');
     Route::resource('tickets', TicketController::class);
     Route::post('/ticket-status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status');
     Route::resource('ticket-subjects', TicketSubjectController::class);
+
 
 
     // activity count
@@ -107,12 +110,29 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     });
 
 
-    // just for admin
+
+
+
+
+
+});
+
+
+Route::middleware(['auth:sanctum', 'auth', 'check.admin'])->prefix('profile')->name('profile.')->group(function() {
+
     Route::patch('/withdraws/{withdrawalTransaction}/status', [WithdrawalTransactionController::class, 'updateStatus']);
 
+    Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])->middleware('check.admin')->name('project.reject');
+    Route::post('/projects/{project}/approve', [ProjectController::class, 'approve'])->middleware('check.admin')->name('project.approve');
 
-
-
+    // Posts
+    Route::prefix('posts')->group(function () {
+        Route::get('/{post}', [PostController::class, 'show'])->name('profile.post.show');
+        Route::get('/', [PostController::class, 'index'])->name('profile.post.index');
+        Route::post('/', [PostController::class, 'store'])->name('profile.post.store');
+        Route::patch('/{post}', [PostController::class, 'update'])->name('profile.post.update');
+        Route::delete('/{post}', [PostController::class, 'destroy'])->name('profile.post.delete');
+    });
 
 });
 
