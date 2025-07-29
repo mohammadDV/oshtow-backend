@@ -105,8 +105,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
         Route::post('/', [ChatController::class, 'indexPaginate'])->name('profile.chat.index');
         Route::get('/{chat}', [ChatController::class, 'show'])->name('profile.chat.show');
         Route::get('/info/{chat}', [ChatController::class, 'chatInfo'])->name('profile.chat.info');
-        // Route::post('/{user}', [ChatController::class, 'store'])->name('profile.chat.store');
-        Route::post('delete/{chat}', [ChatController::class, 'deleteMessages'])->name('profile.chat.delete.messages');
+        Route::post('/{user}', [ChatController::class, 'store'])->name('profile.chat.store');
+        // Route::post('delete/{chat}', [ChatController::class, 'deleteMessages'])->name('profile.chat.delete.messages');
         // Route::post('/status/{chat}', [ChatController::class, 'changeStatus'])->name('profile.chat.change-status')->middleware('permission:chat_store');
     });
 
