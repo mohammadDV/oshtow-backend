@@ -36,7 +36,7 @@ class ChatRepository implements IChatRepository {
     {
         $search = $request->get('query');
         return Chat::query()
-            ->with('user:id,nickname,profile_photo_path,rate', 'target:id,nickname,profile_photo_path')
+            ->with('user:id,nickname,profile_photo_path,rate', 'target:id,nickname,profile_photo_path', 'lastMessage')
             ->withCount(['messages' => function ($query) {
                 $query->where(function($query) {
                     $query->where('status', ChatMessage::STATUS_PENDING)
