@@ -256,10 +256,10 @@ class UserRepository implements IUserRepository
             $remainingDays = now()->diffInDays($activeSubscription->ends_at, false);
             $subscriptionInfo = [
                 'has_active_subscription' => 1,
-                'remaining_days' => $remainingDays,
+                'remaining_days' => intval($remainingDays),
                 'ends_at' => $activeSubscription->ends_at,
                 'message' => $remainingDays > 0
-                    ? __('site.:days days remain to expire your subscription', ['days' => $remainingDays])
+                    ? __('site.:days days remain to expire your subscription', ['days' => intval($remainingDays)])
                     : __('site.Your subscription has expired')
             ];
         } else {
