@@ -8,10 +8,10 @@ use Application\Api\User\Requests\UpdateUserRequest;
 use Application\Api\User\Resources\UserResource;
 use Carbon\Carbon;
 use Core\Http\traits\GlobalFunc;
-use Domain\Chat\Models\Chat;
 use Domain\Chat\Models\ChatMessage;
 use Domain\Claim\Models\Claim;
 use Domain\IdentityRecord\Models\IdentityRecord;
+use Domain\Notification\Services\NotificationService;
 use Domain\Plan\Models\Subscription;
 use Domain\Project\Models\Project;
 use Domain\Ticket\Models\Ticket;
@@ -309,16 +309,16 @@ class UserRepository implements IUserRepository
         }
 
         $update = $user->update([
-            'first_name'            => $request->input('first_name'),
-            'last_name'             => $request->input('last_name'),
+            // 'first_name'            => $request->input('first_name'),
+            // 'last_name'             => $request->input('last_name'),
             'nickname'              => $request->input('nickname'),
-            'address'               => $request->input('address'),
-            'country_id'            => $request->input('country_id'),
-            'province_id'           => $request->input('province_id'),
-            'city_id'               => $request->input('city_id'),
-            'status'                => $user->level == 3 ? $request->input('status') : $user->status,
+            // 'address'               => $request->input('address'),
+            // 'country_id'            => $request->input('country_id'),
+            // 'province_id'           => $request->input('province_id'),
+            // 'city_id'               => $request->input('city_id'),
+            // 'status'                => $user->level == 3 ? $request->input('status') : $user->status,
             // 'is_private'            => $request->input('is_private', false),
-            'mobile'                => $request->input('mobile'),
+            // 'mobile'                => $request->input('mobile'),
             'biography'             => $request->input('biography'),
             'profile_photo_path'    => $request->input('profile_photo_path', config('image.default-profile-image')),
             'bg_photo_path'         => $request->input('bg_photo_path', config('image.default-background-image')),
@@ -374,6 +374,13 @@ class UserRepository implements IUserRepository
         $update = $user->update([
             'password' => Hash::make($request->input('password'))
         ]);
+
+        NotificationService::create([
+            'title' => 'تحویل کالا',
+            'content' => ' کاربر گرامی: رمزعبور شما با موفقیت تغییر یافت. ',
+            'id' => $user->id,
+            'type' => NotificationService::PROFILE,
+        ], $user->id);
 
         if ($update) {
             return [

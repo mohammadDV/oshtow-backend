@@ -8,6 +8,12 @@ use Application\Api\User\Notifications\EmailNotification;
 
 class NotificationService
 {
+    const PROFILE = 'profile';
+    const PASSENGER = 'passenger';
+    const SENDER = 'sender';
+    const CHAT = 'chat';
+    const CLAIM = 'claim';
+    const Wallet = 'wallet';
 
     /**
      * Create and send notification
@@ -18,6 +24,7 @@ class NotificationService
      */
     static public function create(array $info, User $user, bool $hasEmail = true)
     {
+
         Notification::create([
             'title' => $info['title'],
             'content' => $info['content'],

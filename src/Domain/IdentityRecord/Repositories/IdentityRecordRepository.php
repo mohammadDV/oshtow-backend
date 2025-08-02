@@ -10,11 +10,11 @@ use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
+use Domain\Notification\Services\NotificationService;
 use Domain\Payment\Models\Transaction;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
-use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -105,12 +105,15 @@ class IdentityRecordRepository implements IIdentityRecordRepository
         }
 
         $identityRecord = IdentityRecord::create([
-            'fullname' => $request->input('fullname'),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'country_id' => $request->input('country_id'),
+            'province_id' => $request->input('province_id'),
+            'city_id' => $request->input('city_id'),
             'national_code' => $request->input('national_code'),
             'mobile' => $request->input('mobile'),
             'birthday' => $request->input('birthday'),
             'email' => $request->input('email'),
-            'country' => $request->input('country'),
             'postal_code' => $request->input('postal_code'),
             'address' => $request->input('address'),
             'image_national_code_front' => $request->input('image_national_code_front'),
@@ -118,6 +121,16 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'video' => $request->input('video'),
             'status' => IdentityRecord::PENDING,
             'user_id' => Auth::user()->id,
+        ]);
+
+        Auth::user()->update([
+            'first_name'            => $request->input('first_name'),
+            'last_name'             => $request->input('last_name'),
+            'address'               => $request->input('address'),
+            'country_id'            => $request->input('country_id'),
+            'province_id'           => $request->input('province_id'),
+            'city_id'               => $request->input('city_id'),
+            'mobile'                => $request->input('mobile'),
         ]);
 
         return $this->redirectToGateway($identityRecord);
@@ -186,6 +199,13 @@ class IdentityRecordRepository implements IIdentityRecordRepository
                 app(SubscribeRepository::class)->createSubscription(
                     Plan::find(config('plan.default_plan_id')), $user
                 );
+
+                NotificationService::create([
+                    'title' => 'تایید احراز هویت',
+                    'content' => ' .کاربر گرامی: احراز هویت شما با موفیت انجام شد و پلن اولیه برای شما فعال شد. ',
+                    'id' => $user->id,
+                    'type' => 'profile',
+                ], $user->id);
 
                 DB::commit();
             } catch (\Exception $e) {

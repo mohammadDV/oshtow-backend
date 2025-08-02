@@ -7,6 +7,7 @@ use Application\Api\Plan\Resources\SubscriptionResource;
 use Carbon\Carbon;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Notification\Services\NotificationService;
 use Domain\Payment\Models\Transaction;
 use Domain\Plan\Models\Plan;
 use Domain\Plan\Models\Subscription;
@@ -14,7 +15,6 @@ use Domain\Plan\Repositories\Contracts\ISubscribeRepository;
 use Domain\User\Models\User;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Repositories\Contracts\IWalletRepository;
-use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
@@ -22,7 +22,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class PlanRepository.
+ * Class SubscribeRepository.
  */
 class SubscribeRepository implements ISubscribeRepository
 {
@@ -33,7 +33,7 @@ class SubscribeRepository implements ISubscribeRepository
     }
 
     /**
-     * Get the plans pagination.
+     * Get the subscriptions pagination.
      * @param TableRequest $request
      * @return AnonymousResourceCollection
      */
@@ -51,7 +51,7 @@ class SubscribeRepository implements ISubscribeRepository
     }
 
     /**
-     * Get the plans.
+     * Get the subscriptions.
      * @return JsonResponse
      */
     public function activeSubscription() :JsonResponse
@@ -83,7 +83,6 @@ class SubscribeRepository implements ISubscribeRepository
             return $this->payWithWallet($plan);
         }
 
-        // TODO: Implement bank payment gateway
         return $this->payWithBank($plan);
 
     }
@@ -194,6 +193,14 @@ class SubscribeRepository implements ISubscribeRepository
         ]);
 
         if ($subscribe) {
+
+            NotificationService::create([
+                'title' => 'تحویل کالا',
+                'content' => ' کاربر گرامی: پلن جدید شما با عنوان ' . $plan->title . ' با موفقیت تحویل شد. ',
+                'id' => $user->id,
+                'type' => NotificationService::PROFILE,
+            ], $user->id);
+
             return [
                 'status' => 1,
                 'subscription' => $subscribe

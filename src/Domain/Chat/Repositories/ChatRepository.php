@@ -8,6 +8,7 @@ use Core\Http\traits\GlobalFunc;
 use Domain\Chat\Models\Chat;
 use Domain\Chat\Models\ChatMessage;
 use Domain\Chat\Repositories\Contracts\IChatRepository;
+use Domain\Notification\Services\NotificationService;
 use Domain\User\Models\User;
 use Domain\User\Services\TelegramNotificationService;
 use Illuminate\Http\JsonResponse;
@@ -204,20 +205,17 @@ class ChatRepository implements IChatRepository {
 
         if ($message) {
 
-            cache()->remember(
-                'notification.chat.user' . Auth::user()->id . '.' . $user->id,
-                now()->addMinutes(1),
-                function () use($user, $chat) {
-                    // Add notification
-                    // return Notification::create([
-                    //     'message' => __('site.Someone sent a private message to you.', ['someone' => Auth::user()->nickname]),
-                    //     'link' => '/profile/chats/' . $chat->id,
-                    //     'user_id' => $user->id,
-                    //     'model_id' => Auth::user()->id,
-                    //     'model_type' => User::class,
-                    //     'has_email' => 1,
-                    // ]);
-                });
+            // cache()->remember(
+            //     'notification.chat.user' . Auth::user()->id . '.' . $user->id,
+            //     now()->addMinutes(1),
+                // function () use($user, $chat) {
+                    NotificationService::create([
+                        'title' => 'دریافت پیام خصوصی',
+                        'content' => ' کاربر گرامی: ' . Auth::user()->nickname . ' به شما پیام خصوصی ارسال کرده است. ',
+                        'id' => $chat->id,
+                        'type' => 'chat',
+                    ], $user->id);
+                // });
 
                 // $this->service->sendNotification(
                 //     config('telegram.chat_id'),

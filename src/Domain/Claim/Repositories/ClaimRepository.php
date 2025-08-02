@@ -14,6 +14,7 @@ use Domain\Chat\Repositories\Contracts\IChatRepository;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Models\ClaimStep;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
+use Domain\Notification\Services\NotificationService;
 use Domain\Payment\Models\PaymentSecure;
 use Domain\Payment\Models\Transaction;
 use Domain\Project\Models\Project;
@@ -201,6 +202,13 @@ class ClaimRepository implements IClaimRepository
         // create chat for them
         $this->handleClaimChat($project);
 
+        NotificationService::create([
+            'title' => 'دریافت درخواست جدید',
+            'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $project->title . ' یک درخواست جدید ارسال شده است. ',
+            'id' => $project->id,
+            'type' => $project->type,
+        ], $project->user_id);
+
         //todo notification
         if ($claim) {
             return response()->json([
@@ -268,7 +276,12 @@ class ClaimRepository implements IClaimRepository
             'user_id' => Auth::user()->id,
         ]);
 
-        //todo notification
+        NotificationService::create([
+            'title' => 'تغییر در درخواست',
+            'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $claim->project->title . ' درخواست یک از کاربران تغییر کرده است. ',
+            'id' => $claim->project->id,
+            'type' => $claim->project->type,
+        ], $claim->project->user_id);
 
         if ($updated) {
             return response()->json([
@@ -320,6 +333,13 @@ class ClaimRepository implements IClaimRepository
                 'data' => $claim->image,
                 'description' => 'Claim approved: project #' . $claim->project->id,
             ]);
+
+            NotificationService::create([
+                'title' => 'تایید درخواست',
+                'content' => ' کاربر گرامی: درخواست شما برای این آگهی ' . $claim->project->title . ' تایید شده است. لطفا هرچه سریعتر برای ادامه فرآیند آگهی اقدام نمایید. ',
+                'id' => $claim->id,
+                'type' => 'claim',
+            ], $claim->user_id);
 
             DB::commit();
 
@@ -450,6 +470,13 @@ class ClaimRepository implements IClaimRepository
                 'Payment Secure: ' . $claim->id
             );
 
+            NotificationService::create([
+                'title' => 'پرداخت درخواست',
+                'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
+                'id' => $claim->id,
+                'type' => 'claim',
+            ], $claim->project->user_id);
+
             DB::commit();
 
             return response()->json([
@@ -504,6 +531,13 @@ class ClaimRepository implements IClaimRepository
                 'description' => 'Payment secure for claim #' . $claim->id,
                 'user_id' => $walletOwnerId,
             ]);
+
+            NotificationService::create([
+                'title' => 'پرداخت درخواست',
+                'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد. لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
+                'id' => $claim->id,
+                'type' => 'claim',
+            ], $claim->project->user_id);
 
             DB::commit();
 
@@ -567,6 +601,13 @@ class ClaimRepository implements IClaimRepository
                 'data' => $claim->confirmation_image,
                 'description' => 'Claim inprogress: project #' . $claim->project->id . ' #' . $request->input('confirmation_description'),
             ]);
+
+            NotificationService::create([
+                'title' => 'تایید دریافت کالا',
+                'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت دریافت کرده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
+                'id' => $claim->id,
+                'type' => 'claim',
+            ], $claim->project->type == Project::PASSENGER ? $claim->user_id : $claim->project->user_id);
 
             DB::commit();
 
@@ -633,6 +674,13 @@ class ClaimRepository implements IClaimRepository
                 'data' => $request->input('confirmation_code'),
                 'description' => 'Claim delivered: project #' . $claim->project->id,
             ]);
+
+            NotificationService::create([
+                'title' => 'تحویل کالا',
+                'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت تحویل داده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
+                'id' => $claim->id,
+                'type' => 'claim',
+            ], $claim->project->type == Project::PASSENGER ? $claim->user_id : $claim->project->user_id);
 
             DB::commit();
 

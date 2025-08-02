@@ -6,6 +6,7 @@ use Application\Api\Wallet\Requests\WithdrawalStatusRequest;
 use Application\Api\Wallet\Requests\WithdrawRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Notification\Services\NotificationService;
 use Domain\Wallet\Models\Wallet;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Models\WithdrawalTransaction;
@@ -160,6 +161,13 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
             }
 
             $withdrawalTransaction->update($data);
+
+            NotificationService::create([
+                'title' => 'انتقال پول از کیف پول',
+                'content' => ' کاربر گرامی: درخواست برداشت شما رد شده است لطفا از طریق پنل کاربری خود آن را بررسی کنید. ',
+                'id' => $withdrawalTransaction->id,
+                'type' => NotificationService::Wallet,
+            ], $withdrawalTransaction->wallet->user->id);
 
             DB::commit();
 

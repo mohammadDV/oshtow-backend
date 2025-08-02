@@ -13,12 +13,15 @@ return new class extends Migration
     {
         Schema::create('identity_records', function (Blueprint $table) {
             $table->id();
-            $table->string('fullname');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
             $table->string('national_code');
             $table->string('mobile');
             $table->date('birthday');
             $table->string('email');
-            $table->string('country');
+            $table->foreignId('country_id')->nullable();
+            $table->foreignId('province_id')->nullable();
+            $table->foreignId('city_id')->nullable();
             $table->string('postal_code');
             $table->string('address');
             $table->string('image_national_code_front');
