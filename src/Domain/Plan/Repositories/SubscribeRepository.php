@@ -199,7 +199,7 @@ class SubscribeRepository implements ISubscribeRepository
                 'content' => ' کاربر گرامی: پلن جدید شما با عنوان ' . $plan->title . ' با موفقیت تحویل شد. ',
                 'id' => $user->id,
                 'type' => NotificationService::PROFILE,
-            ], $user->id);
+            ], $user);
 
             return [
                 'status' => 1,

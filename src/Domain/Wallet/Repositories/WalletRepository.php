@@ -116,7 +116,7 @@ class WalletRepository implements IWalletRepository
                 'content' => ' کاربر گرامی: کیف پول شما با موفقیت شارژ شد. ',
                 'id' => $walletTransaction->wallet->id,
                 'type' => NotificationService::Wallet,
-            ], $walletTransaction?->wallet?->user?->id);
+            ], $walletTransaction?->wallet?->user);
 
             DB::commit();
 
@@ -172,7 +172,7 @@ class WalletRepository implements IWalletRepository
                 'content' => ' کاربر گرامی: کاربر با نام کاربری. ' . Auth::user()->nickname . ' کیف پول شما را شارژ کرده است. ',
                 'id' => $recipientWallet->id,
                 'type' => NotificationService::Wallet,
-            ], $recipient->id);
+            ], $recipient);
 
             DB::commit();
 

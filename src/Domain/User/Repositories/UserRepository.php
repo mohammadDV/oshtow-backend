@@ -380,7 +380,7 @@ class UserRepository implements IUserRepository
             'content' => ' کاربر گرامی: رمزعبور شما با موفقیت تغییر یافت. ',
             'id' => $user->id,
             'type' => NotificationService::PROFILE,
-        ], $user->id);
+        ], $user);
 
         if ($update) {
             return [

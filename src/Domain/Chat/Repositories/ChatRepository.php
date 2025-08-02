@@ -214,7 +214,7 @@ class ChatRepository implements IChatRepository {
                         'content' => ' کاربر گرامی: ' . Auth::user()->nickname . ' به شما پیام خصوصی ارسال کرده است. ',
                         'id' => $chat->id,
                         'type' => 'chat',
-                    ], $user->id);
+                    ], $user);
                 // });
 
                 // $this->service->sendNotification(

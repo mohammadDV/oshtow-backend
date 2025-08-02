@@ -204,8 +204,8 @@ class IdentityRecordRepository implements IIdentityRecordRepository
                     'title' => 'تایید احراز هویت',
                     'content' => ' .کاربر گرامی: احراز هویت شما با موفیت انجام شد و پلن اولیه برای شما فعال شد. ',
                     'id' => $user->id,
-                    'type' => 'profile',
-                ], $user->id);
+                    'type' => NotificationService::PROFILE,
+                ], $user);
 
                 DB::commit();
             } catch (\Exception $e) {
