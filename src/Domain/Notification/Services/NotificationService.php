@@ -37,7 +37,8 @@ class NotificationService
 
 
         if ($hasEmail) {
-            $user->notify(new EmailNotification($info['title'], $info['content']));
+            $actionUrl = $info['action_url'] ?? null;
+            $user->notify(new EmailNotification($info['title'], $info['content'], $actionUrl));
         }
 
     }

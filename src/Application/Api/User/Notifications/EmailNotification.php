@@ -13,11 +13,13 @@ class EmailNotification extends Notification implements ShouldQueue
 
     protected $title;
     protected $content;
+    protected $actionUrl;
 
-    public function __construct($title, $content)
+    public function __construct($title, $content, $actionUrl = null)
     {
         $this->title = $title;
         $this->content = $content;
+        $this->actionUrl = $actionUrl;
     }
 
     public function via($notifiable)
@@ -29,6 +31,10 @@ class EmailNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject($this->title)
-            ->line($this->content);
+            ->view('emails.custom-notification', [
+                'title' => $this->title,
+                'content' => $this->content,
+                'actionUrl' => $this->actionUrl ?? config('app.url'),
+            ]);
     }
 }
