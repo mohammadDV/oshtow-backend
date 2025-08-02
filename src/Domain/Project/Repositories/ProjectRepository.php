@@ -187,6 +187,13 @@ class ProjectRepository implements IProjectRepository
                 $project->categories()->attach($request->input('categories'));
             }
 
+            NotificationService::create([
+                'title' => 'آگهی با موفیت ثبت شد.',
+                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' با موفیت ثبت شد. ',
+                'id' => $project->id,
+                'type' => $project->type,
+            ], $project->user);
+
             return response()->json([
                 'status' => 1,
                 'message' => __('site.The operation has been successfully'),
@@ -297,6 +304,13 @@ class ProjectRepository implements IProjectRepository
         ]);
 
         if ($updated) {
+
+            NotificationService::create([
+                'title' => 'تایید آگهی',
+                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' با موفیت تایید شد. ',
+                'id' => $project->id,
+                'type' => $project->type,
+            ], $project->user);
 
             return response()->json([
                 'status' => 1,

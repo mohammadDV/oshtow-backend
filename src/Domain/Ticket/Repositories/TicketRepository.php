@@ -87,14 +87,6 @@ class TicketRepository implements ITicketRepository {
             ], Response::HTTP_CREATED);
         }
 
-        // Check if created_at is more than 5 minutes ago
-        if ($createdAt->diffInMinutes(Carbon::now()) < config('times.ticket_time_min')) {
-            return response()->json([
-                'status' => 0,
-                'message' => __('site.You are not allowed to resend messages. Please try again in 5 minutes.')
-            ], Response::HTTP_CREATED);
-        }
-
         $ticket = Ticket::create([
             'subject_id'    => $request->input('subject_id'),
             'user_id'       => Auth::user()->id,

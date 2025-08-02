@@ -7,6 +7,7 @@ use Application\Api\Review\Resources\ReviewResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
+use Domain\Notification\Services\NotificationService;
 use Domain\Project\Models\Project;
 use Domain\Review\Models\Review;
 use Domain\Review\Repositories\Contracts\IReviewRepository;
@@ -153,6 +154,13 @@ class ReviewRepository implements IReviewRepository
             $owner->update([
                 'rate' => empty($owner->rate) ? $request->input('rate') : ceil((($owner->rate + $request->input('rate')) / 2))
             ]);
+
+            NotificationService::create([
+                'title' => 'تحویل کالا',
+                'content' => ' کاربر گرامی: کاربر با نام ' . Auth::user()->nickname . ' برای شما یک نظر ثبت کرده است. ',
+                'id' => $claim->id,
+                'type' => NotificationService::CLAIM,
+            ], $owner->id);
 
             DB::commit();
 

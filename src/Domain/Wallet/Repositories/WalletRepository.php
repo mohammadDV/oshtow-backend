@@ -7,6 +7,7 @@ use Application\Api\Wallet\Requests\TransferRequest;
 use Application\Api\Wallet\Requests\WithdrawRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Notification\Services\NotificationService;
 use Domain\Payment\Models\Transaction;
 use Domain\User\Models\User;
 use Domain\Wallet\Models\Wallet;
@@ -110,6 +111,13 @@ class WalletRepository implements IWalletRepository
             // Update transaction status
             $this->update($walletTransaction, ['status' => 'completed']);
 
+            NotificationService::create([
+                'title' => 'شارژ کیف پول',
+                'content' => ' کاربر گرامی: کیف پول شما با موفقیت شارژ شد. ',
+                'id' => $walletTransaction->wallet->id,
+                'type' => NotificationService::Wallet,
+            ], $walletTransaction?->wallet?->user?->id);
+
             DB::commit();
 
         } catch (\Exception $e) {
@@ -158,6 +166,13 @@ class WalletRepository implements IWalletRepository
                 type: WalletTransaction::TRANSFER,
                 description: '#Transfer from ' . Auth::user()->customer_number . ' To'. $recipient->customer_number . ' #related_transaction_id: ' . $senderTransaction->id,
             );
+
+            NotificationService::create([
+                'title' => 'انتقال پول از کیف پول',
+                'content' => ' کاربر گرامی: کاربر با نام کاربری. ' . Auth::user()->nickname . ' کیف پول شما را شارژ کرده است. ',
+                'id' => $recipientWallet->id,
+                'type' => NotificationService::Wallet,
+            ], $recipient->id);
 
             DB::commit();
 
