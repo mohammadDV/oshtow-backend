@@ -166,7 +166,7 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
                 'title' => 'انتقال پول از کیف پول',
                 'content' => ' کاربر گرامی: درخواست برداشت شما رد شده است لطفا از طریق پنل کاربری خود آن را بررسی کنید. ',
                 'id' => $withdrawalTransaction->id,
-                'type' => NotificationService::Wallet,
+                'type' => NotificationService::WITHDRAWAL,
             ], $withdrawalTransaction->wallet->user);
 
             DB::commit();

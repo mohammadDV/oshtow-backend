@@ -13,7 +13,8 @@ class NotificationService
     const SENDER = 'sender';
     const CHAT = 'chat';
     const CLAIM = 'claim';
-    const Wallet = 'wallet';
+    const WALLET = 'wallet';
+    const WITHDRAWAL = 'withdrawal';
 
     /**
      * Create and send notification

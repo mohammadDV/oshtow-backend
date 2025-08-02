@@ -14,7 +14,6 @@ use Domain\Wallet\Models\Wallet;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Models\WithdrawalTransaction;
 use Domain\Wallet\Repositories\Contracts\IWalletRepository;
-use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -115,7 +114,7 @@ class WalletRepository implements IWalletRepository
                 'title' => 'شارژ کیف پول',
                 'content' => ' کاربر گرامی: کیف پول شما با موفقیت شارژ شد. ',
                 'id' => $walletTransaction->wallet->id,
-                'type' => NotificationService::Wallet,
+                'type' => NotificationService::WALLET,
             ], $walletTransaction?->wallet?->user);
 
             DB::commit();
@@ -171,7 +170,7 @@ class WalletRepository implements IWalletRepository
                 'title' => 'انتقال پول از کیف پول',
                 'content' => ' کاربر گرامی: کاربر با نام کاربری. ' . Auth::user()->nickname . ' کیف پول شما را شارژ کرده است. ',
                 'id' => $recipientWallet->id,
-                'type' => NotificationService::Wallet,
+                'type' => NotificationService::WALLET,
             ], $recipient);
 
             DB::commit();
