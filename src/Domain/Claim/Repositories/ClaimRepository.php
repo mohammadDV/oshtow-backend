@@ -207,7 +207,7 @@ class ClaimRepository implements IClaimRepository
             'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $project->title . ' یک درخواست جدید ارسال شده است. ',
             'id' => $project->id,
             'type' => $project->type,
-        ], $project->user_id);
+        ], $project->user);
 
         //todo notification
         if ($claim) {
@@ -281,7 +281,7 @@ class ClaimRepository implements IClaimRepository
             'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $claim->project->title . ' درخواست یک از کاربران تغییر کرده است. ',
             'id' => $claim->project->id,
             'type' => $claim->project->type,
-        ], $claim->project->user_id);
+        ], $claim->project->user);
 
         if ($updated) {
             return response()->json([
@@ -339,7 +339,7 @@ class ClaimRepository implements IClaimRepository
                 'content' => ' کاربر گرامی: درخواست شما برای این آگهی ' . $claim->project->title . ' تایید شده است. لطفا هرچه سریعتر برای ادامه فرآیند آگهی اقدام نمایید. ',
                 'id' => $claim->id,
                 'type' => 'claim',
-            ], $claim->user_id);
+            ], $claim->user);
 
             DB::commit();
 
@@ -474,8 +474,8 @@ class ClaimRepository implements IClaimRepository
                 'title' => 'پرداخت درخواست',
                 'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
                 'id' => $claim->id,
-                'type' => 'claim',
-            ], $claim->project->user_id);
+                'type' => NotificationService::CLAIM,
+            ], $claim->project->user);
 
             DB::commit();
 
@@ -536,8 +536,8 @@ class ClaimRepository implements IClaimRepository
                 'title' => 'پرداخت درخواست',
                 'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد. لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
                 'id' => $claim->id,
-                'type' => 'claim',
-            ], $claim->project->user_id);
+                'type' => NotificationService::CLAIM,
+            ], $claim->project->user);
 
             DB::commit();
 
@@ -606,8 +606,8 @@ class ClaimRepository implements IClaimRepository
                 'title' => 'تایید دریافت کالا',
                 'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت دریافت کرده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
                 'id' => $claim->id,
-                'type' => 'claim',
-            ], $claim->project->type == Project::PASSENGER ? $claim->user_id : $claim->project->user_id);
+                'type' => NotificationService::CLAIM,
+            ], $claim->project->type == Project::PASSENGER ? $claim->user : $claim->project->user);
 
             DB::commit();
 
@@ -679,8 +679,8 @@ class ClaimRepository implements IClaimRepository
                 'title' => 'تحویل کالا',
                 'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت تحویل داده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
                 'id' => $claim->id,
-                'type' => 'claim',
-            ], $claim->project->type == Project::PASSENGER ? $claim->user_id : $claim->project->user_id);
+                'type' => NotificationService::CLAIM,
+            ], $claim->project->type == Project::PASSENGER ? $claim->user : $claim->project->user);
 
             DB::commit();
 

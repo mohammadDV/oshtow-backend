@@ -160,7 +160,7 @@ class ReviewRepository implements IReviewRepository
                 'content' => ' کاربر گرامی: کاربر با نام ' . Auth::user()->nickname . ' برای شما یک نظر ثبت کرده است. ',
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
-            ], $owner->id);
+            ], $owner);
 
             DB::commit();
 
