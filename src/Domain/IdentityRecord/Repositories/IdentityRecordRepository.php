@@ -123,17 +123,22 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'user_id' => Auth::user()->id,
         ]);
 
-        Auth::user()->update([
-            'first_name'            => $request->input('first_name'),
-            'last_name'             => $request->input('last_name'),
-            'address'               => $request->input('address'),
-            'country_id'            => $request->input('country_id'),
-            'province_id'           => $request->input('province_id'),
-            'city_id'               => $request->input('city_id'),
-            'mobile'                => $request->input('mobile'),
-        ]);
+        if ($identityRecord) {
 
-        return $this->redirectToGateway($identityRecord);
+            Auth::user()->update([
+                'first_name'            => $request->input('first_name'),
+                'last_name'             => $request->input('last_name'),
+                'address'               => $request->input('address'),
+                'country_id'            => $request->input('country_id'),
+                'province_id'           => $request->input('province_id'),
+                'city_id'               => $request->input('city_id'),
+                'mobile'                => $request->input('mobile'),
+            ]);
+
+            return $this->redirectToGateway($identityRecord);
+        }
+
+        throw new \Exception();
 
     }
 
