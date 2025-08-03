@@ -35,7 +35,8 @@ return [
     ],
 
     'default-current-index-image' => 'medium',
-    'url-upload-file' => 'prod-data-sport.storage.iran.liara.space', // .varzeshpod.com
+    // 'url-upload-file' => 'prod-data-sport.storage.iran.liara.space', // .varzeshpod.com
+    'url-upload-file' => 'https://varzeshpod-prod.s3.ir-thr-at1.arvanstorage.com/', // .varzeshpod.com
     'default-profile-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-avatar.jpg',
     'default-background-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-user-banner.jpg',
     'default_project_image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-destination1.jpeg',

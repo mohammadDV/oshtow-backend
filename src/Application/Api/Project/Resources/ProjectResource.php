@@ -31,12 +31,14 @@ class ProjectResource extends JsonResource
                 $destinationImage = $this->dCountry->image;
             }
         }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'type' => $this->type,
             'path_type' => $this->path_type,
             'amount' => $this->amount,
+            'image' => $this->image,
             'weight' => $this->weight,
             'dimensions' => $this->dimensions,
             'status' => $this->status,
