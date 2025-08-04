@@ -53,4 +53,119 @@ class IdentityRecord extends Model
     {
         return $this->belongsTo(City::class);
     }
+
+    /**
+     * Set the image attribute with domain replacement
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setImageNationalCodeBackAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Replace the old domain with the new one from config
+            $this->attributes['image_national_code_back'] = str_replace(
+                config('image.url-upload-file'),
+                '',
+                trim($value)
+            );
+        } else {
+            $this->attributes['image_national_code_back'] = $value;
+        }
+    }
+
+    /**
+     * Get the image attribute with proper domain
+     *
+     * @param string $value
+     * @return string|null
+     */
+    public function getImageNationalCodeBackAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Check if the value already has http:// or https:// protocol
+            if (!preg_match('/^https?:\/\//', $value)) {
+                return config('image.url-upload-file') . ltrim($value, '/');
+            }
+        }
+        return $value;
+    }
+
+
+
+    /**
+     * Set the image attribute with domain replacement
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setImageNationalCodeFrontAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Replace the old domain with the new one from config
+            $this->attributes['image_national_code_front'] = str_replace(
+                config('image.url-upload-file'),
+                '',
+                trim($value)
+            );
+        } else {
+            $this->attributes['image_national_code_front'] = $value;
+        }
+    }
+
+    /**
+     * Get the image attribute with proper domain
+     *
+     * @param string $value
+     * @return string|null
+     */
+    public function getImageNationalCodeFrontAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Check if the value already has http:// or https:// protocol
+            if (!preg_match('/^https?:\/\//', $value)) {
+                return config('image.url-upload-file') . ltrim($value, '/');
+            }
+        }
+        return $value;
+    }
+
+
+
+    /**
+     * Set the image attribute with domain replacement
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setVideoAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Replace the old domain with the new one from config
+            $this->attributes['video'] = str_replace(
+                config('image.url-upload-file'),
+                '',
+                trim($value)
+            );
+        } else {
+            $this->attributes['video'] = $value;
+        }
+    }
+
+    /**
+     * Get the image attribute with proper domain
+     *
+     * @param string $value
+     * @return string|null
+     */
+    public function getVideoAttribute($value)
+    {
+        if ($value && is_string($value)) {
+            // Check if the value already has http:// or https:// protocol
+            if (!preg_match('/^https?:\/\//', $value)) {
+                return config('image.url-upload-file') . ltrim($value, '/');
+            }
+        }
+        return $value;
+    }
 }
