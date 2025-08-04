@@ -4,6 +4,7 @@ namespace Domain\Ticket\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ticket extends Model
 {
@@ -21,5 +22,14 @@ class Ticket extends Model
 
     public function messages() {
         return $this->hasMany(TicketMessage::class);
+    }
+
+    /**
+     * Get the first message of the chat
+     *
+     * @return HasOne
+     */
+    public function message(): HasOne {
+        return $this->hasOne(TicketMessage::class);
     }
 }

@@ -29,7 +29,7 @@ class TicketRepository implements ITicketRepository {
     {
         $search = $request->get('query');
         return Ticket::query()
-            ->with('subject')
+            ->with('subject', 'message')
             ->when(Auth::user()->level != 3, function ($query) {
                 return $query->where('user_id', Auth::user()->id);
             })
