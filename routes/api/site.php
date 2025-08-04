@@ -67,6 +67,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::resource('projects', ProjectController::class);
     Route::post('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('project.edit');
     Route::resource('tickets', TicketController::class);
+    Route::post('tickets/{ticket}/message', [TicketController::class, 'storeMessage'])->name('profile.ticket.message.store');
     Route::post('/ticket-status/{ticket}', [TicketController::class, 'changeStatus'])->name('profile.ticket.change-status');
     Route::resource('ticket-subjects', TicketSubjectController::class);
 

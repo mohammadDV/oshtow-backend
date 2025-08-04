@@ -2,6 +2,7 @@
 
 namespace Domain\Ticket\Repositories\Contracts;
 
+use Application\Api\Ticket\Requests\TicketMessageRequest;
 use Application\Api\Ticket\Requests\TicketRequest;
 use Application\Api\Ticket\Requests\TicketStatusRequest;
 use Core\Http\Requests\TableRequest;
@@ -43,5 +44,13 @@ interface ITicketRepository  {
      * @return Ticket
      */
     public function show(Ticket $ticket) :Ticket;
+
+    /**
+     * Store the message of ticket.
+     * @param TicketMessageRequest $request
+     * @param Ticket $ticket
+     * @return JsonResponse
+     */
+    public function storeMessage(TicketMessageRequest $request, Ticket $ticket) :JsonResponse;
 
 }
