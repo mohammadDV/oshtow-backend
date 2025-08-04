@@ -113,18 +113,23 @@ class IdentityRecordResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('image_national_code_front')
                             ->label(__('site.national_code_front'))
+                            ->placeholder(__('site.upload_national_code_front'))
                             ->image()
+                            ->imageEditor()
                             ->required()
                             ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
                             ->directory('/identity-records/national-code-front'),
                         Forms\Components\FileUpload::make('image_national_code_back')
                             ->label(__('site.national_code_back'))
+                            ->placeholder(__('site.upload_national_code_back'))
                             ->image()
+                            ->imageEditor()
                             ->required()
                             ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
                             ->directory('/identity-records/national-code-back'),
                         Forms\Components\FileUpload::make('video')
                             ->label(__('site.video'))
+                            ->placeholder(__('site.upload_video'))
                             ->acceptedFileTypes(['video/*'])
                             ->required()
                             ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')

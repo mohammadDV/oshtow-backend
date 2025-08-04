@@ -105,7 +105,7 @@ class UserResource extends Resource
                             ->placeholder(__('site.upload_profile_photo'))
                             ->image()
                             ->imageEditor()
-                            ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                            ->disk('s3')
                             ->directory('/users/profile-photos')
                             // ->previewable(false)
                             ->required(),
