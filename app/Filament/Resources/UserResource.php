@@ -112,8 +112,7 @@ class UserResource extends Resource
                         Forms\Components\FileUpload::make('bg_photo_path')
                             ->label(__('site.bg_photo_path'))
                             ->placeholder(__('site.upload_bg_photo'))
-                            ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
-                            ->visibility('public')
+                            ->disk('s3')
                             ->image()
                             ->directory('/users/bg-photos'),
                     ])->columns(2),
@@ -149,7 +148,7 @@ class UserResource extends Resource
                     ->searchable(),
                 ImageColumn::make('profile_photo_path')
                     ->label(__('site.profile_photo_path'))
-                    ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                    ->disk('s3')
                     ->circular()
                     ->size(40),
                 TextColumn::make('first_name')

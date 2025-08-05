@@ -35,9 +35,10 @@ return [
     ],
 
     'default-current-index-image' => 'medium',
-    // 'url-upload-file' => 'prod-data-sport.storage.iran.liara.space', // .varzeshpod.com
-    'url-upload-file' => 'https://varzeshpod-prod.s3.ir-thr-at1.arvanstorage.com/', // .varzeshpod.com
-    'default-profile-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-avatar.jpg',
-    'default-background-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-user-banner.jpg',
-    'default_project_image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-destination1.jpeg',
+    // 'default-profile-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-avatar.jpg',
+    'default-profile-image' => 'oshtow/uploads/images/default/user-3/2025/08/05/5oDhYkWyG3iywqqsoP2Io35sASpnJzoHiEOlOn2l.jpg',
+    // 'default-background-image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-user-banner.jpg',
+    'default-background-image' => 'oshtow/uploads/images/default/user-3/2025/08/05/94hFAge9cTsYZlAQ9aF0zLPt9QHsyHTfJ874SIZh.jpg"',
+    // 'default_project_image' => 'https://prod-data-sport.storage.iran.liara.space/oshtow/default-destination1.jpeg',
+    'default_project_image' => 'oshtow/uploads/images/default/user-3/2025/08/05/dTLrFqPILuXwcEHg9CNgpLpdoktV4LRxsJ1Xf5Tk.jpg',
 ];

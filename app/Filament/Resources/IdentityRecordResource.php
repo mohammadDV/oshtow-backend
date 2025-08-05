@@ -117,7 +117,7 @@ class IdentityRecordResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->required()
-                            ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                            ->disk('s3')
                             ->directory('/identity-records/national-code-front'),
                         Forms\Components\FileUpload::make('image_national_code_back')
                             ->label(__('site.national_code_back'))
@@ -125,14 +125,14 @@ class IdentityRecordResource extends Resource
                             ->image()
                             ->imageEditor()
                             ->required()
-                            ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                            ->disk('s3')
                             ->directory('/identity-records/national-code-back'),
                         Forms\Components\FileUpload::make('video')
                             ->label(__('site.video'))
                             ->placeholder(__('site.upload_video'))
                             ->acceptedFileTypes(['video/*'])
                             ->required()
-                            ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                            ->disk('s3')
                             ->directory('/identity-records/videos'),
                     ])->columns(3),
 
@@ -162,7 +162,7 @@ class IdentityRecordResource extends Resource
                     ->searchable(),
                 ImageColumn::make('image_national_code_front')
                     ->label(__('site.national_code_front'))
-                    ->disk(config('app.env') === 'local' ? 's3_proxy' : 's3')
+                    ->disk('s3')
                     ->size(40),
                 TextColumn::make('first_name')
                     ->label(__('site.first_name'))

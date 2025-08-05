@@ -29,7 +29,6 @@ class FileService extends FileToolsService
         // $result = Storage::disk('liara')->put($this->getFinalFileDirectory(), $file);
         $result = Storage::disk('s3')->put($this->getFinalFileDirectory(), $file, 'public');
         return  $result;
-        // return  str_replace('prod-data-sport.storage.iran.liara.space', config('image.url-upload-file'), Storage::disk('s3')->url($result));
 
         // $result = $file->move(storage_path($this->getFinalFileDirectory()), $this->getFinalFileName());
         // return $result ? $this->getFileAddress() : false;
