@@ -112,15 +112,19 @@ class ProjectResource extends Resource
                                     ->options(Country::pluck('title', 'id'))
                                     ->searchable()
                                     ->live()
-                                    ->afterStateUpdated(fn () => $form->getComponent('o_province_id')->state(null))
-                                    ->afterStateUpdated(fn () => $form->getComponent('o_city_id')->state(null)),
+                                    ->afterStateUpdated(function (callable $set) {
+                                        $set('o_province_id', null);
+                                        $set('o_city_id', null);
+                                    }),
                                 Select::make('d_country_id')
                                     ->label(__('site.destination_country'))
                                     ->options(Country::pluck('title', 'id'))
                                     ->searchable()
                                     ->live()
-                                    ->afterStateUpdated(fn () => $form->getComponent('d_province_id')->state(null))
-                                    ->afterStateUpdated(fn () => $form->getComponent('d_city_id')->state(null)),
+                                    ->afterStateUpdated(function (callable $set) {
+                                        $set('d_province_id', null);
+                                        $set('d_city_id', null);
+                                    }),
                             ]),
                         Grid::make(2)
                             ->schema([
@@ -133,7 +137,9 @@ class ProjectResource extends Resource
                                     })
                                     ->searchable()
                                     ->live()
-                                    ->afterStateUpdated(fn () => $form->getComponent('o_city_id')->state(null)),
+                                    ->afterStateUpdated(function (callable $set) {
+                                        $set('o_city_id', null);
+                                    }),
                                 Select::make('d_province_id')
                                     ->label(__('site.destination_province'))
                                     ->options(function (callable $get) {
@@ -143,7 +149,9 @@ class ProjectResource extends Resource
                                     })
                                     ->searchable()
                                     ->live()
-                                    ->afterStateUpdated(fn () => $form->getComponent('d_city_id')->state(null)),
+                                    ->afterStateUpdated(function (callable $set) {
+                                        $set('d_city_id', null);
+                                    }),
                             ]),
                         Grid::make(2)
                             ->schema([
@@ -210,9 +218,6 @@ class ProjectResource extends Resource
                             ->imageEditor()
                             ->disk('s3')
                             ->directory('/projects/images')
-                            ->visibility('public')
-                            ->previewable(true)
-                            ->getUploadedFileUrlUsing(fn ($record) => $record->image ? $record->image : null),
                     ])->columns(2),
             ]);
     }
