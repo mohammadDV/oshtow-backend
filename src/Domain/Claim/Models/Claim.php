@@ -7,6 +7,7 @@ use Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Claim extends Model
 {
@@ -70,5 +71,13 @@ class Claim extends Model
     public function sponsor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'sponsor_id');
+    }
+
+    /**
+     * Get the steps for the claim.
+     */
+    public function claimSteps(): HasMany
+    {
+        return $this->hasMany(ClaimStep::class);
     }
 }

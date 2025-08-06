@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('claim_steps', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger("step_id")->unsigned()->index();
             $table->bigInteger("claim_id")->unsigned()->index();
             $table->foreign('claim_id')->references('id')->on('claims')->onDelete('cascade');
             $table->string('data', 2048)->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
-            $table->primary(['claim_id', 'step_id']);
+            $table->unique(['claim_id', 'step_id']);
         });
     }
 

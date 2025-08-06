@@ -11,6 +11,14 @@ return [
             'label' => 'کاربر',
             'plural_label' => 'کاربران',
         ],
+        'project' => [
+            'label' => 'پروژه',
+            'plural_label' => 'پروژه‌ها',
+        ],
+        'claim' => [
+            'label' => 'درخواست',
+            'plural_label' => 'درخواست‌ها',
+        ],
     ],
     'components' => [
         'actions' => [
@@ -86,6 +94,29 @@ return [
             'search' => [
                 'placeholder' => 'جستجو...',
             ],
+            'columns' => [
+                'text' => [
+                    'search' => [
+                        'placeholder' => 'جستجو...',
+                    ],
+                ],
+            ],
+            'actions' => [
+                'view' => [
+                    'label' => 'مشاهده',
+                ],
+                'edit' => [
+                    'label' => 'ویرایش',
+                ],
+                'delete' => [
+                    'label' => 'حذف',
+                ],
+            ],
+            'bulk_actions' => [
+                'delete' => [
+                    'label' => 'حذف انتخاب شده‌ها',
+                ],
+            ],
         ],
         'forms' => [
             'actions' => [
@@ -104,13 +135,47 @@ return [
                 'save_and_create_another' => [
                     'label' => 'ذخیره و ایجاد دیگری',
                 ],
+                'edit' => [
+                    'label' => 'ویرایش',
+                ],
+                'delete' => [
+                    'label' => 'حذف',
+                ],
+                'view' => [
+                    'label' => 'مشاهده',
+                ],
             ],
             'fields' => [
                 'boolean' => [
                     'true' => 'بله',
                     'false' => 'خیر',
                 ],
+                'select' => [
+                    'actions' => [
+                        'create_option' => [
+                            'modal' => [
+                                'heading' => 'ایجاد گزینه جدید',
+                                'description' => 'آیا می‌خواهید گزینه جدیدی ایجاد کنید؟',
+                            ],
+                        ],
+                    ],
+                    'boolean' => [
+                        'true' => 'بله',
+                        'false' => 'خیر',
+                    ],
+                    'placeholder' => 'انتخاب کنید...',
+                ],
+                'text_input' => [
+                    'placeholder' => 'متن را وارد کنید...',
+                ],
+                'textarea' => [
+                    'placeholder' => 'متن را وارد کنید...',
+                ],
+                'date_picker' => [
+                    'placeholder' => 'تاریخ را انتخاب کنید...',
+                ],
                 'file_upload' => [
+                    'placeholder' => 'فایل را انتخاب کنید...',
                     'actions' => [
                         'upload' => [
                             'label' => 'آپلود',
@@ -127,21 +192,6 @@ return [
                         'max_size' => 'حداکثر حجم فایل: :size',
                         'min_size' => 'حداقل حجم فایل: :size',
                     ],
-                ],
-                'select' => [
-                    'actions' => [
-                        'create_option' => [
-                            'modal' => [
-                                'heading' => 'ایجاد گزینه جدید',
-                                'description' => 'آیا می‌خواهید گزینه جدیدی ایجاد کنید؟',
-                            ],
-                        ],
-                    ],
-                    'boolean' => [
-                        'true' => 'بله',
-                        'false' => 'خیر',
-                    ],
-                    'placeholder' => 'انتخاب کنید...',
                 ],
                 'tags_input' => [
                     'placeholder' => 'تگ جدید...',
@@ -173,6 +223,33 @@ return [
                 'close' => [
                     'label' => 'بستن',
                 ],
+            ],
+        ],
+        'common' => [
+            'status' => [
+                'pending' => 'در انتظار',
+                'approved' => 'تایید شده',
+                'rejected' => 'رد شده',
+                'completed' => 'تکمیل شده',
+                'cancelled' => 'لغو شده',
+                'active' => 'فعال',
+                'inactive' => 'غیرفعال',
+            ],
+            'actions' => [
+                'confirm' => 'تایید',
+                'cancel' => 'انصراف',
+                'save' => 'ذخیره',
+                'edit' => 'ویرایش',
+                'delete' => 'حذف',
+                'view' => 'مشاهده',
+                'create' => 'ایجاد',
+            ],
+            'fields' => [
+                'title' => 'عنوان',
+                'description' => 'توضیحات',
+                'status' => 'وضعیت',
+                'created_at' => 'تاریخ ایجاد',
+                'updated_at' => 'تاریخ بروزرسانی',
             ],
         ],
     ],
