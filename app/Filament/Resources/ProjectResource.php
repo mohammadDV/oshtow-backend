@@ -27,6 +27,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
+use Filament\Tables\Columns\BadgeColumn;
+use Domain\Claim\Models\Claim;
 
 class ProjectResource extends Resource
 {
@@ -300,6 +302,42 @@ class ProjectResource extends Resource
                     ->color('primary')
                     ->icon('heroicon-o-user')
                     ->tooltip(__('site.click_to_view_user_details')),
+                TextColumn::make('claims_count')
+                    ->label(__('site.claims'))
+                    ->counts('claims')
+                    ->badge()
+                    ->color('info')
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->tooltip(__('site.total_claims_for_project')),
+                TextColumn::make('claims_status')
+                    ->label(__('site.claims_status'))
+                    ->formatStateUsing(function ($record) {
+                        $claims = $record->claims;
+                        if ($claims->isEmpty()) {
+                            return __('site.no_claims');
+                        }
+
+                        $statusCounts = $claims->groupBy('status')->map->count();
+                        $statusLabels = [
+                            Claim::PENDING => __('site.pending'),
+                            Claim::APPROVED => __('site.approved'),
+                            Claim::PAID => __('site.paid'),
+                            Claim::INPROGRESS => __('site.in_progress'),
+                            Claim::DELIVERED => __('site.delivered'),
+                            Claim::CANCELED => __('site.canceled'),
+                        ];
+
+                        $statusTexts = [];
+                        foreach ($statusCounts as $status => $count) {
+                            $label = $statusLabels[$status] ?? $status;
+                            $statusTexts[] = "{$label}: {$count}";
+                        }
+
+                        return implode(', ', $statusTexts);
+                    })
+                    ->wrap()
+                    ->limit(100)
+                    ->tooltip(__('site.claims_status_breakdown')),
                 TextColumn::make('send_date')
                     ->label(__('site.send_date'))
                     ->date('Y/m/d')
@@ -335,8 +373,30 @@ class ProjectResource extends Resource
                     ->label(__('site.vip')),
                 Tables\Filters\TernaryFilter::make('active')
                     ->label(__('site.active')),
+                Tables\Filters\SelectFilter::make('has_claims')
+                    ->label(__('site.has_claims'))
+                    ->options([
+                        'yes' => __('site.has_claims'),
+                        'no' => __('site.no_claims'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        if ($data['value'] === 'yes') {
+                            return $query->has('claims');
+                        }
+                        if ($data['value'] === 'no') {
+                            return $query->doesntHave('claims');
+                        }
+                        return $query;
+                    }),
             ])
             ->actions([
+                Tables\Actions\Action::make('view_claims')
+                    ->label(__('site.view_claims'))
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->color('info')
+                    ->url(fn (Project $record): string => route('filament.admin.resources.projects.edit', $record) . '?activeTab=claims')
+                    ->openUrlInNewTab()
+                    ->visible(fn (Project $record): bool => $record->claims()->count() > 0),
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make()
@@ -372,7 +432,7 @@ class ProjectResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            \App\Filament\Resources\ProjectResource\RelationManagers\ClaimsRelationManager::class,
         ];
     }
 
