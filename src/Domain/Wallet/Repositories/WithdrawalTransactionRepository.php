@@ -70,7 +70,7 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
                     ->firstOrFail();
 
             $amount = $request->amount;
-            $description = $request->description ?? 'Wallet withdrawal';
+            $description = $request->description ?? __('site.wallet_transaction_wallet_withdrawal');
 
             if (!$wallet->canWithdraw($amount)) {
                 return response()->json([
@@ -155,7 +155,7 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
                     wallet: $withdrawalTransaction->wallet,
                     amount: $withdrawalTransaction->amount,
                     type: WalletTransaction::REFUND,
-                    description: "شارژ حساب به علت رد شدن درخواست برداشت از حساب با شماره مرجع :" . $withdrawalTransaction->reference ,
+                    description: __('site.wallet_transaction_withdrawal_refund', ['reference' => $withdrawalTransaction->reference]),
                     status: WalletTransaction::COMPLETED
                 );
             }
@@ -163,8 +163,8 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
             $withdrawalTransaction->update($data);
 
             NotificationService::create([
-                'title' => 'انتقال پول از کیف پول',
-                'content' => ' کاربر گرامی: درخواست برداشت شما رد شده است لطفا از طریق پنل کاربری خود آن را بررسی کنید. ',
+                'title' => __('site.wallet_withdrawal_rejected_title'),
+                'content' => __('site.wallet_withdrawal_rejected_content'),
                 'id' => $withdrawalTransaction->id,
                 'type' => NotificationService::WITHDRAWAL,
             ], $withdrawalTransaction->wallet->user);

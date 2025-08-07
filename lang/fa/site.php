@@ -299,7 +299,7 @@ return array(
     'Reset Password' => 'بازنشانی رمز عبور',
     'This password reset link will expire in 60 minutes.' => 'این لینک بازنشانی رمز عبور تا ۶۰ دقیقه معتبر است.',
     'If you did not request a password reset, no further action is required.' => 'اگر شما درخواست بازنشانی رمز عبور نداده‌اید، هیچ اقدامی لازم نیست.',
-    'If you\'re having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:' => 'اگر در کلیک روی دکمه "بازنشانی رمز عبور" مشکل دارید، لینک زیر را در مرورگر خود کپی و جایگذاری کنید:',
+    'If you are having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:' => 'اگر در کلیک روی دکمه "بازنشانی رمز عبور" مشکل دارید، لینک زیر را در مرورگر خود کپی و جایگذاری کنید:',
     'Thanks' => 'با تشکر',
     'The' => '',
     'Team' => 'تیم',
@@ -754,4 +754,114 @@ return array(
     'payment_secure_relation_manager' => 'پرداخت امن',
     'claim_steps_relation_manager' => 'مراحل درخواست',
     'claim_step_relation_manager' => 'مرحله درخواست',
+
+    // Payment Secure Admin Actions
+    'release_payment_secure' => 'آزادسازی پرداخت امن',
+    'release_payment_secure_description' => 'آیا از آزادسازی این پرداخت امن اطمینان دارید؟ مبلغ به کیف پول کاربر پروژه واریز خواهد شد.',
+    'cancel_payment_secure' => 'لغو پرداخت امن',
+    'cancel_payment_secure_description' => 'آیا از لغو این پرداخت امن اطمینان دارید؟ مبلغ به کیف پول کاربر درخواست بازگردانده خواهد شد.',
+    'payment_secure_released' => 'پرداخت امن آزاد شد',
+    'payment_secure_cancelled' => 'پرداخت امن لغو شد',
+    'error' => 'خطا',
+    'release' => 'آزادسازی',
+    'cancel' => 'لغو',
+    'payment_secure_not_pending' => 'پرداخت امن در وضعیت انتظار نیست',
+    'payment_secure_released_title' => 'پرداخت امن آزاد شد',
+    'payment_secure_released_content' => 'کاربر گرامی: پرداخت امن با موفقیت آزاد شد. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید.',
+    'payment_secure_cancelled_title' => 'پرداخت امن لغو شد',
+    'payment_secure_cancelled_content' => 'کاربر گرامی: پرداخت امن با موفقیت لغو شد. مبلغ به کیف پول شما بازگردانده شد.',
+
+    // Claim Notifications
+    'new_claim_received_title' => 'دریافت درخواست جدید',
+    'new_claim_received_content' => 'کاربر گرامی: برای آگهی شما با نام :project_title یک درخواست جدید ارسال شده است.',
+    'claim_updated_title' => 'تغییر در درخواست',
+    'claim_updated_content' => 'کاربر گرامی: برای آگهی شما با نام :project_title درخواست یک از کاربران تغییر کرده است.',
+    'claim_approved_title' => 'تایید درخواست',
+    'claim_approved_content' => 'کاربر گرامی: درخواست شما برای این آگهی :project_title تایید شده است. لطفا هرچه سریعتر برای ادامه فرآیند آگهی اقدام نمایید.',
+    'claim_paid_title' => 'پرداخت درخواست',
+    'claim_paid_content' => 'کاربر گرامی: درخواست تایید شده درآگهی :project_title با موفقیت پرداخت شد لطفا جهت ادامه فرآیند آگهی اقدام کنید.',
+    'claim_paid_content_alt' => 'کاربر گرامی: درخواست تایید شده درآگهی :project_title با موفقیت پرداخت شد. لطفا جهت ادامه فرآیند آگهی اقدام کنید.',
+    'claim_inprogress_title' => 'تایید دریافت کالا',
+    'claim_inprogress_content' => 'کاربر گرامی: مسافر با نام :user_nickname تایید کرد که کالا را با موفقیت دریافت کرده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید.',
+    'claim_delivered_title' => 'تحویل کالا',
+    'claim_delivered_content' => 'کاربر گرامی: مسافر با نام :user_nickname تایید کرد که کالا را با موفقیت تحویل داده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید.',
+
+    // Wallet Notifications
+    'wallet_topup_title' => 'شارژ کیف پول',
+    'wallet_topup_content' => 'کاربر گرامی: کیف پول شما با موفقیت شارژ شد.',
+    'wallet_transfer_title' => 'انتقال پول از کیف پول',
+    'wallet_transfer_content' => 'کاربر گرامی: کاربر با نام کاربری :user_nickname کیف پول شما را شارژ کرده است.',
+    'wallet_withdrawal_rejected_title' => 'انتقال پول از کیف پول',
+    'wallet_withdrawal_rejected_content' => 'کاربر گرامی: درخواست برداشت شما رد شده است لطفا از طریق پنل کاربری خود آن را بررسی کنید.',
+
+    // Review Notifications
+    'new_review_title' => 'ثبت دیدگاه جدید',
+    'new_review_content' => 'کاربر گرامی: کاربر با نام :user_nickname برای شما یک دیدگاه جدید ثبت کرده است.',
+
+    // User Notifications
+    'password_changed_title' => 'تغییر رمز عبور',
+    'password_changed_content' => 'کاربر گرامی: رمزعبور شما با موفقیت تغییر یافت.',
+
+    // Project Notifications
+    'project_created_title' => 'آگهی با موفقیت ثبت شد',
+    'project_created_content' => 'کاربر گرامی: آگهی شما با نام :project_title با موفقیت ثبت شد.',
+    'project_rejected_title' => 'رد شدن آگهی توسط مدیریت',
+    'project_rejected_content' => 'کاربر گرامی: آگهی شما با نام :project_title از طرف مدیریت رد شده است. علت رد شدن :reason',
+    'project_approved_title' => 'تایید آگهی',
+    'project_approved_content' => 'کاربر گرامی: آگهی شما با نام :project_title با موفقیت تایید شد.',
+
+    // Identity Record Notifications
+    'identity_verification_approved_title' => 'تایید احراز هویت',
+    'identity_verification_approved_content' => 'کاربر گرامی: احراز هویت شما با موفقیت انجام شد و پلن اولیه برای شما فعال شد.',
+
+    // Plan Notifications
+    'plan_activated_title' => 'فعال شدن پلن جدید',
+    'plan_activated_content' => 'کاربر گرامی: پلن جدید شما با عنوان :plan_title با موفقیت فعال شد.',
+
+    // Chat Notifications
+    'private_message_title' => 'دریافت پیام خصوصی',
+    'private_message_content' => 'کاربر گرامی: :user_nickname به شما پیام خصوصی ارسال کرده است.',
+
+    // Wallet Transaction Descriptions
+    'wallet_transaction_payment_secure_purchase' => 'پرداخت امن: :claim_id',
+    'wallet_transaction_payment_secure_released' => 'پرداخت امن: :claim_id آزاد شد',
+    'wallet_transaction_payment_secure_return' => 'پرداخت امن: :claim_id بازگشت به کاربر',
+    'wallet_transaction_withdrawal_refund' => 'شارژ حساب به علت رد شدن درخواست برداشت از حساب با شماره مرجع: :reference',
+    'wallet_transaction_transfer_to' => 'انتقال به :email #شناسه کیف پول گیرنده: :wallet_id',
+    'wallet_transaction_transfer_from' => '#انتقال از :sender_number به :recipient_number #شناسه تراکنش مرتبط: :transaction_id',
+    'wallet_transaction_plan_purchase' => 'خرید پلن: :plan_title',
+    'wallet_transaction_wallet_withdrawal' => 'برداشت از کیف پول',
+
+    // Plan Management
+    'Subscription Management' => 'مدیریت اشتراک',
+    'plans' => 'پلن‌ها',
+    'plan' => 'پلن',
+    'plan_information' => 'اطلاعات پلن',
+    'plan_title' => 'عنوان پلن',
+    'plan_period' => 'دوره پلن',
+    'plan_amount' => 'مبلغ پلن',
+    'plan_period_count' => 'تعداد دوره',
+    'plan_claim_count' => 'تعداد درخواست',
+    'plan_project_count' => 'تعداد پروژه',
+    'plan_status' => 'وضعیت پلن',
+    'plan_creator' => 'ایجادکننده پلن',
+    'plan_description' => 'توضیحات پلن',
+    'subscriptions_count' => 'تعداد اشتراک‌ها',
+    'view_plan' => 'مشاهده پلن',
+    'edit_plan' => 'ویرایش پلن',
+    'create_plan' => 'ایجاد پلن',
+    'plan_created_successfully' => 'پلن با موفقیت ایجاد شد',
+    'plan_updated_successfully' => 'پلن با موفقیت بروزرسانی شد',
+    'enter_plan_title' => 'عنوان پلن را وارد کنید',
+    'enter_plan_amount' => 'مبلغ پلن را وارد کنید',
+    'enter_plan_period_count' => 'تعداد دوره را وارد کنید',
+    'enter_plan_claim_count' => 'تعداد درخواست را وارد کنید',
+    'enter_plan_project_count' => 'تعداد پروژه را وارد کنید',
+    'enter_plan_description' => 'توضیحات پلن را وارد کنید',
+    'monthly' => 'ماهانه',
+    'yearly' => 'سالانه',
+    'active' => 'فعال',
+    'inactive' => 'غیرفعال',
+    'active_plans' => 'پلن‌های فعال',
+    'inactive_plans' => 'پلن‌های غیرفعال',
 );

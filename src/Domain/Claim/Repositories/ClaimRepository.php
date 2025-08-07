@@ -203,8 +203,8 @@ class ClaimRepository implements IClaimRepository
         $this->handleClaimChat($project);
 
         NotificationService::create([
-            'title' => 'دریافت درخواست جدید',
-            'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $project->title . ' یک درخواست جدید ارسال شده است. ',
+            'title' => __('site.new_claim_received_title'),
+            'content' => __('site.new_claim_received_content', ['project_title' => $project->title]),
             'id' => $project->id,
             'type' => $project->type,
         ], $project->user);
@@ -277,8 +277,8 @@ class ClaimRepository implements IClaimRepository
         ]);
 
         NotificationService::create([
-            'title' => 'تغییر در درخواست',
-            'content' => ' کاربر گرامی: برای آگهی شما با نام ' . $claim->project->title . ' درخواست یک از کاربران تغییر کرده است. ',
+            'title' => __('site.claim_updated_title'),
+            'content' => __('site.claim_updated_content', ['project_title' => $claim->project->title]),
             'id' => $claim->project->id,
             'type' => $claim->project->type,
         ], $claim->project->user);
@@ -335,8 +335,8 @@ class ClaimRepository implements IClaimRepository
             ]);
 
             NotificationService::create([
-                'title' => 'تایید درخواست',
-                'content' => ' کاربر گرامی: درخواست شما برای این آگهی ' . $claim->project->title . ' تایید شده است. لطفا هرچه سریعتر برای ادامه فرآیند آگهی اقدام نمایید. ',
+                'title' => __('site.claim_approved_title'),
+                'content' => __('site.claim_approved_content', ['project_title' => $claim->project->title]),
                 'id' => $claim->id,
                 'type' => 'claim',
             ], $claim->user);
@@ -449,10 +449,16 @@ class ClaimRepository implements IClaimRepository
                 ->where('user_id', Auth::user()->id)
                 ->firstOrFail();
 
+            $walletReleased = Wallet::query()
+                ->where('currency', Wallet::IRR)
+                ->where('user_id', $claim->project->type == Project::PASSENGER ? $claim->project->user_id :$claim->user_id)
+                ->firstOrFail();
+
             // Create payment secure
             PaymentSecure::create([
                 'claim_id' => $claim->id,
                 'wallet_id' => $wallet->id,
+                'wallet_id_released' => $walletReleased->id,
                 'amount' => $amount,
                 'status' => PaymentSecure::PENDING,
                 'expires_at' => now()->addDays(15),
@@ -467,12 +473,12 @@ class ClaimRepository implements IClaimRepository
                 $wallet,
                 -$amount,
                 WalletTransaction::PURCHASE,
-                'Payment Secure: ' . $claim->id
+                __('site.wallet_transaction_payment_secure_purchase', ['claim_id' => $claim->id])
             );
 
             NotificationService::create([
-                'title' => 'پرداخت درخواست',
-                'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
+                'title' => __('site.claim_paid_title'),
+                'content' => __('site.claim_paid_content', ['project_title' => $claim->project->title]),
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
             ], $claim->project->user);
@@ -521,10 +527,16 @@ class ClaimRepository implements IClaimRepository
                 ->where('user_id', $walletOwnerId)
                 ->firstOrFail();
 
+            $walletReleased = Wallet::query()
+                ->where('currency', Wallet::IRR)
+                ->where('user_id', $claim->project->type == Project::PASSENGER ? $claim->project->user_id :$claim->user_id)
+                ->firstOrFail();
+
             // Create payment secure
             $payment = PaymentSecure::create([
                 'claim_id' => $claim->id,
                 'wallet_id' => $wallet->id,
+                'wallet_id_released' => $walletReleased->id,
                 'amount' => $claim->amount,
                 'status' => PaymentSecure::PENDING,
                 'expires_at' => now()->addDays(15),
@@ -533,8 +545,8 @@ class ClaimRepository implements IClaimRepository
             ]);
 
             NotificationService::create([
-                'title' => 'پرداخت درخواست',
-                'content' => ' کاربر گرامی: درخواست تایید شده درآگهی ' . $claim->project->title . ' با موفقیت پرداخت شد. لطفا جهت ادامه فرآیند آگهی اقدام کنید. ',
+                'title' => __('site.claim_paid_title'),
+                'content' => __('site.claim_paid_content_alt', ['project_title' => $claim->project->title]),
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
             ], $claim->project->user);
@@ -603,8 +615,8 @@ class ClaimRepository implements IClaimRepository
             ]);
 
             NotificationService::create([
-                'title' => 'تایید دریافت کالا',
-                'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت دریافت کرده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
+                'title' => __('site.claim_inprogress_title'),
+                'content' => __('site.claim_inprogress_content', ['user_nickname' => Auth::user()->nickname]),
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
             ], $claim->project->type == Project::PASSENGER ? $claim->user : $claim->project->user);
@@ -675,9 +687,11 @@ class ClaimRepository implements IClaimRepository
                 'description' => 'Claim delivered: project #' . $claim->project->id,
             ]);
 
+            $this->releasePaymentSecure($claim);
+
             NotificationService::create([
-                'title' => 'تحویل کالا',
-                'content' => ' کاربر گرامی: مسافر با نام ' . Auth::user()->nickname . ' تایید کرد که کالا را با موفیت تحویل داده است. لطفا جهت بررسی فرآیند آگهی وارد سایت شوید. ',
+                'title' => __('site.claim_delivered_title'),
+                'content' => __('site.claim_delivered_content', ['user_nickname' => Auth::user()->nickname]),
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
             ], $claim->project->type == Project::PASSENGER ? $claim->user : $claim->project->user);
@@ -693,6 +707,33 @@ class ClaimRepository implements IClaimRepository
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
+        }
+    }
+
+    /**
+     * Release the payment secure.
+     * @param Claim $claim
+     * @return void
+     */
+    private function releasePaymentSecure(Claim $claim): void
+    {
+        $paymentSecure = PaymentSecure::where('claim_id', $claim->id)->first();
+        if ($paymentSecure->status == PaymentSecure::PENDING) {
+            $paymentSecure->release();
+
+            WalletTransaction::createTransaction(
+                $paymentSecure->wallet,
+                $paymentSecure->amount,
+                WalletTransaction::DEPOSITE,
+                __('site.wallet_transaction_payment_secure_released', ['claim_id' => $claim->id])
+            );
+
+            NotificationService::create([
+                'title' => __('site.payment_secure_released_title'),
+                'content' => __('site.payment_secure_released_content'),
+                'id' => $claim->id,
+                'type' => NotificationService::CLAIM,
+            ], $claim->project->type == Project::PASSENGER ? $claim->project->user : $claim->user);
         }
     }
 }

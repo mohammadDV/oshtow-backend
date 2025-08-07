@@ -29,6 +29,12 @@ class ClaimStepsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'description';
 
+    protected static ?string $title = 'مراحل درخواست';
+
+    protected static ?string $modelLabel = 'مرحله درخواست';
+
+    protected static ?string $pluralModelLabel = 'مراحل درخواست';
+
     public function getTableRecordKey($record): string
     {
         return $record->claim_id . '_' . $record->step_id;

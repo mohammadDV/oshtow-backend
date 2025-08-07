@@ -376,8 +376,8 @@ class UserRepository implements IUserRepository
         ]);
 
         NotificationService::create([
-            'title' => 'تحویل کالا',
-            'content' => ' کاربر گرامی: رمزعبور شما با موفقیت تغییر یافت. ',
+            'title' => __('site.password_changed_title'),
+            'content' => __('site.password_changed_content'),
             'id' => $user->id,
             'type' => NotificationService::PROFILE,
         ], $user);

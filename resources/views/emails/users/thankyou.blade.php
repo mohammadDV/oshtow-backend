@@ -70,6 +70,7 @@
             color: #333333;
             line-height: 1.6;
             margin: 20px 0 30px 0;
+            text-align: center;
         }
 
         .cta-button {
@@ -104,6 +105,7 @@
             margin: 20px 0;
             color: #155724;
             font-size: 14px;
+            text-align: center;
         }
 
         @media only screen and (max-width: 600px) {

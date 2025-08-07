@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('model_type')->nullable();
             $table->bigInteger("wallet_id")->unsigned()->index();
             $table->foreign('wallet_id')->references('id')->on('wallets')->onDelete('cascade');
+            $table->bigInteger("wallet_id_released")->unsigned()->nullable()->index();
+            $table->foreign('wallet_id_released')->references('id')->on('wallets')->onDelete('cascade')->nullable();
             $table->bigInteger("claim_id")->unsigned()->index();
             $table->foreign('claim_id')->references('id')->on('claims')->onDelete('cascade');
             $table->decimal('amount', 15, 2);

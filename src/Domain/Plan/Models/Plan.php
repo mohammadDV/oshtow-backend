@@ -13,8 +13,18 @@ class Plan extends Model
 
     protected $guarded = [];
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'subscriptions');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
