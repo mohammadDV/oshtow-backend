@@ -5,6 +5,7 @@ namespace Domain\Ticket\Repositories;
 use Application\Api\Ticket\Requests\TicketMessageRequest;
 use Application\Api\Ticket\Requests\TicketRequest;
 use Application\Api\Ticket\Requests\TicketStatusRequest;
+use Domain\Notification\Services\NotificationService;
 use Carbon\Carbon;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
@@ -48,6 +49,11 @@ class TicketRepository implements ITicketRepository {
      */
     public function show(Ticket $ticket) :Ticket
     {
+        TicketMessage::query()
+            ->where('user_id', '!=', Auth::user()->id)
+            ->where('ticket_id', $ticket->id)
+            ->update(['status' => TicketMessage::READ]);
+
         return Ticket::query()
                 ->with('subject')
                 ->with('messages')
@@ -98,6 +104,13 @@ class TicketRepository implements ITicketRepository {
             'message'      => $request->input('message'),
             'user_id'      => Auth::user()->id,
         ]);
+
+        NotificationService::create([
+            'title' => __('site.ticket_created_successfully'),
+            'content' => __('site.ticket_created_successfully_message_content'),
+            'id' => $ticket->id,
+            'type' => NotificationService::TICKET,
+        ], Auth::user());
 
         if ($message) {
             return response()->json([
@@ -156,10 +169,17 @@ class TicketRepository implements ITicketRepository {
                     ->orderBy('id', 'desc')
                     ->first();
 
-        if ($exist->user_id == Auth::user()->id && Auth::user()->level != 3) {
+        if ($exist->user_id == Auth::user()->id) {
             return response()->json([
                 'status' => 0,
                 'message' => __('site.You are not allowed to resend messages. Please wait until the operator answers.')
+            ], Response::HTTP_OK);
+        }
+
+        if ($ticket->status != Ticket::STATUS_ACTIVE) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.This ticket is closed.')
             ], Response::HTTP_OK);
         }
 

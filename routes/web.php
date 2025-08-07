@@ -2,10 +2,38 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Domain\User\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Test route to preview email templates with Peyda font
+Route::get('/test-email/{template}', function ($template) {
+    $user = User::first();
+
+    if (!$user) {
+        return 'No user found for testing';
+    }
+
+    switch ($template) {
+        case 'thankyou':
+            return view('emails.users.thankyou', ['user' => $user]);
+        case 'password-reset':
+            return view('emails.users.password-reset', [
+                'user' => $user,
+                'resetUrl' => 'https://example.com/reset-password?token=test-token'
+            ]);
+        case 'custom-notification':
+            return view('emails.custom-notification', [
+                'title' => 'Test Notification',
+                'content' => 'This is a test notification with Peyda font.',
+                'actionUrl' => 'https://example.com'
+            ]);
+        default:
+            return 'Invalid template. Available: thankyou, password-reset, custom-notification';
+    }
+})->name('test.email');
 
 // Proxy route for S3 images to avoid CORS issues
 Route::get('storage/s3/{path}', function ($path) {
