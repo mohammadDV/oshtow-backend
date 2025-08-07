@@ -13,6 +13,11 @@ class Subscription extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'ends_at' => 'datetime',
+        'active' => 'boolean',
+    ];
+
     public function plan() {
         return $this->belongsTo(Plan::class);
     }
