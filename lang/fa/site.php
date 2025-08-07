@@ -301,7 +301,7 @@ return array(
     'If you did not request a password reset, no further action is required.' => 'اگر شما درخواست بازنشانی رمز عبور نداده‌اید، هیچ اقدامی لازم نیست.',
     'If you\'re having trouble clicking the "Reset Password" button, copy and paste the URL below into your web browser:' => 'اگر در کلیک روی دکمه "بازنشانی رمز عبور" مشکل دارید، لینک زیر را در مرورگر خود کپی و جایگذاری کنید:',
     'Thanks' => 'با تشکر',
-    'The' => 'تیم',
+    'The' => '',
     'Team' => 'تیم',
 
     // Email Verification Messages
@@ -319,6 +319,17 @@ return array(
     'Password must contain at least one capital letter and one symbol' => 'رمز عبور باید حداقل شامل یک حرف بزرگ و یک نماد باشد.',
     'Current password is incorrect' => 'رمز عبور فعلی اشتباه است.',
     'Password has been changed successfully' => 'رمز عبور با موفقیت تغییر یافت.',
+
+    // Thank You Email Messages
+    'Welcome to' => 'خوش آمدید به',
+    'Thank you for registering with us' => 'از ثبت نام شما متشکریم',
+    'We are excited to have you on board' => 'ما خوشحالیم که شما را در خانواده خود داریم',
+    'Welcome message' => 'خوش آمدید! ما خوشحالیم که شما را در خانواده',
+    'Go to Dashboard' => 'رفتن به داشبورد',
+    'If you have any questions, feel free to reply to this email' => 'اگر سوالی دارید، لطفاً به این ایمیل پاسخ دهید',
+    'Thanks' => 'با تشکر',
+    'The' => 'تیم',
+    'Team' => 'تیم',
 
     // User Model Fields for Filament Panel
     'users' => 'کاربران',
@@ -676,6 +687,7 @@ return array(
     'pending_claims' => 'درخواست‌های در انتظار',
     'claims_awaiting_approval' => 'درخواست‌های در انتظار تایید',
     'claims_by_status' => 'درخواست‌ها بر اساس وضعیت',
+    'total_payment_secures_for_claim' => 'کل پرداخت‌های امن درخواست',
 
     // Additional Claim Management Translations
     'claim_information' => 'اطلاعات درخواست',
@@ -714,4 +726,32 @@ return array(
     'confirm_delete_claim_step' => 'تایید حذف مرحله درخواست',
     'confirm_delete_claim_step_description' => 'آیا از حذف این مرحله درخواست اطمینان دارید؟',
     'total_steps_for_claim' => 'کل مراحل درخواست',
+
+    // Payment Secure Management Translations
+    'payment_secures' => 'پرداخت‌های امن',
+    'payment_secure' => 'پرداخت امن',
+    'Payment Management' => 'مدیریت پرداخت‌ها',
+    'payment_secure_information' => 'اطلاعات پرداخت امن',
+    'wallet' => 'کیف پول',
+    'released' => 'آزاد شده',
+    'cancelled' => 'لغو شده',
+    'expires_at' => 'تاریخ انقضا',
+    'expired_payments' => 'پرداخت‌های منقضی شده',
+    'active_payments' => 'پرداخت‌های فعال',
+    'view_payment_secure' => 'مشاهد',
+    'edit_payment_secure' => 'ویرایش',
+    'create_payment_secure' => 'ایجاد پرداخت امن',
+    'delete_payment_secure' => 'حذف پرداخت امن',
+    'delete_selected_payment_secures' => 'حذف پرداخت‌های انتخاب شده',
+    'payment_secure_created_successfully' => 'پرداخت امن با موفقیت ایجاد شد',
+    'payment_secure_updated_successfully' => 'پرداخت امن با موفقیت بروزرسانی شد',
+    'payment_secure_deleted_successfully' => 'پرداخت امن با موفقیت حذف شد',
+    'confirm_delete_payment_secure' => 'تایید حذف پرداخت امن',
+    'confirm_delete_payment_secure_description' => 'آیا از حذف این پرداخت امن اطمینان دارید؟',
+    'click_to_view_claim_details' => 'برای مشاهده جزئیات درخواست کلیک کنید',
+    'payment_secures_count' => 'تعداد پرداخت‌های امن',
+    'payment_secures_relation_manager' => 'پرداخت‌های امن',
+    'payment_secure_relation_manager' => 'پرداخت امن',
+    'claim_steps_relation_manager' => 'مراحل درخواست',
+    'claim_step_relation_manager' => 'مرحله درخواست',
 );
