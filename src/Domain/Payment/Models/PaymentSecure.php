@@ -4,6 +4,7 @@ namespace Domain\Payment\Models;
 
 use Domain\Claim\Models\Claim;
 use Domain\Wallet\Models\Wallet;
+use Domain\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,6 +21,7 @@ class PaymentSecure extends Model
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'expires_at' => 'datetime',
     ];
 
     protected $hidden = [
@@ -40,6 +42,16 @@ class PaymentSecure extends Model
     public function wallet(): BelongsTo
     {
         return $this->belongsTo(Wallet::class);
+    }
+
+    public function walletReleased(): BelongsTo
+    {
+        return $this->belongsTo(Wallet::class, 'wallet_id_released');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function isExpired(): bool

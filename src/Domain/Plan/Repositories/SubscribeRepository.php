@@ -146,7 +146,7 @@ class SubscribeRepository implements ISubscribeRepository
                 $wallet,
                 -$plan->amount,
                 WalletTransaction::PURCHASE,
-                'Plan purchase: ' . $plan->title
+                __('site.wallet_transaction_plan_purchase', ['plan_title' => $plan->title])
             );
 
             DB::commit();
@@ -195,8 +195,8 @@ class SubscribeRepository implements ISubscribeRepository
         if ($subscribe) {
 
             NotificationService::create([
-                'title' => 'تحویل کالا',
-                'content' => ' کاربر گرامی: پلن جدید شما با عنوان ' . $plan->title . ' با موفقیت تحویل شد. ',
+                'title' => __('site.plan_activated_title'),
+                'content' => __('site.plan_activated_content', ['plan_title' => $plan->title]),
                 'id' => $user->id,
                 'type' => NotificationService::PROFILE,
             ], $user);

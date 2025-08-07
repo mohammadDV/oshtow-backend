@@ -156,8 +156,8 @@ class ReviewRepository implements IReviewRepository
             ]);
 
             NotificationService::create([
-                'title' => 'تحویل کالا',
-                'content' => ' کاربر گرامی: کاربر با نام ' . Auth::user()->nickname . ' برای شما یک نظر ثبت کرده است. ',
+                'title' => __('site.new_review_title'),
+                'content' => __('site.new_review_content', ['user_nickname' => Auth::user()->nickname]),
                 'id' => $claim->id,
                 'type' => NotificationService::CLAIM,
             ], $owner);

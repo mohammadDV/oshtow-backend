@@ -189,8 +189,8 @@ class ProjectRepository implements IProjectRepository
             }
 
             NotificationService::create([
-                'title' => 'آگهی با موفیت ثبت شد.',
-                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' با موفیت ثبت شد. ',
+                'title' => __('site.project_created_title'),
+                'content' => __('site.project_created_content', ['project_title' => $project->title]),
                 'id' => $project->id,
                 'type' => $project->type,
             ], $project->user);
@@ -276,8 +276,8 @@ class ProjectRepository implements IProjectRepository
         if ($updated) {
 
             NotificationService::create([
-                'title' => 'رد شدن آگهی توسط مدیریت',
-                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' :از طرف مدیریت رد شده است. علت رد شدن ' . $request->input('reason'),
+                'title' => __('site.project_rejected_title'),
+                'content' => __('site.project_rejected_content', ['project_title' => $project->title, 'reason' => $request->input('reason')]),
                 'id' => $project->id,
                 'type' => $project->type,
             ], $project->user);
@@ -308,8 +308,8 @@ class ProjectRepository implements IProjectRepository
         if ($updated) {
 
             NotificationService::create([
-                'title' => 'تایید آگهی',
-                'content' => ' کاربر گرامی: آگهی شما با نام ' . $project->title . ' با موفیت تایید شد. ',
+                'title' => __('site.project_approved_title'),
+                'content' => __('site.project_approved_content', ['project_title' => $project->title]),
                 'id' => $project->id,
                 'type' => $project->type,
             ], $project->user);

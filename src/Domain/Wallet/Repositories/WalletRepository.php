@@ -111,8 +111,8 @@ class WalletRepository implements IWalletRepository
             $this->update($walletTransaction, ['status' => 'completed']);
 
             NotificationService::create([
-                'title' => 'شارژ کیف پول',
-                'content' => ' کاربر گرامی: کیف پول شما با موفقیت شارژ شد. ',
+                'title' => __('site.wallet_topup_title'),
+                'content' => __('site.wallet_topup_content'),
                 'id' => $walletTransaction->wallet->id,
                 'type' => NotificationService::WALLET,
             ], $walletTransaction?->wallet?->user);
@@ -155,7 +155,7 @@ class WalletRepository implements IWalletRepository
                 wallet: $senderWallet,
                 amount: -$request->input('amount'),
                 type: WalletTransaction::TRANSFER,
-                description: $request->description ?? 'Transfer to ' . $recipient->email . '#recipient_wallet_id: ' . $recipientWallet->id,
+                description: $request->description ?? __('site.wallet_transaction_transfer_to', ['email' => $recipient->email, 'wallet_id' => $recipientWallet->id]),
             );
 
             // Recipient's transaction (Credit)
@@ -163,12 +163,12 @@ class WalletRepository implements IWalletRepository
                 wallet: $recipientWallet,
                 amount: $request->input('amount'),
                 type: WalletTransaction::TRANSFER,
-                description: '#Transfer from ' . Auth::user()->customer_number . ' To'. $recipient->customer_number . ' #related_transaction_id: ' . $senderTransaction->id,
+                description: __('site.wallet_transaction_transfer_from', ['sender_number' => Auth::user()->customer_number, 'recipient_number' => $recipient->customer_number, 'transaction_id' => $senderTransaction->id]),
             );
 
             NotificationService::create([
-                'title' => 'انتقال پول از کیف پول',
-                'content' => ' کاربر گرامی: کاربر با نام کاربری. ' . Auth::user()->nickname . ' کیف پول شما را شارژ کرده است. ',
+                'title' => __('site.wallet_transfer_title'),
+                'content' => __('site.wallet_transfer_content', ['user_nickname' => Auth::user()->nickname]),
                 'id' => $recipientWallet->id,
                 'type' => NotificationService::WALLET,
             ], $recipient);
@@ -280,7 +280,7 @@ class WalletRepository implements IWalletRepository
                 wallet: $wallet,
                 amount: -$amount,
                 type: WalletTransaction::WITHDRAWAL,
-                description: $description,
+                description: $description ?? __('site.wallet_transaction_wallet_withdrawal'),
                 status: WalletTransaction::COMPLETED
             );
 

@@ -191,4 +191,105 @@ return array(
     'upload_national_code_front' => 'Upload national code front',
     'upload_national_code_back' => 'Upload national code back',
     'upload_video' => 'Upload video',
+
+    // Payment Secure Release Notifications
+    'payment_secure_not_pending' => 'Payment secure is not in pending status',
+    'payment_secure_released_title' => 'Payment Secure Released',
+    'payment_secure_released_content' => 'Dear user: The payment secure has been successfully released. Please visit the site to review the project process.',
+    'payment_secure_cancelled_title' => 'Payment Secure Cancelled',
+    'payment_secure_cancelled_content' => 'Dear user: The payment secure has been successfully cancelled. The amount has been returned to your wallet.',
+
+    // Claim Notifications
+    'new_claim_received_title' => 'New Claim Received',
+    'new_claim_received_content' => 'Dear user: A new claim has been submitted for your project named :project_title.',
+    'claim_updated_title' => 'Claim Updated',
+    'claim_updated_content' => 'Dear user: A claim for your project named :project_title has been updated by one of the users.',
+    'claim_approved_title' => 'Claim Approved',
+    'claim_approved_content' => 'Dear user: Your claim for the project :project_title has been approved. Please proceed with the project process as soon as possible.',
+    'claim_paid_title' => 'Claim Payment',
+    'claim_paid_content' => 'Dear user: The approved claim for project :project_title has been successfully paid. Please proceed with the project process.',
+    'claim_paid_content_alt' => 'Dear user: The approved claim for project :project_title has been successfully paid. Please proceed with the project process.',
+    'claim_inprogress_title' => 'Item Receipt Confirmed',
+    'claim_inprogress_content' => 'Dear user: The passenger named :user_nickname confirmed that they have successfully received the item. Please visit the site to review the project process.',
+    'claim_delivered_title' => 'Item Delivered',
+    'claim_delivered_content' => 'Dear user: The passenger named :user_nickname confirmed that they have successfully delivered the item. Please visit the site to review the project process.',
+
+    // Wallet Notifications
+    'wallet_topup_title' => 'Wallet Top-up',
+    'wallet_topup_content' => 'Dear user: Your wallet has been successfully topped up.',
+    'wallet_transfer_title' => 'Wallet Transfer',
+    'wallet_transfer_content' => 'Dear user: User with nickname :user_nickname has topped up your wallet.',
+    'wallet_withdrawal_rejected_title' => 'Wallet Transfer',
+    'wallet_withdrawal_rejected_content' => 'Dear user: Your withdrawal request has been rejected. Please check it through your user panel.',
+
+    // Review Notifications
+    'new_review_title' => 'New Review Posted',
+    'new_review_content' => 'Dear user: User with name :user_nickname has posted a new review for you.',
+
+    // User Notifications
+    'password_changed_title' => 'Password Changed',
+    'password_changed_content' => 'Dear user: Your password has been successfully changed.',
+
+    // Project Notifications
+    'project_created_title' => 'Project Successfully Created',
+    'project_created_content' => 'Dear user: Your project named :project_title has been successfully created.',
+    'project_rejected_title' => 'Project Rejected by Management',
+    'project_rejected_content' => 'Dear user: Your project named :project_title has been rejected by management. Reason for rejection: :reason',
+    'project_approved_title' => 'Project Approved',
+    'project_approved_content' => 'Dear user: Your project named :project_title has been successfully approved.',
+
+    // Identity Record Notifications
+    'identity_verification_approved_title' => 'Identity Verification Approved',
+    'identity_verification_approved_content' => 'Dear user: Your identity verification has been completed successfully and the initial plan has been activated for you.',
+
+    // Plan Notifications
+    'plan_activated_title' => 'New Plan Activated',
+    'plan_activated_content' => 'Dear user: Your new plan with title :plan_title has been successfully activated.',
+
+    // Chat Notifications
+    'private_message_title' => 'Private Message Received',
+    'private_message_content' => 'Dear user: :user_nickname has sent you a private message.',
+
+    // Wallet Transaction Descriptions
+    'wallet_transaction_payment_secure_purchase' => 'Payment Secure: :claim_id',
+    'wallet_transaction_payment_secure_released' => 'Payment Secure: :claim_id released',
+    'wallet_transaction_payment_secure_return' => 'Payment Secure: :claim_id return back to user',
+    'wallet_transaction_withdrawal_refund' => 'Account recharge due to withdrawal request rejection with reference number: :reference',
+    'wallet_transaction_transfer_to' => 'Transfer to :email #recipient_wallet_id: :wallet_id',
+    'wallet_transaction_transfer_from' => '#Transfer from :sender_number to :recipient_number #related_transaction_id: :transaction_id',
+    'wallet_transaction_plan_purchase' => 'Plan purchase: :plan_title',
+    'wallet_transaction_wallet_withdrawal' => 'Wallet withdrawal',
+
+    // Plan Management
+    'Subscription Management' => 'Subscription Management',
+    'plans' => 'Plans',
+    'plan' => 'Plan',
+    'plan_information' => 'Plan Information',
+    'plan_title' => 'Plan Title',
+    'plan_period' => 'Plan Period',
+    'plan_amount' => 'Plan Amount',
+    'plan_period_count' => 'Period Count',
+    'plan_claim_count' => 'Claim Count',
+    'plan_project_count' => 'Project Count',
+    'plan_status' => 'Plan Status',
+    'plan_creator' => 'Plan Creator',
+    'plan_description' => 'Plan Description',
+    'subscriptions_count' => 'Subscriptions Count',
+    'view_plan' => 'View Plan',
+    'edit_plan' => 'Edit Plan',
+    'create_plan' => 'Create Plan',
+    'plan_created_successfully' => 'Plan created successfully',
+    'plan_updated_successfully' => 'Plan updated successfully',
+    'enter_plan_title' => 'Enter plan title',
+    'enter_plan_amount' => 'Enter plan amount',
+    'enter_plan_period_count' => 'Enter period count',
+    'enter_plan_claim_count' => 'Enter claim count',
+    'enter_plan_project_count' => 'Enter project count',
+    'enter_plan_description' => 'Enter plan description',
+    'monthly' => 'Monthly',
+    'yearly' => 'Yearly',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'active_plans' => 'Active Plans',
+    'inactive_plans' => 'Inactive Plans',
 );

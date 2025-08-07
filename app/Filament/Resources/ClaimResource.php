@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ClaimResource\Pages;
 use App\Filament\Resources\ClaimResource\RelationManagers\ClaimStepsRelationManager;
+use App\Filament\Resources\ClaimResource\RelationManagers\PaymentSecuresRelationManager;
 use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
 use Domain\User\Models\User;
@@ -246,6 +247,13 @@ class ClaimResource extends Resource
                     ->color('info')
                     ->icon('heroicon-o-list-bullet')
                     ->tooltip(__('site.total_steps_for_claim')),
+                TextColumn::make('payment_secures_count')
+                    ->label(__('site.payment_secures'))
+                    ->counts('paymentSecures')
+                    ->badge()
+                    ->color('warning')
+                    ->icon('heroicon-o-shield-check')
+                    ->tooltip(__('site.total_payment_secures_for_claim')),
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
                     ->dateTime('Y/m/d H:i')
@@ -290,6 +298,7 @@ class ClaimResource extends Resource
     {
         return [
             ClaimStepsRelationManager::class,
+            PaymentSecuresRelationManager::class,
         ];
     }
 

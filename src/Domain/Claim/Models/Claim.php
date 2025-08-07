@@ -4,6 +4,7 @@ namespace Domain\Claim\Models;
 
 use Domain\Project\Models\Project;
 use Domain\User\Models\User;
+use Domain\Payment\Models\PaymentSecure;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -79,5 +80,13 @@ class Claim extends Model
     public function claimSteps(): HasMany
     {
         return $this->hasMany(ClaimStep::class);
+    }
+
+    /**
+     * Get the payment secures for the claim.
+     */
+    public function paymentSecures(): HasMany
+    {
+        return $this->hasMany(PaymentSecure::class);
     }
 }

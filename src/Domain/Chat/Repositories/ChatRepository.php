@@ -210,8 +210,8 @@ class ChatRepository implements IChatRepository {
             //     now()->addMinutes(1),
                 // function () use($user, $chat) {
                     NotificationService::create([
-                        'title' => 'دریافت پیام خصوصی',
-                        'content' => ' کاربر گرامی: ' . Auth::user()->nickname . ' به شما پیام خصوصی ارسال کرده است. ',
+                        'title' => __('site.private_message_title'),
+                        'content' => __('site.private_message_content', ['user_nickname' => Auth::user()->nickname]),
                         'id' => $chat->id,
                         'type' => 'chat',
                     ], $user);

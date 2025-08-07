@@ -206,8 +206,8 @@ class IdentityRecordRepository implements IIdentityRecordRepository
                 );
 
                 NotificationService::create([
-                    'title' => 'تایید احراز هویت',
-                    'content' => ' .کاربر گرامی: احراز هویت شما با موفیت انجام شد و پلن اولیه برای شما فعال شد. ',
+                    'title' => __('site.identity_verification_approved_title'),
+                    'content' => __('site.identity_verification_approved_content'),
                     'id' => $user->id,
                     'type' => NotificationService::PROFILE,
                 ], $user);
