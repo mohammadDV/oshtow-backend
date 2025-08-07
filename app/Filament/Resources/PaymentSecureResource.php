@@ -257,6 +257,15 @@ class PaymentSecureResource extends Resource
                                 ->success()
                                 ->send();
 
+
+                            $record->claim->update([
+                                'status' => Claim::DELIVERED,
+                            ]);
+
+                            $record->claim->project->update([
+                                'status' => Project::COMPLETED,
+                            ]);
+
                             // Commit transaction
                             DB::commit();
 
@@ -304,6 +313,14 @@ class PaymentSecureResource extends Resource
                                 WalletTransaction::DEPOSITE,
                                 __('site.wallet_transaction_payment_secure_return', ['claim_id' => $record->claim->id])
                             );
+
+                            $record->claim->update([
+                                'status' => Claim::CANCELED,
+                            ]);
+
+                            $record->claim->project->update([
+                                'status' => Project::FAILED,
+                            ]);
 
                             // Send notification
                             NotificationService::create([
