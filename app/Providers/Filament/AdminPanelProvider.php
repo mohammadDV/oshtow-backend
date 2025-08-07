@@ -7,6 +7,7 @@ use App\Filament\Widgets\ClaimsOverview;
 use App\Filament\Widgets\TicketsOverview;
 use App\Filament\Widgets\TicketsByStatusChart;
 use App\Filament\Widgets\LatestTickets;
+use App\Filament\Widgets\WithdrawalTransactionsOverview;
 use Domain\User\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
                 TicketsOverview::class,
                 TicketsByStatusChart::class,
                 LatestTickets::class,
+                WithdrawalTransactionsOverview::class,
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
