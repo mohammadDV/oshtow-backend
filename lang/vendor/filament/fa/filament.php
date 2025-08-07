@@ -19,6 +19,18 @@ return [
             'label' => 'درخواست',
             'plural_label' => 'درخواست‌ها',
         ],
+        'ticket' => [
+            'label' => 'تیکت',
+            'plural_label' => 'تیکت‌ها',
+        ],
+        'ticket_message' => [
+            'label' => 'پیام تیکت',
+            'plural_label' => 'پیام‌های تیکت',
+        ],
+        'ticket_subject' => [
+            'label' => 'موضوع تیکت',
+            'plural_label' => 'موضوعات تیکت',
+        ],
     ],
     'components' => [
         'actions' => [

@@ -15,6 +15,7 @@ class NotificationService
     const CLAIM = 'claim';
     const WALLET = 'wallet';
     const WITHDRAWAL = 'withdrawal';
+    const TICKET = 'ticket';
 
     /**
      * Create and send notification
