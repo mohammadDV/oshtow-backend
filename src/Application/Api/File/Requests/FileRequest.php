@@ -22,7 +22,7 @@ class FileRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'file' => 'required|mimes:zip,rar,jpg,jpeg,png,gif,svg|max:102400',
+            'file' => 'required|mimes:zip,rar,pdf,jpg,jpeg,png,gif,svg|max:102400',
         ];
     }
 }
