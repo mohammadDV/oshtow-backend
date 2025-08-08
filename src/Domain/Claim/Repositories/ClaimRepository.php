@@ -10,6 +10,7 @@ use Application\Api\Claim\Resources\ClaimResource;
 use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
+use Domain\Chat\Models\Chat;
 use Domain\Chat\Repositories\Contracts\IChatRepository;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Models\ClaimStep;
@@ -131,12 +132,25 @@ class ClaimRepository implements IClaimRepository
             }
         }
 
+        $chat = Chat::query()
+            ->where([
+                ['user_id', $claim->user_id],
+                ['target_id', $claim->project->user_id],
+            ])
+            ->orWhere([
+                ['target_id', $claim->project->user_id],
+                ['user_id', $claim->user_id],
+            ])
+            ->orderBy('id', 'desc')
+            ->first();
+
         return [
             'type' => $type,
             'sponsor' => $claim->sponsor_id == Auth::id(),
             'status' => $claim->status,
             'delivery_code' => $type == Project::SENDER ? $claim->delivery_code ?? '' : '',
             'show_review_form' => $showCommentForm,
+            'chat_id' => $chat->id ?? null,
         ];
     }
 

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Application\Api\Project\Requests\SearchProjectRequest;
+use Domain\Chat\Models\Chat;
 use Domain\Claim\Models\Claim;
 use Domain\Notification\Services\NotificationService;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -406,6 +407,7 @@ class ProjectRepository implements IProjectRepository
 
         $requestEnable = true;
         $chatEnable = false;
+        $chatId = null;
 
         $token = request()->bearerToken();
         $user = null;
@@ -416,9 +418,25 @@ class ProjectRepository implements IProjectRepository
                 $user = $accessToken->tokenable; // The authenticated user
 
                 $claim = Claim::query()
-                ->where('project_id', $project->id)
-                ->where('user_id', $user->id)
-                ->first();
+                    ->where('project_id', $project->id)
+                    ->where('user_id', $user->id)
+                    ->first();
+
+                if ($claim) {
+                    $chat = Chat::query()
+                        ->where([
+                            ['user_id', $claim->user_id],
+                            ['target_id', $project->user_id],
+                        ])
+                        ->orWhere([
+                            ['target_id', $project->user_id],
+                            ['user_id', $claim->user_id],
+                        ])
+                        ->orderBy('id', 'desc')
+                        ->first();
+                }
+
+                $chatId = $chat->id ?? null;
 
                 if ($claim || $user->id == $project->user_id ||
                     $project->status != Project::APPROVED ||
@@ -439,7 +457,8 @@ class ProjectRepository implements IProjectRepository
 
         return [
             'request_enable' => $requestEnable,
-            'chat_enable' => $chatEnable
+            'chat_enable' => $chatEnable,
+            'chat_id' => $chatId
         ];
     }
 
