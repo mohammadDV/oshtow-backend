@@ -1199,4 +1199,33 @@ return array(
     'no_file' => 'بدون فایل',
     'download file' => 'دانلود فایل',
     'All messages' => 'همه پیام‌ها',
+
+    // Post Management
+    'post' => 'پست',
+    'posts' => 'پست‌ها',
+    'post_information' => 'اطلاعات پست',
+    'pre_title' => 'عنوان پیش‌فرض',
+    'summary' => 'خلاصه',
+    'content' => 'محتوای',
+    'post_image' => 'تصویر پست',
+    'upload_post_image' => 'تصویر پست را آپلود کنید',
+    'generate_thumbnails' => 'تولید تصاویر کوچک',
+    'generate_thumbnails_help' => 'تصاویر کوچک و اسلاید را به طور خودکار تولید کنید',
+    'author' => 'نویسنده',
+    'special' => 'ویژه',
+    'special_post_help' => 'این پست را به عنوان پست ویژه علامت‌گذاری کنید',
+    'views' => 'بازدیدها',
+    'video' => 'ویدیو',
+    'video_id' => 'شناسه ویدیو',
+    'normal' => 'عادی',
+    'Content Management' => 'مدیریت محتوا',
+    'post_deleted' => 'پست با موفقیت حذف شد',
+
+    // Settings Section
+    'settings' => 'تنظیمات',
+    'media' => 'رسانه',
+    'table_id' => 'شناسه',
+    'created_at' => 'تاریخ ایجاد',
+    'updated_at' => 'تاریخ بروزرسانی',
+    'click_to_view_user_details' => 'برای مشاهده جزئیات کاربر کلیک کنید',
 );

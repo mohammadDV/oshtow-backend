@@ -616,4 +616,33 @@ return array(
     'no_file' => 'No file',
     'download file' => 'Download file',
     'All messages' => 'All messages',
+
+    // Post Management
+    'post' => 'Post',
+    'posts' => 'Posts',
+    'post_information' => 'Post Information',
+    'pre_title' => 'Pre Title',
+    'summary' => 'Summary',
+    'content' => 'Content',
+    'post_image' => 'Post Image',
+    'upload_post_image' => 'Upload post image',
+    'generate_thumbnails' => 'Generate Thumbnails',
+    'generate_thumbnails_help' => 'Automatically generate thumbnail and slide images',
+    'author' => 'Author',
+    'special' => 'Special',
+    'special_post_help' => 'Mark this post as a special post',
+    'views' => 'Views',
+    'video' => 'Video',
+    'video_id' => 'Video ID',
+    'normal' => 'Normal',
+    'Content Management' => 'Content Management',
+    'post_deleted' => 'Post deleted successfully',
+
+    // Settings Section
+    'settings' => 'Settings',
+    'media' => 'Media',
+    'table_id' => 'ID',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
+    'click_to_view_user_details' => 'Click to view user details',
 );
