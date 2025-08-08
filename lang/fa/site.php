@@ -153,7 +153,8 @@ return array(
     'Comments count'                => 'تعداد کامنت ها',
     'Views count'                   => 'بازدید',
     'Comments'                      => 'دیدگاه‌ها',
-    'Comment'                       => 'دیگاه',
+    'Comment'                       => 'دیدگاه',
+    'comment'                       => 'دیدگاه',
     'Type'                          => 'نوع',
     'User'                          => 'کاربر',
     'News id'                       => 'کد خبر',
@@ -1160,4 +1161,18 @@ return array(
     'rejected_withdrawal_requests' => 'درخواست‌های برداشت رد شده',
     'total_withdrawal_transactions' => 'کل تراکنش‌های برداشت',
     'all_withdrawal_requests' => 'همه درخواست‌های برداشت',
+
+    // Review Management
+    'Reviews' => 'نظرات',
+    'reviews' => 'نظرات',
+    'review' => 'نظر',
+    'review_information' => 'اطلاعات نظر',
+    'create_review' => 'ایجاد نظر',
+    'edit_review' => 'ویرایش نظر',
+    'view_review' => 'مشاهده نظر',
+    'Review management' => 'مدیریت نظرات',
+    'star' => 'ستاره',
+    'stars' => 'ستاره',
+    'owner' => 'مالک',
+    'claim_id' => 'شناسه درخواست',
 );

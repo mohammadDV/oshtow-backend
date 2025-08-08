@@ -577,4 +577,19 @@ return array(
     'rejected_withdrawal_requests' => 'Rejected withdrawal requests',
     'total_withdrawal_transactions' => 'Total Withdrawal Transactions',
     'all_withdrawal_requests' => 'All withdrawal requests',
+
+    // Review Management
+    'Reviews' => 'Reviews',
+    'reviews' => 'Reviews',
+    'review' => 'Review',
+    'review_information' => 'Review Information',
+    'create_review' => 'Create Review',
+    'edit_review' => 'Edit Review',
+    'view_review' => 'View Review',
+    'Review management' => 'Review Management',
+    'star' => 'Star',
+    'stars' => 'Stars',
+    'owner' => 'Owner',
+    'claim_id' => 'Claim ID',
+    'comment' => 'Comment',
 );
