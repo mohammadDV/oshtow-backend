@@ -33,7 +33,7 @@ class NotificationService
             'status' => 1,
             'user_id' => $user->id,
             'model_id' => $info['id'] ?? null,
-            'model_type' => $info['type'] ?? null,
+            'model_type' => $info['type'] ?? NotificationService::PROFILE,
         ]);
 
 
