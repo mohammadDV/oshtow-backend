@@ -135,7 +135,7 @@ class PaymentController extends Controller
             }
         }
 
-        return Redirect::to('http://localhost:3000/payment/result/' . $request->transactionId());
+        return Redirect::to('/payment/result/' . $request->transactionId());
     }
 
     /**

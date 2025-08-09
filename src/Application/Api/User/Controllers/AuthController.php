@@ -255,7 +255,8 @@ class AuthController extends Controller
         $user->markEmailAsVerified();
         event(new \Illuminate\Auth\Events\Verified($user));
 
-        return response()->json(['message' => __('site.Email verified successfully')], 200);
+        return redirect('/auth/check-verification');
+
     }
 
     public function resendVerification(Request $request)
