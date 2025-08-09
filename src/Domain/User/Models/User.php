@@ -139,6 +139,15 @@ class User extends Authenticatable implements MustVerifyEmail, HasName, Filament
         return $this->hasMany(Wallet::class);
     }
 
+    /**
+     * Get the user's notifications.
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function notifications()
+    {
+        return $this->hasMany(\Domain\Notification\Models\Notification::class);
+    }
+
     public function getStatusNameAttribute()
     {
         return $this->status == 1 ? __('site.Active') : __('site.Inactive');

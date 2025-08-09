@@ -137,6 +137,7 @@ class WithdrawalTransactionResource extends Resource
                 TextColumn::make('currency')
                     ->label(__('site.currency'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('site.status'))
@@ -160,14 +161,17 @@ class WithdrawalTransactionResource extends Resource
                 TextColumn::make('card')
                     ->label(__('site.card'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->copyable(),
                 TextColumn::make('sheba')
                     ->label(__('site.sheba'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->copyable(),
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
                     ->dateTime('Y-m-d H:i:s')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(fn ($state) => Jalalian::fromDateTime($state)->format('Y/m/d H:i:s'))
                     ->sortable(),
             ])

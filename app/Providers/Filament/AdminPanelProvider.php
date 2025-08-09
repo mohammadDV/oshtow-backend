@@ -4,11 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Http\Middleware\SetPersianLocale;
 use App\Filament\Widgets\ClaimsOverview;
-use App\Filament\Widgets\TicketsOverview;
-use App\Filament\Widgets\TicketsByStatusChart;
+use App\Filament\Widgets\ProjectsByStatusChart;
 use App\Filament\Widgets\LatestTickets;
-use App\Filament\Widgets\WithdrawalTransactionsOverview;
-use Domain\User\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -17,7 +14,6 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -46,10 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 ClaimsOverview::class,
-                TicketsOverview::class,
-                TicketsByStatusChart::class,
+                ProjectsByStatusChart::class,
                 LatestTickets::class,
-                WithdrawalTransactionsOverview::class,
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
