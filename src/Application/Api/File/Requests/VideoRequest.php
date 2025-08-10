@@ -22,7 +22,7 @@ class VideoRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'video' => 'required|mimes:mp4,ogx,oga,ogv,ogg,webm,mov|max:202400',
+            'video' => 'required|mimes:mp4,ogx,oga,ogv,ogg,webm,mov|max:204800',
         ];
     }
 }

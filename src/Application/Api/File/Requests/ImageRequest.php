@@ -22,7 +22,7 @@ class ImageRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'image' => ['required','image','mimes:jpg,jpeg,png,gif,svg','max:2048']
+            'image' => ['required','image','mimes:jpg,jpeg,png,gif,svg','max:51200']
         ];
     }
 }
