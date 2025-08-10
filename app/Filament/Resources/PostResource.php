@@ -116,7 +116,7 @@ class PostResource extends Resource
                                     ->directory('posts/videos')
                                     ->visibility('public')
                                     ->acceptedFileTypes(['video/mp4', 'video/avi', 'video/mov', 'video/quicktime', 'video/wmv', 'video/flv', 'video/x-msvideo'])
-                                    ->maxSize(100 * 1024) // 100MB
+                                    ->maxSize(150 * 1024) // 100MB
                                     ->visible(fn (callable $get) => $get('type') == 1)
                                     ->required(fn (callable $get) => $get('type') == 1),
                             ]),
