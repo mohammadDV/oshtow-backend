@@ -40,7 +40,7 @@ $corsConfig = [
                 'https://localhost:8000',
                 'https://127.0.0.1:3000',
                 'https://localhost:3000',
-                'https://varzeshpod-prod.s3.ir-thr-at1.arvanstorage.com',
+                'https://oshtow.s3.ir-thr-at1.arvanstorage.com',
                 'https://varzeshpod.com',
                 'https://www.varzeshpod.com',
                 'https://oshtow.com',
