@@ -8,6 +8,7 @@ use Domain\Wallet\Models\Wallet;
 use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Repositories\Contracts\IWalletTransactionRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class WalletTransactionRepository implements IWalletTransactionRepository
 {
@@ -22,6 +23,9 @@ class WalletTransactionRepository implements IWalletTransactionRepository
      */
     public function index(TableRequest $request, Wallet $wallet) :LengthAwarePaginator
     {
+
+        $this->checkLevelAccess(Auth::user()->id == $wallet->user_id);
+
         $type = $request->get('type');
         $status = $request->get('status');
         return WalletTransaction::query()
