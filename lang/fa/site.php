@@ -1284,4 +1284,13 @@ return array(
     'created_at' => 'تاریخ ایجاد',
     'updated_at' => 'تاریخ بروزرسانی',
     'click_to_view_user_details' => 'برای مشاهده جزئیات کاربر کلیک کنید',
+
+    // Account Verification Messages
+    'Your account is not active yet. Please send a message to the admin from ticket section.' => 'حساب کاربری شما هنوز فعال نشده است. لطفاً از بخش تیکت پیامی برای مدیر ارسال کنید.',
+    'You must verify your account to create a claim' => 'برای ایجاد درخواست باید حساب کاربری خود را تایید کنید',
+    'You must verify your account to create a subscription' => 'برای ایجاد اشتراک باید حساب کاربری خود را تایید کنید',
+    'You must verify your account to create a project' => 'برای ایجاد پروژه باید حساب کاربری خود را تایید کنید',
+    'You must verify your account to create a review' => 'برای ایجاد نظر باید حساب کاربری خود را تایید کنید',
+    'You must verify your account to top up your wallet' => 'برای شارژ کیف پول باید حساب کاربری خود را تایید کنید',
+    'You must verify your account to withdraw from your wallet' => 'برای برداشت از کیف پول باید حساب کاربری خود را تایید کنید',
 );

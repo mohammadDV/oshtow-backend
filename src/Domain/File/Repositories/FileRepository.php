@@ -8,6 +8,8 @@ use Application\Api\File\Requests\VideoRequest;
 use Domain\File\Repositories\Contracts\IFileRepository;
 use Domain\File\Services\FileService;
 use Domain\File\Services\ImageService;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class FileRepository implements IFileRepository {
 
@@ -27,11 +29,20 @@ class FileRepository implements IFileRepository {
      */
     public function uploadImage(ImageRequest $request)
     {
+
+        if (empty(Auth::user()->status)) {
+            return [
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ];
+        }
+
         if ($request->hasFile('image')) {
             $this->imageService->setExclusiveDirectory('oshtow' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . $request->input('dir', 'default'));
-            $imageResult = $this->imageService->save($request->file('image'),
-            !empty($request->input('thumb')) ? 1 : 0
-        );
+                $imageResult = $this->imageService->save($request->file('image'),
+                !empty($request->input('thumb')) ? 1 : 0
+            );
+
             if (!$imageResult){
                 throw new \Exception(__('site.Error in save data'));
             }
@@ -56,6 +67,13 @@ class FileRepository implements IFileRepository {
      */
     public function uploadVideo(VideoRequest $request)
     {
+        if (empty(Auth::user()->status)) {
+            return [
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ];
+        }
+
 
         if ($request->hasFile('video')) {
 
@@ -86,6 +104,12 @@ class FileRepository implements IFileRepository {
      */
     public function uploadFile(FileRequest $request)
     {
+        if (empty(Auth::user()->status)) {
+            return [
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ];
+        }
 
         if ($request->hasFile('file')) {
 

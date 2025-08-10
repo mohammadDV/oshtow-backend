@@ -12,6 +12,7 @@ use Domain\Wallet\Models\WalletTransaction;
 use Domain\Wallet\Models\WithdrawalTransaction;
 use Domain\Wallet\Repositories\Contracts\IWithdrawalTransactionRepository;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +61,20 @@ class WithdrawalTransactionRepository implements IWithdrawalTransactionRepositor
      */
     public function store(WithdrawRequest $request): JsonResponse
     {
+        if (empty(Auth::user()->status)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (empty(Auth::user()->verified_at)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You must verify your account to withdraw from your wallet'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         try {
             DB::beginTransaction();
 

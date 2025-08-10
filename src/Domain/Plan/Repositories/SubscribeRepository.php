@@ -79,6 +79,20 @@ class SubscribeRepository implements ISubscribeRepository
      */
     public function store(StoreSubscribeRequest $request, Plan $plan)
     {
+        if (empty(Auth::user()->status)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (empty(Auth::user()->verified_at)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You must verify your account to create a subscription'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if ($request->input('payment_method') === 'wallet') {
             return $this->payWithWallet($plan);
         }

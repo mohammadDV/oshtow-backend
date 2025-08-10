@@ -52,6 +52,20 @@ class WalletRepository implements IWalletRepository
      */
     public function topUp(TopUpRequest $request)
     {
+        if (empty(Auth::user()->status)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (empty(Auth::user()->verified_at)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You must verify your account to top up your wallet'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         // Get the wallet
         $wallet = $this->findByUserId(Auth::id());
 

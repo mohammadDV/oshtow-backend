@@ -117,6 +117,19 @@ class ReviewRepository implements IReviewRepository
      */
     public function store(Claim $claim, ReviewRequest $request) :JsonResponse
     {
+        if (empty(Auth::user()->status)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (empty(Auth::user()->verified_at)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You must verify your account to create a review'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $this->checkLevelAccess(
             in_array(Auth::user()->id, [$claim->project->user_id, $claim->user_id]) &&

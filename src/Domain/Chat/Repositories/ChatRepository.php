@@ -166,13 +166,19 @@ class ChatRepository implements IChatRepository {
      */
     public function store(ChatRequest $request, User $user) :JsonResponse
     {
+        if (empty(Auth::user()->status)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.Your account is not active yet. Please send a message to the admin from ticket section.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        // if ($this->areBothBlocked($user)) {
-        //     return response()->json([
-        //         'status' => 0,
-        //         'message' => ''
-        //     ]);
-        // }
+        if (empty(Auth::user()->verified_at)) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You must verify your account to create a claim'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $chat = Chat::query()
             ->where([

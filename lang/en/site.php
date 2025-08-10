@@ -701,4 +701,13 @@ return array(
     'created_at' => 'Created At',
     'updated_at' => 'Updated At',
     'click_to_view_user_details' => 'Click to view user details',
+
+    // Account Verification Messages
+    'Your account is not active yet. Please send a message to the admin from ticket section.' => 'Your account is not active yet. Please send a message to the admin from ticket section.',
+    'You must verify your account to create a claim' => 'You must verify your account to create a claim',
+    'You must verify your account to create a subscription' => 'You must verify your account to create a subscription',
+    'You must verify your account to create a project' => 'You must verify your account to create a project',
+    'You must verify your account to create a review' => 'You must verify your account to create a review',
+    'You must verify your account to top up your wallet' => 'You must verify your account to top up your wallet',
+    'You must verify your account to withdraw from your wallet' => 'You must verify your account to withdraw from your wallet',
 );
