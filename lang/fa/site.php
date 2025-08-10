@@ -708,6 +708,12 @@ return array(
     'upload_national_code_back' => 'پشت کارت ملی را آپلود کنید',
     'upload_video' => 'ویدئو را آپلود کنید',
 
+    // User Verification
+    'verify_user' => 'تایید کاربر',
+    'confirm_verify_user' => 'تایید تایید کاربر',
+    'confirm_verify_user_description' => 'آیا مطمئن هستید که می‌خواهید این کاربر را تایید کنید؟ این کار هر دو فیلد verified_at و email_verified_at را به تاریخ امروز تنظیم می‌کند.',
+    'user_verified_successfully' => 'کاربر با موفقیت تایید شد',
+
     // Claims Management Translations
     'claim' => 'درخواست',
     'claim_user' => 'کاربر درخواست',

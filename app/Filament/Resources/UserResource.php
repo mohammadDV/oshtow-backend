@@ -83,14 +83,6 @@ class UserResource extends Resource
                             ])
                             ->default(1)
                             ->required(),
-                        Forms\Components\Select::make('level')
-                            ->label(__('site.level'))
-                            ->options([
-                                0 => __('site.user_level_1'),
-                                3 => __('site.user_level_3'),
-                            ])
-                            ->default(1)
-                            ->required(),
                         Forms\Components\Toggle::make('is_private')
                             ->label(__('site.is_private'))
                             ->default(false),
@@ -154,10 +146,12 @@ class UserResource extends Resource
                 TextColumn::make('first_name')
                     ->label(__('site.first_name'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('last_name')
                     ->label(__('site.last_name'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('nickname')
                     ->label(__('site.nickname'))
@@ -170,6 +164,7 @@ class UserResource extends Resource
                 TextColumn::make('mobile')
                     ->label(__('site.mobile'))
                     ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('site.status'))
@@ -183,6 +178,7 @@ class UserResource extends Resource
                 TextColumn::make('level')
                     ->label(__('site.level'))
                     ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->color(fn (int $state): string => match ($state) {
                         1 => 'gray',
                         2 => 'blue',
@@ -197,20 +193,24 @@ class UserResource extends Resource
                     }),
                 TextColumn::make('point')
                     ->label(__('site.point'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
                     ->sortable(),
                 TextColumn::make('verified_at')
                     ->label(__('site.verified_at'))
                     ->dateTime('Y-m-d H:i:s')
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('email_verified_at')
                     ->label(__('site.email_verified_at'))
                     ->dateTime('Y-m-d H:i:s')
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
             ->filters([
@@ -272,6 +272,28 @@ class UserResource extends Resource
                             ->success()
                             ->send();
                     }),
+                Tables\Actions\Action::make('verify_user')
+                    ->label(__('site.verify_user'))
+                    ->icon('heroicon-o-check-badge')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading(__('site.confirm_verify_user'))
+                    ->modalDescription(__('site.confirm_verify_user_description'))
+                    ->modalSubmitActionLabel(__('site.verify_user'))
+                    ->modalCancelActionLabel(__('site.cancel'))
+                    ->action(function ($record) {
+                        $record->update([
+                            'verified_at' => now(),
+                            'email_verified_at' => now(),
+                        ]);
+                    })
+                    ->after(function ($record) {
+                        Notification::make()
+                            ->title(__('site.user_verified_successfully'))
+                            ->success()
+                            ->send();
+                    })
+                    ->visible(fn ($record) => !$record->verified_at || !$record->email_verified_at),
             ])
             ->bulkActions([
                 // Delete actions removed to disable user deletion

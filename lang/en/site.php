@@ -248,6 +248,12 @@ return array(
     'upload_national_code_back' => 'Upload national code back',
     'upload_video' => 'Upload video',
 
+    // User Verification
+    'verify_user' => 'Verify User',
+    'confirm_verify_user' => 'Confirm User Verification',
+    'confirm_verify_user_description' => 'Are you sure you want to verify this user? This will set both verified_at and email_verified_at to today\'s date.',
+    'user_verified_successfully' => 'User verified successfully',
+
     // Payment Secure Release Notifications
     'payment_secure_not_pending' => 'Payment secure is not in pending status',
     'payment_secure_released_title' => 'Payment Secure Released',
