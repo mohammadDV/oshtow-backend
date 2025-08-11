@@ -203,6 +203,10 @@
             text-align: center;
         }
 
+        .button {
+            color: #fff !important;
+        }
+
         /* Responsive Design */
         @media only screen and (max-width: 600px) {
             .email-container {
