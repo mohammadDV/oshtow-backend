@@ -66,7 +66,9 @@ class ProjectRepository implements IProjectRepository
             ->when(!empty($status), function ($query) use ($status) {
                 return $query->where('status', $status);
             })
-            ->where('type', $type)
+            ->when(!empty($type), function ($query) use ($type) {
+                return $query->where('type', $type);
+            })
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
 
