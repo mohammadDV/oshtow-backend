@@ -42,7 +42,7 @@ class ProjectRepository implements IProjectRepository
     {
         $search = $request->get('query');
         $status = $request->get('status');
-        $type = $request->get('type', 'sender');
+        $type = $request->get('type');
         $projects = Project::query()
             ->with([
                 'claimsLimit.user',
