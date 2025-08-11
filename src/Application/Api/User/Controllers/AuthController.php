@@ -31,10 +31,10 @@ class AuthController extends Controller
     /**
      * @param TelegramNotificationService $service
      */
-    // public function __construct(protected TelegramNotificationService $service)
-    // {
+    public function __construct(protected TelegramNotificationService $service)
+    {
 
-    // }
+    }
 
     /**
      * Log in the user.
@@ -197,15 +197,15 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        // $this->service->sendNotification(
-        //     config('telegram.chat_id'),
-        //     'ثبت نام کاربر جدید' . PHP_EOL .
-        //     'first_name ' . $request->first_name . PHP_EOL .
-        //     'last_name ' . $request->last_name. PHP_EOL .
-        //     'nickname ' . $request->nickname . PHP_EOL .
-        //     'email ' . $request->email . PHP_EOL .
-        //     'mobile ' . $request->mobile . PHP_EOL
-        // );
+        $this->service->sendNotification(
+            config('telegram.chat_id'),
+            'ثبت نام کاربر جدید' . PHP_EOL .
+            'first_name ' . $request->first_name . PHP_EOL .
+            'last_name ' . $request->last_name. PHP_EOL .
+            'nickname ' . $request->nickname . PHP_EOL .
+            'email ' . $request->email . PHP_EOL .
+            'mobile ' . $request->mobile . PHP_EOL
+        );
 
         return response([
             'is_admin' => $user->level == 3,

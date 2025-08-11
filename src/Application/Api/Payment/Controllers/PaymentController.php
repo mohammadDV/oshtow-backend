@@ -13,6 +13,7 @@ use Domain\Payment\Models\Transaction;
 use Domain\Payment\Repositories\Contracts\IPaymentRepository;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
+use Domain\User\Services\TelegramNotificationService;
 use Domain\Wallet\Repositories\WalletRepository;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
@@ -28,6 +29,7 @@ class PaymentController extends Controller
     public function __construct(
         protected IPaymentRepository $repository,
         protected IClaimRepository $claimRepository,
+        protected TelegramNotificationService $service
     ) {}
 
 
@@ -102,6 +104,16 @@ class PaymentController extends Controller
                 ]);
 
                 $this->processHandling($transaction);
+
+                $this->service->sendNotification(
+                    config('telegram.chat_id'),
+                    'پرداخت موفق درگاه' . PHP_EOL .
+                    'id ' . $transaction->user_id . PHP_EOL .
+                    'transaction' . $transaction->id . PHP_EOL .
+                    'type' . $transaction->model_type . PHP_EOL .
+                    'amount' . number_format($transaction->amount) . PHP_EOL .
+                    'time ' . now()
+                );
 
             }
 

@@ -21,6 +21,7 @@ use Domain\Payment\Models\Transaction;
 use Domain\Project\Models\Project;
 use Domain\Review\Models\Review;
 use Domain\User\Models\User;
+use Domain\User\Services\TelegramNotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -37,7 +38,7 @@ class ClaimRepository implements IClaimRepository
 {
     use GlobalFunc;
 
-    public function __construct(protected IWalletRepository $walletRepository)
+    public function __construct(protected IWalletRepository $walletRepository, protected TelegramNotificationService $service)
     {
     }
 
@@ -236,6 +237,17 @@ class ClaimRepository implements IClaimRepository
             'id' => $project->id,
             'type' => $project->type,
         ], $project->user);
+
+        $this->service->sendNotification(
+            config('telegram.chat_id'),
+            'ارسال درخواست جدید' . PHP_EOL .
+            'id ' . Auth::user()->id . PHP_EOL .
+            'nickname ' . Auth::user()->nickname . PHP_EOL .
+            'title' . $project->title . PHP_EOL .
+            'claim' . $claim->id . PHP_EOL .
+            'amount' . number_format($claim->amount) . PHP_EOL .
+            'time ' . now()
+        );
 
         //todo notification
         if ($claim) {

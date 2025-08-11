@@ -18,6 +18,7 @@ use Application\Api\Project\Requests\SearchProjectRequest;
 use Domain\Chat\Models\Chat;
 use Domain\Claim\Models\Claim;
 use Domain\Notification\Services\NotificationService;
+use Domain\User\Services\TelegramNotificationService;
 use Laravel\Sanctum\PersonalAccessToken;
 
 /**
@@ -26,6 +27,11 @@ use Laravel\Sanctum\PersonalAccessToken;
 class ProjectRepository implements IProjectRepository
 {
     use GlobalFunc;
+
+    public function __construct(protected TelegramNotificationService $service)
+    {
+        //
+    }
 
     /**
      * Get the projects pagination.
@@ -208,6 +214,15 @@ class ProjectRepository implements IProjectRepository
                 'id' => $project->id,
                 'type' => $project->type,
             ], $project->user);
+
+            $this->service->sendNotification(
+                config('telegram.chat_id'),
+                'ساخت آگهی جدید' . PHP_EOL .
+                'id ' . Auth::user()->id . PHP_EOL .
+                'nickname ' . Auth::user()->nickname . PHP_EOL .
+                'title ' . $project->title . PHP_EOL .
+                'time ' . now()
+            );
 
             return response()->json([
                 'status' => 1,
