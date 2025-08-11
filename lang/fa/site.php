@@ -342,6 +342,8 @@ return array(
     'request_archived' => 'درخواست مورد نظر آرشیو شده است.',
     'operation_succeed' => 'عملیات با موفقیت انجام شد.',
     'already_verified' => 'عملیات پرداخت موفق بوده و قبلاً تایید صحت تراکنش آن انجام شده است.',
+    'invalid_request' => 'درخواست نامعتبر است.',
+    'transaction_successful' => 'تراکنش با موفقیت انجام شد.',
 
     // Password Reset Messages
     'Password reset link sent to your email.' => 'لینک بازنشانی رمز عبور به ایمیل شما ارسال شد.',

@@ -13,11 +13,4 @@ interface IPaymentRepository
      * @return LengthAwarePaginator
      */
     public function index(TableRequest $request) :LengthAwarePaginator;
-
-    /**
-     * Get the transaction result.
-     * @param string $bankTransactionId
-     * @return array
-     */
-    public function show(string $bankTransactionId) : array;
 }

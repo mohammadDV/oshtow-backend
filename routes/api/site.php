@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
     Route::patch('/users/{user}/change-password', [UserController::class, 'changePassword'])->name('user.change-password');
 
     // payment
+    Route::get('/payment/transactions', [PaymentController::class, 'index'])->name('user.payment.transactions');
 
     Route::resource('notifications', NotificationController::class);
     Route::get('/notifications-unread', [NotificationController::class, 'unread'])->name('unread-notifications');
