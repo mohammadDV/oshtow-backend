@@ -4,6 +4,8 @@ return array(
     'Active' => 'Active',
     'Inactive' => 'Inactive',
     'Invalid request' => 'Invalid request',
+    'invalid_request' => 'Invalid request',
+    'transaction_successful' => 'Transaction completed successfully.',
     'Invalid Nickname' => 'Invalid Nickname',
     'Invalid recaptcha' => 'Invalid recaptcha',
     'These credentials do not match our records.' => 'These credentials do not match our records.',

@@ -42,16 +42,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * Get the transaction result.
-     * @param string $bankTransactionId
-     * @return array
-     */
-    public function show(string $id) : JsonResponse
-    {
-        return response()->json($this->repository->show($id));
-    }
-
-    /**
      * Display a listing of the resource.
      */
     public function payment(Request $request)
@@ -61,7 +51,7 @@ class PaymentController extends Controller
         if ($code != $request->input('sign')) {
             return [
                 'status' => 0,
-                'message' => 'درخواست نامعتبر است.'
+                'message' => __("site.invalid_request")
             ];
         }
 
@@ -107,7 +97,7 @@ class PaymentController extends Controller
 
                 $transaction->update([
                     'reference' => $referenceId,
-                    'message' => "تراکنش با موفقیت انجام شد.",
+                    'message' => __("site.transaction_successful"),
                     'status' => Transaction::COMPLETED,
                 ]);
 
@@ -150,28 +140,5 @@ class PaymentController extends Controller
             Transaction::SECURE => app(ClaimRepository::class)->createPaymentSecure(Claim::find($transaction->model_id)),
         };
     }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function verifyPaymentSecure(Claim $claim): JsonResponse
-    {
-
-        $this->checkLevelAccess(
-            in_array(
-                Auth::user()->id,
-                [$claim->user_id, $claim->project->user_id]
-            ) && $claim->status == Claim::APPROVED
-        );
-
-        $this->claimRepository->paidClaim($claim);
-
-        return response()->json([
-            'status' => 1,
-            'message' => __('site.The operation has been successfully'),
-            'data' => $claim,
-        ]);
-    }
-
 
 }
