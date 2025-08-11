@@ -234,5 +234,6 @@ return [
 		"privacy_policy"  => "قوانین و مقررات",
         'send_date' => 'تاریخ ارسال',
         'receive_date' => 'تاریخ دریافت',
+        'confirmation_code' => 'کد تایید',
     ],
 ];

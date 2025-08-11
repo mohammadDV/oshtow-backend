@@ -204,6 +204,7 @@ return [
     'attributes' => [
         'send_date' => 'Send Date',
         'receive_date' => 'Receive Date',
+        'confirmation_code' => 'Confirmation Code',
     ],
 
 ];
