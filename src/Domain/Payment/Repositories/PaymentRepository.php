@@ -8,6 +8,7 @@ use Domain\Payment\Repositories\Contracts\IPaymentRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Application\Api\Payment\Resources\TransactionsResource;
+use Morilog\Jalali\Jalalian;
 
 class PaymentRepository implements IPaymentRepository
 {
@@ -31,6 +32,28 @@ class PaymentRepository implements IPaymentRepository
 
         return $transactions->through(fn ($transaction) => new TransactionsResource($transaction));
 
+    }
+
+    /**
+     * Get the identityRecord.
+     * @param IdentityRecord $identityRecord
+     * @return array
+     */
+    public function show(string $bankTransactionId) : array
+    {
+
+        $transaction = Transaction::query()
+            ->where('bank_transaction_id', $bankTransactionId)
+            ->first();
+
+        return [
+            'bank_transaction_id' => $transaction->bank_transaction_id,
+            'reference' => $transaction->reference,
+            'status' => $transaction->status,
+            'amount' => $transaction->amount,
+            'message' => $transaction->message,
+            'date' => Jalalian::fromDateTime($transaction->created_at)->format('Y-m-d H:i:s'),
+        ];
     }
 
 }
