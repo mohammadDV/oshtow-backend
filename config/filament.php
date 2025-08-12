@@ -98,4 +98,32 @@ return [
 
     'system_route_prefix' => 'filament',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Performance Optimizations
+    |--------------------------------------------------------------------------
+    |
+    | These settings help improve the performance of Filament tables and forms.
+    |
+    */
+
+    'performance' => [
+        'tables' => [
+            'default_pagination' => 25,
+            'max_pagination' => 100,
+            'defer_loading' => true,
+            'persist_filters' => true,
+            'persist_sort' => true,
+            'lazy_image_loading' => true,
+        ],
+        'forms' => [
+            'defer_validation' => true,
+            'lazy_validation' => true,
+        ],
+        'cache' => [
+            'navigation_badges' => true,
+            'navigation_badge_ttl' => 300, // 5 minutes
+        ],
+    ],
+
 ];

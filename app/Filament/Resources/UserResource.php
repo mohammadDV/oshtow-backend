@@ -15,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Morilog\Jalali\Jalalian;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Cache;
 
 class UserResource extends Resource
 {
@@ -142,7 +143,8 @@ class UserResource extends Resource
                     ->label(__('site.profile_photo_path'))
                     ->disk('s3')
                     ->circular()
-                    ->size(40),
+                    ->size(40)
+                    ->extraImgAttributes(['loading' => 'lazy']), // HTML lazy loading attribute
                 TextColumn::make('first_name')
                     ->label(__('site.first_name'))
                     ->searchable()
@@ -198,18 +200,16 @@ class UserResource extends Resource
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
                     ->toggleable(isToggledHiddenByDefault: true)
-                    ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->dateTime('Y-m-d H:i:s') // Use native date formatting instead of Jalalian
                     ->sortable(),
                 TextColumn::make('verified_at')
                     ->label(__('site.verified_at'))
-                    ->dateTime('Y-m-d H:i:s')
-                    ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->dateTime('Y-m-d H:i:s') // Use native date formatting instead of Jalalian
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('email_verified_at')
                     ->label(__('site.email_verified_at'))
-                    ->dateTime('Y-m-d H:i:s')
-                    ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->dateTime('Y-m-d H:i:s') // Use native date formatting instead of Jalalian
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
@@ -248,57 +248,84 @@ class UserResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->label(__('site.view_user')),
-                Tables\Actions\EditAction::make()
-                    ->label(__('site.edit_user')),
-                Tables\Actions\Action::make('toggle_status')
-                    ->label(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
-                    ->icon(fn ($record) => $record->status === 1 ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
-                    ->color(fn ($record) => $record->status === 1 ? 'danger' : 'success')
+                // Tables\Actions\ViewAction::make()
+                //     ->label(__('site.view_user')),
+                // Tables\Actions\EditAction::make()
+                //     ->label(__('site.edit_user')),
+                // Tables\Actions\Action::make('toggle_status')
+                //     ->label(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
+                //     ->icon(fn ($record) => $record->status === 1 ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
+                //     ->color(fn ($record) => $record->status === 1 ? 'danger' : 'success')
+                //     ->requiresConfirmation()
+                //     ->modalHeading(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user') : __('site.confirm_enable_user'))
+                //     ->modalDescription(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user_description') : __('site.confirm_enable_user_description'))
+                //     ->modalSubmitActionLabel(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
+                //     ->modalCancelActionLabel(__('site.cancel'))
+                //     ->action(function ($record) {
+                //         $newStatus = $record->status === 1 ? 0 : 1;
+                //         $record->update(['status' => $newStatus]);
+
+                //         // Clear cache when user status changes
+                //         Cache::forget('user_count');
+                //     })
+                //     ->after(function ($record) {
+                //         $message = $record->status === 1 ? __('site.user_enabled_successfully') : __('site.user_disabled_successfully');
+                //         \Filament\Notifications\Notification::make()
+                //             ->title($message)
+                //             ->success()
+                //             ->send();
+                //     }),
+                Tables\Actions\Action::make('verify_email')
+                    ->label(__('site.verify_email'))
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
                     ->requiresConfirmation()
-                    ->modalHeading(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user') : __('site.confirm_enable_user'))
-                    ->modalDescription(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user_description') : __('site.confirm_enable_user_description'))
-                    ->modalSubmitActionLabel(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
-                    ->modalCancelActionLabel(__('site.cancel'))
-                    ->action(function ($record) {
-                        $newStatus = $record->status === 1 ? 0 : 1;
-                        $record->update(['status' => $newStatus]);
-                    })
-                    ->after(function ($record) {
-                        $message = $record->status === 1 ? __('site.user_enabled_successfully') : __('site.user_disabled_successfully');
-                        \Filament\Notifications\Notification::make()
-                            ->title($message)
-                            ->success()
-                            ->send();
-                    }),
-                Tables\Actions\Action::make('verify_user')
-                    ->label(__('site.verify_user'))
-                    ->icon('heroicon-o-check-badge')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->modalHeading(__('site.confirm_verify_user'))
-                    ->modalDescription(__('site.confirm_verify_user_description'))
-                    ->modalSubmitActionLabel(__('site.verify_user'))
+                    ->modalHeading(__('site.confirm_verify_email'))
+                    ->modalDescription(__('site.confirm_verify_email_description'))
+                    ->modalSubmitActionLabel(__('site.verify_email'))
                     ->modalCancelActionLabel(__('site.cancel'))
                     ->action(function ($record) {
                         $record->update([
-                            'verified_at' => now(),
                             'email_verified_at' => now(),
                         ]);
                     })
                     ->after(function ($record) {
                         Notification::make()
-                            ->title(__('site.user_verified_successfully'))
+                            ->title(__('site.email_verified_successfully'))
                             ->success()
                             ->send();
                     })
-                    ->visible(fn ($record) => !$record->verified_at || !$record->email_verified_at),
+                    ->visible(fn ($record) => !$record->email_verified_at),
+                Tables\Actions\Action::make('verify_identity')
+                    ->label(__('site.verify_identity'))
+                    ->icon('heroicon-o-identification')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading(__('site.confirm_verify_identity'))
+                    ->modalDescription(__('site.confirm_verify_identity_description'))
+                    ->modalSubmitActionLabel(__('site.verify_identity'))
+                    ->modalCancelActionLabel(__('site.cancel'))
+                    ->action(function ($record) {
+                        $record->update([
+                            'verified_at' => now(),
+                        ]);
+                    })
+                    ->after(function ($record) {
+                        Notification::make()
+                            ->title(__('site.identity_verified_successfully'))
+                            ->success()
+                            ->send();
+                    })
+                    ->visible(fn ($record) => $record->email_verified_at && !$record->verified_at),
             ])
             ->bulkActions([
                 // Delete actions removed to disable user deletion
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->paginated([10, 25, 50, 100]) // Add pagination options
+            ->persistFiltersInSession() // Persist filters in session
+            ->persistSortInSession() // Persist sort in session
+            ->poll('30s'); // Refresh data every 30 seconds for real-time updates
     }
 
     public static function getRelations(): array
@@ -320,6 +347,25 @@ class UserResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        // Cache the user count for better performance
+        return Cache::remember('user_count', 300, function () {
+            return static::getModel()::count();
+        });
+    }
+
+    // Add query optimization method
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->select(['id', 'first_name', 'last_name', 'nickname', 'email', 'mobile', 'status', 'level', 'point', 'created_at', 'verified_at', 'email_verified_at', 'profile_photo_path'])
+            ->without(['roles', 'permissions']) // Exclude unnecessary relationships
+            ->withCount(['posts', 'wallets']) // Add counts for related data if needed
+            ->with(['role:id,name']); // Only load essential role information
+    }
+
+    // Add table performance optimization
+    public static function getTableQueryStringIdentifier(): string
+    {
+        return 'users';
     }
 }
