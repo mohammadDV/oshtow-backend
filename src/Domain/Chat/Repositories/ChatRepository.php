@@ -130,22 +130,20 @@ class ChatRepository implements IChatRepository {
 
     /**
     * Get the chat id from claim id.
-    * @param Claim $claim
-    * @return Chat
-    */
-    public function getChatID(Claim $claim) :Chat
+    * @param Claim $claim    */
+    public function getChatID(Claim $claim)
     {
         $otherId = $claim->user_id == Auth::id() ? $claim->project->user_id : $claim->user_id;
 
         return Chat::query()
-            ->where([
-                ['user_id', Auth::id()],
-                ['target_id', $otherId],
-            ])
-            ->orWhere([
-                ['target_id', Auth::id()],
-                ['user_id', $otherId],
-            ])
+            ->where(function ($query) use ($otherId) {
+                $query->where('user_id', Auth::user()->id)
+                    ->where('target_id', $otherId);
+            })
+            ->orWhere(function ($query) use ($otherId) {
+                $query->where('user_id', $otherId)
+                    ->where('target_id', Auth::user()->id);
+            })
             ->orderBy('id', 'desc')
             ->first();
     }
@@ -204,14 +202,14 @@ class ChatRepository implements IChatRepository {
         }
 
         $chat = Chat::query()
-            ->where([
-                ['user_id', Auth::user()->id],
-                ['target_id', $user->id],
-            ])
-            ->orWhere([
-                ['target_id', Auth::user()->id],
-                ['user_id', $user->id],
-            ])
+            ->where(function ($query) use ($user) {
+                $query->where('user_id', Auth::user()->id)
+                    ->where('target_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->where('target_id', Auth::user()->id);
+            })
             ->orderBy('id', 'desc')
             ->first();
 

@@ -454,14 +454,14 @@ class ProjectRepository implements IProjectRepository
 
                 if ($claim) {
                     $chat = Chat::query()
-                        ->where([
-                            ['user_id', $claim->user_id],
-                            ['target_id', $project->user_id],
-                        ])
-                        ->orWhere([
-                            ['target_id', $project->user_id],
-                            ['user_id', $claim->user_id],
-                        ])
+                        ->where(function ($query) use ($claim, $project) {
+                            $query->where('user_id', $claim->user_id)
+                                ->where('target_id', $project->user_id);
+                        })
+                        ->orWhere(function ($query) use ($claim, $project) {
+                            $query->where('user_id', $project->user_id)
+                                ->where('target_id', $claim->user_id);
+                        })
                         ->orderBy('id', 'desc')
                         ->first();
                 }

@@ -134,14 +134,14 @@ class ClaimRepository implements IClaimRepository
         }
 
         $chat = Chat::query()
-            ->where([
-                ['user_id', $claim->user_id],
-                ['target_id', $claim->project->user_id],
-            ])
-            ->orWhere([
-                ['target_id', $claim->project->user_id],
-                ['user_id', $claim->user_id],
-            ])
+            ->where(function ($query) use ($claim) {
+                $query->where('user_id', $claim->user_id)
+                    ->where('target_id', $claim->project->user_id);
+            })
+            ->orWhere(function ($query) use ($claim) {
+                $query->where('user_id', $claim->project->user_id)
+                    ->where('target_id', $claim->user_id);
+            })
             ->orderBy('id', 'desc')
             ->first();
 

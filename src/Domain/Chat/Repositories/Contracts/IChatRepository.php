@@ -49,9 +49,8 @@ interface IChatRepository  {
     /**
     * Get the chat id from claim id.
     * @param Claim $claim
-    * @return Chat
     */
-   public function getChatID(Claim $claim) :Chat;
+   public function getChatID(Claim $claim);
 
     /**
      * Get the messages of the chat.
