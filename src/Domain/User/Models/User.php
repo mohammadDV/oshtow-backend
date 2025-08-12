@@ -204,4 +204,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasName, Filament
 
         return 'User #' . $this->id;
     }
+
+    /**
+     * Send the email verification notification.
+     *
+     * @return void
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \Application\Api\User\Notifications\CustomEmailVerificationNotification());
+    }
 }

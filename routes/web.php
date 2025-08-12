@@ -30,8 +30,13 @@ Route::get('/test-email/{template}', function ($template) {
                 'content' => 'This is a test notification with Peyda font.',
                 'actionUrl' => 'https://example.com'
             ]);
+        case 'email-verification':
+            return view('emails.users.email-verification', [
+                'user' => $user,
+                'verificationUrl' => 'https://example.com/verify-email?id=123&hash=abc123'
+            ]);
         default:
-            return 'Invalid template. Available: thankyou, password-reset, custom-notification';
+            return 'Invalid template. Available: thankyou, password-reset, custom-notification, email-verification';
     }
 })->name('test.email');
 

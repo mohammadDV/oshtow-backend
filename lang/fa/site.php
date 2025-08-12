@@ -369,6 +369,11 @@ return array(
     'Email verified successfully' => 'ایمیل با موفقیت تایید شد.',
     'Already verified' => 'قبلاً تایید شده است.',
     'Verification link sent!' => 'لینک تایید ارسال شد!',
+    'Verify Email Address' => 'تایید آدرس ایمیل',
+    'Please click the button below to verify your email address.' => 'لطفاً برای تایید آدرس ایمیل خود روی دکمه زیر کلیک کنید.',
+    'This verification link will expire in 60 minutes.' => 'این لینک تایید تا ۶۰ دقیقه معتبر است.',
+    'If you did not create an account, no further action is required.' => 'اگر شما حساب کاربری ایجاد نکرده‌اید، هیچ اقدامی لازم نیست.',
+    'If you are having trouble clicking the "Verify Email Address" button, copy and paste the URL below into your web browser:' => 'اگر در کلیک روی دکمه "تایید آدرس ایمیل" مشکل دارید، لینک زیر را در مرورگر خود کپی و جایگذاری کنید:',
 
     // Change Password Messages
     'Current password is required' => 'رمز عبور فعلی الزامی است.',

@@ -722,4 +722,11 @@ return array(
     'You must verify your account to create a review' => 'You must verify your account to create a review',
     'You must verify your account to top up your wallet' => 'You must verify your account to top up your wallet',
     'You must verify your account to withdraw from your wallet' => 'You must verify your account to withdraw from your wallet',
+
+    // Email Verification Messages
+    'Verify Email Address' => 'Verify Email Address',
+    'Please click the button below to verify your email address.' => 'Please click the button below to verify your email address.',
+    'This verification link will expire in 60 minutes.' => 'This verification link will expire in 60 minutes.',
+    'If you did not create an account, no further action is required.' => 'If you did not create an account, no further action is required.',
+    'If you are having trouble clicking the "Verify Email Address" button, copy and paste the URL below into your web browser:' => 'If you are having trouble clicking the "Verify Email Address" button, copy and paste the URL below into your web browser:',
 );
