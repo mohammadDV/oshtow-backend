@@ -8,6 +8,7 @@ use Core\Http\traits\GlobalFunc;
 use Domain\Chat\Models\Chat;
 use Domain\Chat\Models\ChatMessage;
 use Domain\Chat\Repositories\Contracts\IChatRepository;
+use Domain\Claim\Models\Claim;
 use Domain\Notification\Services\NotificationService;
 use Domain\User\Models\User;
 use Domain\User\Services\TelegramNotificationService;
@@ -125,6 +126,28 @@ class ChatRepository implements IChatRepository {
         // $chat->banned = $this->areBothBlocked($user);
 
         return $chat;
+    }
+
+    /**
+    * Get the chat id from claim id.
+    * @param Claim $claim
+    * @return Chat
+    */
+    public function getChatID(Claim $claim) :Chat
+    {
+        $otherId = $claim->user_id == Auth::id() ? $claim->project->user_id : $claim->user_id;
+
+        return Chat::query()
+            ->where([
+                ['user_id', Auth::id()],
+                ['target_id', $otherId],
+            ])
+            ->orWhere([
+                ['target_id', Auth::id()],
+                ['user_id', $otherId],
+            ])
+            ->orderBy('id', 'desc')
+            ->first();
     }
 
     /**

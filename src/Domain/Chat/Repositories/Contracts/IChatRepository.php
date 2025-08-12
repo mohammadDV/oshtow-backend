@@ -5,6 +5,7 @@ namespace Domain\Chat\Repositories\Contracts;
 use Application\Api\Chat\Requests\ChatRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Chat\Models\Chat;
+use Domain\Claim\Models\Claim;
 use Domain\User\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -44,6 +45,13 @@ interface IChatRepository  {
     * @return Chat
     */
    public function chatInfo(Chat $chat) :Chat;
+
+    /**
+    * Get the chat id from claim id.
+    * @param Claim $claim
+    * @return Chat
+    */
+   public function getChatID(Claim $claim) :Chat;
 
     /**
      * Get the messages of the chat.

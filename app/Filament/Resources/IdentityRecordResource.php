@@ -254,12 +254,12 @@ class IdentityRecordResource extends Resource
                     ->label(__('site.approve'))
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn ($record) => $record->status === IdentityRecord::PENDING)
                     ->requiresConfirmation()
                     ->modalHeading(__('site.confirm_approve_identity'))
                     ->modalDescription(__('site.confirm_approve_identity_description'))
                     ->modalSubmitActionLabel(__('site.approve'))
                     ->modalCancelActionLabel(__('site.cancel'))
+                    ->visible(fn ($record) => in_array($record->status, [IdentityRecord::PENDING, IdentityRecord::PAID]))
                     ->action(function ($record) {
                         if ($record->status !== IdentityRecord::PAID) {
                             Notification::make()

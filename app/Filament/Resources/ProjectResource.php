@@ -397,6 +397,35 @@ class ProjectResource extends Resource
                     ->url(fn (Project $record): string => route('filament.admin.resources.projects.edit', $record) . '?activeTab=claims')
                     ->openUrlInNewTab()
                     ->visible(fn (Project $record): bool => $record->claims()->count() > 0),
+                Tables\Actions\Action::make('approve')
+                    ->label(__('site.approve'))
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->visible(fn (Project $record): bool => $record->status === Project::PENDING)
+                    ->action(function (Project $record) {
+                        try {
+                            $repository = app(\Domain\Project\Repositories\Contracts\IProjectRepository::class);
+                            $repository->approve($record);
+
+                            Notification::make()
+                                ->title(__('site.project_approved_title'))
+                                ->body(__('site.project_approved_content', ['project_title' => $record->title]))
+                                ->success()
+                                ->send();
+
+                        } catch (\Exception $e) {
+                            Notification::make()
+                                ->title(__('site.error'))
+                                ->body(__('site.something_went_wrong'))
+                                ->danger()
+                                ->send();
+                        }
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading(__('site.confirm_approve_project'))
+                    ->modalDescription(__('site.confirm_approve_project_description'))
+                    ->modalSubmitActionLabel(__('site.approve'))
+                    ->modalCancelActionLabel(__('site.cancel')),
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make()
