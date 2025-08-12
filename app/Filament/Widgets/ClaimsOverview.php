@@ -20,17 +20,14 @@ class ClaimsOverview extends BaseWidget
     protected function getStats(): array
     {
         // Get date range for last month
-        $lastMonth = Carbon::now()->subMonth();
-        $startOfLastMonth = $lastMonth->copy()->startOfMonth();
-        $endOfLastMonth = $lastMonth->copy()->endOfMonth();
+        $thirtyDaysAgo = Carbon::now()->subDays(30);
+        $startDate = $thirtyDaysAgo;
+        $endDate = Carbon::now();
 
-        // Count projects and claims from last month
-        $projectsLastMonth = Project::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->count();
-        $claimsLastMonth = Claim::whereBetween('created_at', [$startOfLastMonth, $endOfLastMonth])->count();
+        // Count projects and claims from last 30 days
+        $projectsLastMonth = Project::whereBetween('created_at', [$startDate, $endDate])->count();
+        $claimsLastMonth = Claim::whereBetween('created_at', [$startDate, $endDate])->count();
 
-        // Total counts for comparison
-        // $totalProjects = Project::count();
-        // $totalClaims = Claim::count();
 
         return [
             Stat::make(__('site.projects_last_month'), $projectsLastMonth)
