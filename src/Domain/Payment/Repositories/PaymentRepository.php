@@ -20,11 +20,19 @@ class PaymentRepository implements IPaymentRepository
     public function index(TableRequest $request) :LengthAwarePaginator
     {
         $search = $request->get('query');
+        $type = $request->get('type');
+        $status = $request->get('status');
         $transactions = Transaction::query()
             ->where('user_id', Auth::user()->id)
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('bank_transaction_id', 'like', '%' . $search . '%')
                     ->orWhere('reference', 'like', '%' . $search . '%');
+            })
+            ->when(!empty($type), function ($query) use ($type) {
+                return $query->where('model_type', $type);
+            })
+            ->when(!empty($status), function ($query) use ($status) {
+                return $query->where('status', $status);
             })
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
