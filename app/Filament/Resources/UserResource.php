@@ -163,6 +163,10 @@ class UserResource extends Resource
                     ->label(__('site.email'))
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('customer_number')
+                    ->label(__('site.customer_number'))
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('mobile')
                     ->label(__('site.mobile'))
                     ->searchable()
@@ -357,7 +361,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->select(['id', 'first_name', 'last_name', 'nickname', 'email', 'mobile', 'status', 'level', 'point', 'created_at', 'verified_at', 'email_verified_at', 'profile_photo_path'])
+            ->select(['id', 'first_name', 'last_name', 'nickname', 'email', 'mobile', 'status', 'level', 'point', 'created_at', 'verified_at', 'email_verified_at', 'profile_photo_path', 'customer_number'])
             ->without(['roles', 'permissions']) // Exclude unnecessary relationships
             ->withCount(['posts', 'wallets']) // Add counts for related data if needed
             ->with(['role:id,name']); // Only load essential role information
