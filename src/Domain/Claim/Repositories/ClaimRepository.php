@@ -762,7 +762,7 @@ class ClaimRepository implements IClaimRepository
             $paymentSecure->release();
 
             WalletTransaction::createTransaction(
-                $paymentSecure->wallet,
+                $paymentSecure->walletReleased,
                 $paymentSecure->amount,
                 WalletTransaction::DEPOSITE,
                 __('site.wallet_transaction_payment_secure_released', ['claim_id' => $claim->id])
