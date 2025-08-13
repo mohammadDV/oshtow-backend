@@ -69,6 +69,7 @@ class AuthController extends Controller
             'verify_email' => !empty($user->email_verified_at),
             'verify_access' => !empty($user->verified_at),
             'status_approval' => $status,
+            'customer_number' => Auth::user()->customer_number,
             'user' => new UserResource($user),
             'mesasge' => 'success',
             'status' => 1
