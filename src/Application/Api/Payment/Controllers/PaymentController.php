@@ -11,6 +11,7 @@ use Domain\Claim\Repositories\Contracts\IClaimRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
 use Domain\Payment\Models\Transaction;
 use Domain\Payment\Repositories\Contracts\IPaymentRepository;
+use Domain\Plan\Models\Plan;
 use Domain\Plan\Repositories\SubscribeRepository;
 use Domain\User\Models\User;
 use Domain\Wallet\Repositories\WalletRepository;
@@ -135,7 +136,7 @@ class PaymentController extends Controller
     {
         match ($transaction->model_type) {
             Transaction::WALLET => app(WalletRepository::class)->completeTopUp($transaction->model_id),
-            Transaction::PLAN => app(SubscribeRepository::class)->createSubscription($transaction->model_id, User::find($transaction->user_id)),
+            Transaction::PLAN => app(SubscribeRepository::class)->createSubscription(Plan::find($transaction->model_id), User::find($transaction->user_id)),
             Transaction::IDENTITY => app(IdentityRecordRepository::class)->changeStatusToPaid($transaction->model_id),
             Transaction::SECURE => app(ClaimRepository::class)->createPaymentSecure(Claim::find($transaction->model_id)),
         };
