@@ -27,7 +27,7 @@ class IdentityRecordRequest extends BaseRequest
             'national_code' => 'required|string|max:20',
             'mobile' => 'required|string|max:11|min:11',
             'birthday' => 'required|date',
-            'email' => 'required|email|max:255|unique:identity_records,email',
+            'email' => 'required|email|max:255',
             'country_id' => ['required', 'exists:countries,id'],
             'province_id' => ['required', 'exists:provinces,id'],
             'city_id' => ['required', 'exists:cities,id'],
