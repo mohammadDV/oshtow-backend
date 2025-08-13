@@ -94,7 +94,7 @@ class AddressRepository implements IAddressRepository
             ->when(!empty($search), function ($query) use ($search) {
                 return $query->where('title', 'like', '%' . $search . '%');
             })
-            ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
+            ->orderBy($request->get('column', 'priority'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
     }
 
