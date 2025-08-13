@@ -65,6 +65,11 @@ class CityResource extends Resource
                             ])
                             ->default(1)
                             ->required(),
+                        Forms\Components\TextInput::make('priority')
+                            ->label(__('site.priority'))
+                            ->numeric()
+                            ->default(0)
+                            ->required(),
                     ])->columns(2),
             ]);
     }
@@ -98,6 +103,10 @@ class CityResource extends Resource
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (int $state): string => $state === 1 ? __('site.Active') : __('site.Inactive')),
+                TextColumn::make('priority')
+                    ->label(__('site.priority'))
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
@@ -120,6 +129,27 @@ class CityResource extends Resource
                         1 => __('site.Active'),
                         0 => __('site.Inactive'),
                     ]),
+                Tables\Filters\Filter::make('priority')
+                    ->label(__('site.priority'))
+                    ->form([
+                        Forms\Components\TextInput::make('priority_from')
+                            ->label(__('site.from_priority'))
+                            ->numeric(),
+                        Forms\Components\TextInput::make('priority_until')
+                            ->label(__('site.to_priority'))
+                            ->numeric(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['priority_from'],
+                                fn (Builder $query, $priority): Builder => $query->where('priority', '>=', $priority),
+                            )
+                            ->when(
+                                $data['priority_until'],
+                                fn (Builder $query, $priority): Builder => $query->where('priority', '<=', $priority),
+                            );
+                    }),
                 Tables\Filters\Filter::make('created_at')
                     ->label(__('site.created_at'))
                     ->form([
