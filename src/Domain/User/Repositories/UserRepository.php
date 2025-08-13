@@ -153,7 +153,8 @@ class UserRepository implements IUserRepository
             'verify_email' => !empty(Auth::user()->email_verified_at),
             'verify_access' => !empty(Auth::user()->verified_at),
             'status_approval' => $status,
-            'user' => new UserResource(Auth::user())
+            'user' => new UserResource(Auth::user()),
+            'customer_number' => Auth::user()->customer_number
         ];
     }
 
