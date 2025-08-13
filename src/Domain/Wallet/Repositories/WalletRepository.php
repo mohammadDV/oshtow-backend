@@ -79,7 +79,7 @@ class WalletRepository implements IWalletRepository
             'currency' => Wallet::IRR,
             'status' => WalletTransaction::PENDING,
             'reference' => WalletTransaction::generateReference(),
-            'description' => 'Wallet top-up',
+            'description' => __('site.wallet_transaction_wallet_topup'),
         ]);
 
         $transaction = Transaction::create([
@@ -169,7 +169,7 @@ class WalletRepository implements IWalletRepository
                 wallet: $senderWallet,
                 amount: -$request->input('amount'),
                 type: WalletTransaction::TRANSFER,
-                description: $request->description ?? __('site.wallet_transaction_transfer_to', ['email' => $recipient->email, 'wallet_id' => $recipientWallet->id]),
+                description: $request->description ?? __('site.wallet_transaction_transfer_to', ['email' => $recipient->email, 'wallet_id' => $recipientWallet->customer_number]),
             );
 
             // Recipient's transaction (Credit)

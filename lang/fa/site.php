@@ -958,6 +958,7 @@ return array(
     'wallet_transaction_transfer_from' => '#انتقال از :sender_number به :recipient_number #شناسه تراکنش مرتبط: :transaction_id',
     'wallet_transaction_plan_purchase' => 'خرید پلن: :plan_title',
     'wallet_transaction_wallet_withdrawal' => 'برداشت از کیف پول',
+    'wallet_transaction_wallet_topup' => 'شارژ کیف پول',
 
     // Plan Management
     'Subscription Management' => 'مدیریت اشتراک',
