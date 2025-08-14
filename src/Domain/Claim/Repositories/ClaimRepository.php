@@ -525,7 +525,7 @@ class ClaimRepository implements IClaimRepository
             'status' => Transaction::PENDING,
             'model_id' => $claim->id,
             'model_type' => Transaction::SECURE,
-            'amount' => $amount,
+            'amount' => $amount + ($amount * config('fee.site') / 100),
             'user_id' => Auth::user()->id,
         ]);
 

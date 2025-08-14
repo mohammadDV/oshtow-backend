@@ -86,7 +86,7 @@ class WalletRepository implements IWalletRepository
             'status' => Transaction::PENDING,
             'model_id' => $walletTransaction->id,
             'model_type' => Transaction::WALLET,
-            'amount' => $amount,
+            'amount' => $amount + ($amount * config('fee.site') / 100),
             'user_id' => Auth::user()->id,
         ]);
 
