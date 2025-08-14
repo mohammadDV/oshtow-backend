@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('description')->nullable();
             $table->decimal('amount', 15, 2)->nullable();
+            $table->decimal('suggested_amount', 15, 2)->nullable();
             $table->unsignedInteger('weight');
             $table->text('address')->nullable();
             $table->enum('address_type', ['me', 'other'])->default('me');

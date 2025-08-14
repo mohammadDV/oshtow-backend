@@ -4,7 +4,9 @@ namespace Application\Api\Claim\Controllers;
 
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
+use Application\Api\Claim\Requests\ConfirmNewAmountRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Claim\Requests\SuggestNewAmountRequest;
 use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
@@ -108,6 +110,28 @@ class ClaimController extends Controller
     public function paidClaim(PaymentSecureRequest $request, Claim $claim)
     {
         return $this->repository->paidClaim($request, $claim);
+    }
+
+    /**
+     * Suggest new amount.
+     * @param SuggestNewAmountRequest $request
+     * @param Claim $claim
+     * @return JsonResponse
+     */
+    public function suggestNewAmount(SuggestNewAmountRequest $request, Claim $claim)
+    {
+        return $this->repository->suggestNewAmount($request, $claim);
+    }
+
+    /**
+     * Confirm new amount.
+     * @param ConfirmNewAmountRequest $request
+     * @param Claim $claim
+     * @return JsonResponse
+     */
+    public function confirmNewAmount(ConfirmNewAmountRequest $request, Claim $claim)
+    {
+        return $this->repository->confirmNewAmount($request, $claim);
     }
 
     /**

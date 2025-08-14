@@ -153,6 +153,8 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->group(function() 
     Route::get('/claims/user/{user}', [ClaimController::class, 'getClaimsPerUser'])->name('claim.user.index');
     Route::get('/claims/{claim}', [ClaimController::class, 'show'])->name('claim.show');
     Route::get('/claims/{claim}/approve', [ClaimController::class, 'approveClaim'])->name('claim.approve');
+    Route::post('/claims/{claim}/suggest-new-amount', [ClaimController::class, 'suggestNewAmount'])->name('claim.suggest-new-amount');
+    Route::post('/claims/{claim}/confirm-new-amount', [ClaimController::class, 'confirmNewAmount'])->name('claim.confirm-new-amount');
     Route::post('/claims/{claim}/paid', [ClaimController::class, 'paidClaim'])->name('claim.paid');
     Route::post('/claims/{claim}/inprogress', [ClaimController::class, 'inprogressClaim'])->name('claim.inprogress');
     Route::post('/claims/{claim}/delivered', [ClaimController::class, 'deliveredClaim'])->name('claim.delivered');

@@ -18,7 +18,6 @@ use Domain\Wallet\Repositories\Contracts\IWalletRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -35,19 +34,17 @@ class SubscribeRepository implements ISubscribeRepository
     /**
      * Get the subscriptions pagination.
      * @param TableRequest $request
-     * @return AnonymousResourceCollection
      */
-    public function index(TableRequest $request) :AnonymousResourceCollection
+    public function index(TableRequest $request)
     {
         $subscriptions = Subscription::query()
             ->with(['plan', 'user'])
-            ->when(Auth::user()->level != 3, function ($query) {
-                return $query->where('user_id', Auth::user()->id);
-            })
+            ->where('user_id', Auth::user()->id)
             ->orderBy($request->get('column', 'id'), $request->get('sort', 'desc'))
             ->paginate($request->get('count', 25));
 
-        return SubscriptionResource::collection($subscriptions);
+        return $subscriptions->through(fn ($subscription) => new SubscriptionResource($subscription));
+
     }
 
     /**

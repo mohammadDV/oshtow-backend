@@ -6,7 +6,6 @@ use Application\Api\Plan\Requests\StoreSubscribeRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Plan\Models\Plan;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 /**
  * Interface ISubscribeRepository.
@@ -16,9 +15,8 @@ interface ISubscribeRepository
     /**
      * Get the plans pagination.
      * @param TableRequest $request
-     * @return AnonymousResourceCollection
      */
-    public function index(TableRequest $request) :AnonymousResourceCollection;
+    public function index(TableRequest $request);
 
     /**
      * Get the plans.

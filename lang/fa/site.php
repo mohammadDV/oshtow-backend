@@ -1418,4 +1418,12 @@ return array(
     'table_persist_filters' => 'حفظ فیلترها',
     'table_persist_sort' => 'حفظ مرتب‌سازی',
     'table_auto_refresh' => 'بازنشانی خودکار',
+
+    // Suggested Amount Notifications
+    'claim_suggested_amount_title' => 'مبلغ پیشنهادی برای درخواست',
+    'claim_suggested_amount_content' => 'کاربر گرامی: برای درخواست شما در پروژه :project_title مبلغ پیشنهادی ارائه شده است. لطفا بررسی کرده و پاسخ دهید.',
+    'confirm_suggested_amount_title' => 'مبلغ پیشنهادی تایید شد',
+    'confirm_suggested_amount_content' => 'کاربر گرامی: مبلغ پیشنهادی برای درخواست شما در پروژه :project_title تایید شده است. لطفا برای ادامه فرآیند پروژه اقدام کنید.',
+    'reject_suggested_amount_title' => 'مبلغ پیشنهادی رد شد',
+    'reject_suggested_amount_content' => 'کاربر گرامی: مبلغ پیشنهادی برای درخواست شما در پروژه :project_title رد شده است. لطفا برای ادامه فرآیند پروژه اقدام کنید.',
 );

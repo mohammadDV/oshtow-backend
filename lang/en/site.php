@@ -282,6 +282,14 @@ return array(
     'claim_delivered_title' => 'Item Delivered',
     'claim_delivered_content' => 'Dear user: The passenger named :user_nickname confirmed that they have successfully delivered the item. Please visit the site to review the project process.',
 
+    // Suggested Amount Notifications
+    'claim_suggested_amount_title' => 'Suggested Amount for Claim',
+    'claim_suggested_amount_content' => 'Dear user: A suggested amount has been proposed for your claim on project :project_title. Please review and respond.',
+    'confirm_suggested_amount_title' => 'Suggested Amount Confirmed',
+    'confirm_suggested_amount_content' => 'Dear user: The suggested amount for your claim on project :project_title has been confirmed. Please proceed with the project process.',
+    'reject_suggested_amount_title' => 'Suggested Amount Rejected',
+    'reject_suggested_amount_content' => 'Dear user: The suggested amount for your claim on project :project_title has been rejected. Please contact support for assistance.',
+
     // Wallet Notifications
     'wallet_topup_title' => 'Wallet Top-up',
     'wallet_topup_content' => 'Dear user: Your wallet has been successfully topped up.',

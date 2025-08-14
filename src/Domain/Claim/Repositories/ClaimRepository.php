@@ -5,9 +5,12 @@ namespace Domain\Claim\Repositories;
 use Application\Api\Chat\Requests\ChatRequest;
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
+use Application\Api\Claim\Requests\ConfirmNewAmountRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Claim\Requests\SuggestNewAmountRequest;
 use Application\Api\Claim\Resources\ClaimResource;
 use Application\Api\Payment\Requests\PaymentSecureRequest;
+use Application\Api\Payment\Resources\PaymentSecureResource;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Chat\Models\Chat;
@@ -133,6 +136,11 @@ class ClaimRepository implements IClaimRepository
             }
         }
 
+        $payment = PaymentSecure::query()
+            ->where('claim_id', $claim->id)
+            ->get();
+
+
         $chat = Chat::query()
             ->where(function ($query) use ($claim) {
                 $query->where('user_id', $claim->user_id)
@@ -152,6 +160,8 @@ class ClaimRepository implements IClaimRepository
             'delivery_code' => $type == Project::SENDER ? $claim->delivery_code ?? '' : '',
             'show_review_form' => $showCommentForm,
             'chat_id' => $chat->id ?? null,
+            'suggested_amount' => $type == Project::PASSENGER ? $claim->suggested_amount ?? '' : '',
+            'payments' => PaymentSecureResource::collection($payment),
         ];
     }
 
@@ -421,6 +431,85 @@ class ClaimRepository implements IClaimRepository
         // TODO: Implement bank payment gateway
         return $this->payWithBank($claim, $request->input('amount'));
 
+    }
+
+    /**
+     * Suggest new amount.
+     * @param SuggestNewAmountRequest $request
+     * @param Claim $claim
+     */
+    public function suggestNewAmount(SuggestNewAmountRequest $request, Claim $claim)
+    {
+        $this->checkLevelAccess(
+            Auth::user()->id == $claim->sponsor_id &&
+            $claim->status == Claim::APPROVED
+        );
+
+        $claim->update([
+            'suggested_amount' => $request->input('amount'),
+        ]);
+
+        NotificationService::create([
+            'title' => __('site.claim_suggested_amount_title'),
+            'content' => __('site.claim_suggested_amount_content', ['project_title' => $claim->project->title]),
+            'id' => $claim->id,
+            'type' => NotificationService::CLAIM,
+        ], $claim->user_id == $claim->sponsor_id ? $claim->project->user : $claim->user);
+
+        return response()->json([
+            'status' => 1,
+            'message' => __('site.The operation has been successfully'),
+            'data' => $claim
+        ], Response::HTTP_OK);
+    }
+
+    /**
+     * Confirm new amount.
+     * @param ConfirmNewAmountRequest $request
+     * @param Claim $claim
+     */
+    public function confirmNewAmount(ConfirmNewAmountRequest $request, Claim $claim)
+    {
+
+        $user = $claim->user_id == $claim->sponsor_id ? $claim->project->user : $claim->user;
+
+        $this->checkLevelAccess(
+            Auth::user()->id == $user->id &&
+            $claim->status == Claim::APPROVED
+        );
+
+        if(!empty($request->input('confirm'))) {
+
+            $claim->update([
+                'amount' => $claim->suggested_amount,
+                'suggested_amount' => null,
+            ]);
+
+            NotificationService::create([
+                'title' => __('site.confirm_suggested_amount_title'),
+                'content' => __('site.confirm_suggested_amount_content', ['project_title' => $claim->project->title]),
+                'id' => $claim->id,
+                'type' => NotificationService::CLAIM,
+            ], $claim->user_id == $claim->sponsor_id ? $claim->user : $claim->project->user);
+
+        } else {
+            $claim->update([
+                'suggested_amount' => null,
+            ]);
+
+            NotificationService::create([
+                'title' => __('site.reject_suggested_amount_title'),
+                'content' => __('site.reject_suggested_amount_content', ['project_title' => $claim->project->title]),
+                'id' => $claim->id,
+                'type' => NotificationService::CLAIM,
+            ], $claim->user_id == $claim->sponsor_id ? $claim->user : $claim->project->user);
+        }
+
+        return response()->json([
+            'status' => 1,
+            'message' => __('site.The operation has been successfully'),
+            'data' => $claim
+        ], Response::HTTP_OK);
     }
 
     /**

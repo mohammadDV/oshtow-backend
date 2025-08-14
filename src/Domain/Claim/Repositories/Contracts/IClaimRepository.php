@@ -4,7 +4,9 @@ namespace Domain\Claim\Repositories\Contracts;
 
 use Application\Api\Claim\Requests\ClaimRequest;
 use Application\Api\Claim\Requests\ConfirmationRequest;
+use Application\Api\Claim\Requests\ConfirmNewAmountRequest;
 use Application\Api\Claim\Requests\DeliveryConfirmationRequest;
+use Application\Api\Claim\Requests\SuggestNewAmountRequest;
 use Application\Api\Payment\Requests\PaymentSecureRequest;
 use Core\Http\Requests\TableRequest;
 use Domain\Claim\Models\Claim;
@@ -68,6 +70,20 @@ interface IClaimRepository
      * @param Claim $claim
      */
     public function paidClaim(PaymentSecureRequest $request, Claim $claim);
+
+    /**
+     * Suggest new amount.
+     * @param SuggestNewAmountRequest $request
+     * @param Claim $claim
+     */
+    public function suggestNewAmount(SuggestNewAmountRequest $request, Claim $claim);
+
+    /**
+     * Confirm new amount.
+     * @param ConfirmNewAmountRequest $request
+     * @param Claim $claim
+     */
+    public function confirmNewAmount(ConfirmNewAmountRequest $request, Claim $claim);
 
     /**
      * Get the claim.
