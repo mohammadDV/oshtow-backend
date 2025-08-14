@@ -160,7 +160,7 @@ class ClaimRepository implements IClaimRepository
             'delivery_code' => $type == Project::SENDER ? $claim->delivery_code ?? '' : '',
             'show_review_form' => $showCommentForm,
             'chat_id' => $chat->id ?? null,
-            'suggested_amount' => $type == Project::PASSENGER ? $claim->suggested_amount ?? '' : '',
+            'suggested_amount' => $claim->suggested_amount ?? '',
             'payments' => PaymentSecureResource::collection($payment),
         ];
     }
