@@ -22,12 +22,8 @@ class IdentityRecordRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
             'national_code' => 'required|string|max:20',
-            'mobile' => 'required|string|max:11|min:11',
             'birthday' => 'required|date',
-            'email' => 'required|email|max:255',
             'country_id' => ['required', 'exists:countries,id'],
             'province_id' => ['required', 'exists:provinces,id'],
             'city_id' => ['required', 'exists:cities,id'],

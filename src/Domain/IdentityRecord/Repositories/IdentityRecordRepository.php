@@ -105,15 +105,15 @@ class IdentityRecordRepository implements IIdentityRecordRepository
         }
 
         $identityRecord = IdentityRecord::create([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
+            'first_name' => Auth::user()->first_name,
+            'last_name' => Auth::user()->last_name,
             'country_id' => $request->input('country_id'),
             'province_id' => $request->input('province_id'),
             'city_id' => $request->input('city_id'),
             'national_code' => $request->input('national_code'),
-            'mobile' => $request->input('mobile'),
+            'mobile' => Auth::user()->mobile,
             'birthday' => $request->input('birthday'),
-            'email' => $request->input('email'),
+            'email' => Auth::user()->email,
             'postal_code' => $request->input('postal_code'),
             'address' => $request->input('address'),
             'image_national_code_front' => $request->input('image_national_code_front'),
@@ -126,13 +126,10 @@ class IdentityRecordRepository implements IIdentityRecordRepository
         if ($identityRecord) {
 
             Auth::user()->update([
-                'first_name'            => $request->input('first_name'),
-                'last_name'             => $request->input('last_name'),
                 'address'               => $request->input('address'),
                 'country_id'            => $request->input('country_id'),
                 'province_id'           => $request->input('province_id'),
                 'city_id'               => $request->input('city_id'),
-                'mobile'                => $request->input('mobile'),
             ]);
 
             return $this->redirectToGateway($identityRecord);
@@ -252,11 +249,8 @@ class IdentityRecordRepository implements IIdentityRecordRepository
         $this->checkLevelAccess(Auth::user()->level == 3);
 
         $identityRecord = $identityRecord->update([
-            'fullname' => $request->input('fullname'),
             'national_code' => $request->input('national_code'),
-            'mobile' => $request->input('mobile'),
             'birthday' => $request->input('birthday'),
-            'email' => $request->input('email'),
             'country' => $request->input('country'),
             'postal_code' => $request->input('postal_code'),
             'address' => $request->input('address'),
