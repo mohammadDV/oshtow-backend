@@ -562,11 +562,11 @@ class ProjectRepository implements IProjectRepository
             }
 
             if ($request->has('send_date')) {
-                $query->where('send_date', '=', $request->input('send_date'));
+                $query->where('send_date', '>=', $request->input('send_date'));
             }
 
             if ($request->has('receive_date')) {
-                $query->where('receive_date', '>=', $request->input('receive_date'));
+                $query->where('send_date', '<=', $request->input('receive_date'));
             }
 
             if ($request->has('path_type')) {
