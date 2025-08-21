@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('postal_code');
             $table->string('address');
             $table->string('image_national_code_front');
-            $table->string('image_national_code_back');
+            $table->string('image_national_code_back')->nullable();
             $table->string('video');
             $table->enum('status',['pending', 'paid', 'completed','in_progress'])->default('pending'); // pending, completed, failed
             $table->bigInteger("user_id")->unsigned()->index();
