@@ -29,6 +29,8 @@ class Transaction extends Model
         'bank_transaction_id',
         'description',
         'message',
+        'manual',
+        'image',
     ];
 
     public function user(): BelongsTo

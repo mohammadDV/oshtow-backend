@@ -12,6 +12,7 @@ use Domain\Chat\Models\ChatMessage;
 use Domain\Claim\Models\Claim;
 use Domain\IdentityRecord\Models\IdentityRecord;
 use Domain\Notification\Services\NotificationService;
+use Domain\Plan\Models\Plan;
 use Domain\Plan\Models\Subscription;
 use Domain\Project\Models\Project;
 use Domain\Ticket\Models\Ticket;
@@ -148,13 +149,19 @@ class UserRepository implements IUserRepository
             $status = $identityRecord->status;
         }
 
+        $plan = Plan::find(config('plan.default_plan_id'));
+
+        $amount = intval($plan->amount);
+
         return [
             'is_admin' => Auth::user()->level == 3,
             'verify_email' => !empty(Auth::user()->email_verified_at),
             'verify_access' => !empty(Auth::user()->verified_at),
             'status_approval' => $status,
             'user' => new UserResource(Auth::user()),
-            'customer_number' => Auth::user()->customer_number
+            'customer_number' => Auth::user()->customer_number,
+            'identity_amount' => $amount,
+            'bank_details' => config('fee.bank_details'),
         ];
     }
 

@@ -94,10 +94,6 @@ class IdentityRecordRepository implements IIdentityRecordRepository
 
         if ($exist) {
 
-            if ($exist->status == IdentityRecord::PENDING) {
-                return $this->redirectToGateway($exist);
-            }
-
             return response()->json([
                 'status' => 0,
                 'message' => __('site.Duplicate request')
@@ -132,19 +128,44 @@ class IdentityRecordRepository implements IIdentityRecordRepository
                 'city_id'               => $request->input('city_id'),
             ]);
 
-            return $this->redirectToGateway($identityRecord);
+            return response()->json([
+                'status' => 1,
+                'identity_record' => $identityRecord,
+                'message' => __('site.The operation has been successfully')
+            ], Response::HTTP_OK);
         }
 
-        throw new \Exception();
+        return response()->json([
+            'status' => 0,
+            'message' => __('site.The operation has been failed')
+        ], Response::HTTP_BAD_REQUEST);
 
     }
 
     /**
      * Redirect to Gateway.
-     * @param IdentityRecord $identityRecord
      */
-    public function redirectToGateway(IdentityRecord $identityRecord)
+    public function redirectToGatewayForIdentity()
     {
+
+        $identityRecord = IdentityRecord::query()
+            ->where('user_id', Auth::user()->id)
+            ->first();
+
+        if (!$identityRecord) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.request_not_found')
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($identityRecord->status != IdentityRecord::PENDING) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.request_already_paid')
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $plan = Plan::find(config('plan.default_plan_id'));
 
         $amount = intval($plan->amount);
@@ -160,16 +181,16 @@ class IdentityRecordRepository implements IIdentityRecordRepository
         $code = Transaction::generateHash($transaction->id);
 
         if ($transaction) {
-            return [
+            return response()->json([
                 'status' => 1,
                 'url' => route('user.payment') . '?transaction=' . $transaction->id . '&sign=' . $code
-            ];
+            ], Response::HTTP_OK);
         }
 
-        return [
+        return response()->json([
             'status' => 0,
             'message' => __('site.request_not_found')
-        ];
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     /**

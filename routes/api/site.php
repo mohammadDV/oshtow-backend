@@ -48,6 +48,9 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 
     Route::get('/check-verification', [UserController::class, 'checkVerification'])->name('user.check.verification');
 
+    Route::get('/payment/redirect-to-gateway-for-identity', [PaymentController::class, 'redirectToGatewayForIdentity'])->name('user.payment.redirect-to-gateway-for-identity');
+    Route::post('/payment/manual-payment', [PaymentController::class, 'manualPayment'])->name('user.payment.manual-payment');
+
     // update user
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('user.show');
@@ -122,23 +125,23 @@ Route::middleware(['auth:sanctum', 'auth', 'throttle:200,1'])->prefix('profile')
 });
 
 
-Route::middleware(['auth:sanctum', 'auth', 'check.admin'])->prefix('profile')->name('profile.')->group(function() {
+// Route::middleware(['auth:sanctum', 'auth', 'check.admin'])->prefix('profile')->name('profile.')->group(function() {
 
-    Route::patch('/withdraws/{withdrawalTransaction}/status', [WithdrawalTransactionController::class, 'updateStatus']);
+//     Route::patch('/withdraws/{withdrawalTransaction}/status', [WithdrawalTransactionController::class, 'updateStatus']);
 
-    Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])->middleware('check.admin')->name('project.reject');
-    Route::post('/projects/{project}/approve', [ProjectController::class, 'approve'])->middleware('check.admin')->name('project.approve');
+//     Route::post('/projects/{project}/reject', [ProjectController::class, 'reject'])->middleware('check.admin')->name('project.reject');
+//     Route::post('/projects/{project}/approve', [ProjectController::class, 'approve'])->middleware('check.admin')->name('project.approve');
 
-    // Posts
-    Route::prefix('posts')->group(function () {
-        Route::get('/{post}', [PostController::class, 'show'])->name('profile.post.show');
-        Route::get('/', [PostController::class, 'index'])->name('profile.post.index');
-        Route::post('/', [PostController::class, 'store'])->name('profile.post.store');
-        Route::patch('/{post}', [PostController::class, 'update'])->name('profile.post.update');
-        Route::delete('/{post}', [PostController::class, 'destroy'])->name('profile.post.delete');
-    });
+//     // Posts
+//     Route::prefix('posts')->group(function () {
+//         Route::get('/{post}', [PostController::class, 'show'])->name('profile.post.show');
+//         Route::get('/', [PostController::class, 'index'])->name('profile.post.index');
+//         Route::post('/', [PostController::class, 'store'])->name('profile.post.store');
+//         Route::patch('/{post}', [PostController::class, 'update'])->name('profile.post.update');
+//         Route::delete('/{post}', [PostController::class, 'destroy'])->name('profile.post.delete');
+//     });
 
-});
+// });
 
 // check with token
 Route::get('/project/{project}/check-request', [ProjectController::class, 'checkRequestForClaim']);

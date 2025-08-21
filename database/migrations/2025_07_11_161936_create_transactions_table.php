@@ -16,6 +16,8 @@ return new class extends Migration
             $table->bigInteger('amount')->unsigned();
             $table->string('reference')->nullable();
             $table->string('bank_transaction_id')->nullable();
+            $table->string('image',2048)->nullable();
+            $table->tinyInteger('manual')->default(0);
             $table->string('model_type')->nullable();
             $table->bigInteger("model_id")->nullable();
             $table->bigInteger("user_id")->unsigned()->index();

@@ -254,8 +254,8 @@ class ClaimRepository implements IClaimRepository
             'id ' . Auth::user()->id . PHP_EOL .
             'nickname ' . Auth::user()->nickname . PHP_EOL .
             'title' . $project->title . PHP_EOL .
-            'claim' . $claim->id . PHP_EOL .
-            'amount' . number_format($claim->amount) . PHP_EOL .
+            'claim ' . $claim->id . PHP_EOL .
+            'amount ' . number_format($claim->amount) . PHP_EOL .
             'time ' . now()
         );
 

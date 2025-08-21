@@ -2,12 +2,14 @@
 
 namespace Application\Api\Payment\Controllers;
 
+use Application\Api\Payment\Requests\ManualPaymentRequest;
 use Core\Http\Controllers\Controller;
 use Core\Http\Requests\TableRequest;
 use Core\Http\traits\GlobalFunc;
 use Domain\Claim\Models\Claim;
 use Domain\Claim\Repositories\ClaimRepository;
 use Domain\Claim\Repositories\Contracts\IClaimRepository;
+use Domain\IdentityRecord\Repositories\Contracts\IIdentityRecordRepository;
 use Domain\IdentityRecord\Repositories\IdentityRecordRepository;
 use Domain\Payment\Models\Transaction;
 use Domain\Payment\Repositories\Contracts\IPaymentRepository;
@@ -19,7 +21,6 @@ use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class PaymentController extends Controller
@@ -29,6 +30,7 @@ class PaymentController extends Controller
     public function __construct(
         protected IPaymentRepository $repository,
         protected IClaimRepository $claimRepository,
+        protected IIdentityRecordRepository $identityRecordRepository,
     ) {}
 
 
@@ -43,7 +45,25 @@ class PaymentController extends Controller
     }
 
     /**
+     * Manual payment.
+     * @param ManualPaymentRequest $request
+     */
+    public function manualPayment(ManualPaymentRequest $request)
+    {
+        return response()->json($this->repository->manualPayment($request));
+    }
+
+    /**
+     * Redirect to Gateway for Identity.
+     */
+    public function redirectToGatewayForIdentity()
+    {
+        return $this->identityRecordRepository->redirectToGatewayForIdentity();
+    }
+
+    /**
      * Display a listing of the resource.
+     * @param Request $request
      */
     public function payment(Request $request)
     {

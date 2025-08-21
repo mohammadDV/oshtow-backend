@@ -70,4 +70,8 @@ interface IIdentityRecordRepository
     */
    public function destroy(IdentityRecord $identityRecord) :JsonResponse;
 
+    /**
+     * Redirect to Gateway.
+     */
+    public function redirectToGatewayForIdentity();
 }
