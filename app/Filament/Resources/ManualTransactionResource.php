@@ -154,29 +154,29 @@ class ManualTransactionResource extends Resource
                         Transaction::CANCELLED => __('site.cancelled'),
                         default => $state,
                     }),
-                TextColumn::make('reference')
-                    ->label(__('site.reference'))
-                    ->searchable()
-                    ->copyable(),
-                TextColumn::make('bank_transaction_id')
-                    ->label(__('site.bank_transaction_id'))
-                    ->searchable()
-                    ->copyable(),
                 TextColumn::make('model_type')
                     ->label(__('site.model_type'))
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        Transaction::WALLET => 'blue',
+                        Transaction::WALLET => 'success',
                         Transaction::PLAN => 'green',
-                        Transaction::IDENTITY => 'purple',
+                        Transaction::IDENTITY => 'info',
                         Transaction::SECURE => 'orange',
                         default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        Transaction::WALLET => __('site.wallet'),
+                        Transaction::PLAN => __('site.plan'),
+                        Transaction::IDENTITY => __('site.identity'),
+                        Transaction::SECURE => __('site.secure'),
+                        default => $state,
                     }),
                 TextColumn::make('model_id')
                     ->label(__('site.model_id'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.created_at'))
                     ->dateTime('Y-m-d H:i:s')
                     ->formatStateUsing(fn ($state) => Jalalian::fromDateTime($state)->format('Y/m/d H:i:s'))
@@ -311,16 +311,35 @@ class ManualTransactionResource extends Resource
                             // Update transaction status
                             $record->update(['status' => Transaction::FAILED]);
 
-                            // Send notification to user
-                            NotificationService::create([
-                                'title' => __('site.manual_transaction_failed_title'),
-                                'content' => __('site.manual_transaction_failed_content', [
-                                    'amount' => number_format($record->amount),
-                                    'transaction_id' => $record->id
-                                ]),
-                                'id' => $record->id,
-                                'type' => NotificationService::WALLET,
-                            ], $record->user);
+                            if ($record->model_type == Transaction::IDENTITY) {
+                                $identityRecord = IdentityRecord::where('user_id', $record->user_id)
+                                    ->where('status', IdentityRecord::INPROGRESS)
+                                    ->first();
+
+                                if ($identityRecord) {
+                                    $identityRecord->delete();
+
+                                    NotificationService::create([
+                                        'title' => __('site.identity_verification_rejected'),
+                                        'content' => __('site.identity_verification_rejected_message'),
+                                        'id' => $record->user_id,
+                                        'type' => NotificationService::PROFILE,
+                                    ], $record->user);
+                                }
+
+                            } else {
+
+                                // Send notification to user
+                                NotificationService::create([
+                                    'title' => __('site.manual_transaction_failed_title'),
+                                    'content' => __('site.manual_transaction_failed_content', [
+                                        'amount' => number_format($record->amount),
+                                        'transaction_id' => $record->id
+                                    ]),
+                                    'id' => Wallet::where('user_id', $record->user_id)->first()->id,
+                                    'type' => NotificationService::WALLET,
+                                ], $record->user);
+                            }
 
                             Notification::make()
                                 ->title(__('site.transaction_failed_successfully'))

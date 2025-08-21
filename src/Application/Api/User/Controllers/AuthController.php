@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Application\Api\User\Mail\ThankYouForRegistering;
 use Application\Api\User\Resources\UserResource;
 use Domain\IdentityRecord\Models\IdentityRecord;
+use Domain\Plan\Models\Plan;
 use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller

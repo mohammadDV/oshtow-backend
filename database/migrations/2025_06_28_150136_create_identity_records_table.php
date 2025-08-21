@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('image_national_code_front');
             $table->string('image_national_code_back');
             $table->string('video');
-            $table->enum('status',['pending', 'paid', 'completed'])->default('pending'); // pending, completed, failed
+            $table->enum('status',['pending', 'paid', 'completed','in_progress'])->default('pending'); // pending, completed, failed
             $table->bigInteger("user_id")->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
