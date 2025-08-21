@@ -30,7 +30,7 @@ class IdentityRecordRequest extends BaseRequest
             'postal_code' => 'required|string|max:20',
             'address' => 'required|string|max:500',
             'image_national_code_front' => 'required|string|max:255',
-            'image_national_code_back' => 'required|string|max:255',
+            'image_national_code_back' => 'nullable|string|max:255',
             'video' => 'required|string|max:255',
         ];
     }

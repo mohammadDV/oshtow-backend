@@ -140,6 +140,7 @@ return array(
     'identity_record_approved_successfully' => 'Identity record approved successfully',
     'identity_record_rejected_successfully' => 'Identity record rejected successfully',
     'identity_record_is_already_paid' => 'Identity record is already paid',
+    'identity_record_not_found' => 'Identity record not found',
     'delete_selected' => 'Delete Selected',
     'Identity Records Management' => 'Identity Records Management',
     'Create Identity Record' => 'Create Identity Record',

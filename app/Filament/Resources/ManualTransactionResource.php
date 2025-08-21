@@ -13,10 +13,12 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Morilog\Jalali\Jalalian;
 
 class ManualTransactionResource extends Resource
@@ -104,11 +106,24 @@ class ManualTransactionResource extends Resource
                         Forms\Components\Textarea::make('message')
                             ->label(__('site.message'))
                             ->rows(3),
+                        Forms\Components\FileUpload::make('image')
+                            ->label(__('site.image'))
+                            ->image()
+                            ->imageEditor()
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeTargetWidth('1920')
+                            ->imageResizeTargetHeight('1080')
+                            ->disk('s3')
+                            ->directory('manual-transactions/receipts')
+                            ->visibility('public')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                            ->maxSize(5120),
                         Forms\Components\Toggle::make('manual')
                             ->label(__('site.manual'))
                             ->disabled()
                             ->default(true),
                     ])->columns(2),
+
             ]);
     }
 
@@ -154,6 +169,12 @@ class ManualTransactionResource extends Resource
                         Transaction::CANCELLED => __('site.cancelled'),
                         default => $state,
                     }),
+                ImageColumn::make('image')
+                    ->label(__('site.image'))
+                    ->disk('s3')
+                    ->size(60)
+                    ->circular()
+                    ->openUrlInNewTab(),
                 TextColumn::make('model_type')
                     ->label(__('site.model_type'))
                     ->badge()
@@ -206,7 +227,6 @@ class ManualTransactionResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('complete')
                     ->label(__('site.complete_transaction'))

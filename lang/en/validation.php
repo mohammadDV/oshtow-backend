@@ -205,6 +205,16 @@ return [
         'send_date' => 'Send Date',
         'receive_date' => 'Receive Date',
         'confirmation_code' => 'Confirmation Code',
+        'national_code' => 'National Code',
+        'birthday' => 'Birthday',
+        'country_id' => 'Country',
+        'province_id' => 'Province',
+        'city_id' => 'City',
+        'postal_code' => 'Postal Code',
+        'address' => 'Address',
+        'image_national_code_front' => 'National Code Front Image',
+        'image_national_code_back' => 'National Code Back Image',
+        'video' => 'Video',
     ],
 
 ];

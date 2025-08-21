@@ -649,6 +649,7 @@ return array(
     'identity_record_approved_successfully' => 'سابقه هویتی با موفقیت تایید شد',
     'identity_record_rejected_successfully' => 'سابقه هویتی با موفقیت رد شد',
     'identity_record_is_already_paid' => 'سابقه هویتی قبلا پرداخت شده است',
+    'identity_record_not_found' => 'سابقه هویتی یافت نشد',
     'delete_selected' => 'حذف انتخاب شده‌ها',
     'Identity Records Management' => 'مدیریت سوابق هویتی',
     'Create Identity Record' => 'ایجاد سابقه هویتی',
