@@ -662,6 +662,8 @@ return array(
     'identity_verification_rejected_message' => 'کاربر گرامی: احراز هویت شما رد شده است لطفا از صحت اطلاعات خود اطمینان حاصل کرده و مجددا ارسال کنید.',
     'identity_verification_payment_required' => 'پرداخت احراز هویت الزامی است',
     'identity_verification_payment_required_message' => 'هویت باید قبل از تایید پرداخت شود.',
+    'request_already_in_progress' => 'درخواست در حال انجام است',
+    'identity_record_is_already_in_progress' => 'احرازویت در حال بررسی می باشد.',
 
     // Project Management Translations
     'projects' => 'پروژه‌ها',
@@ -858,7 +860,6 @@ return array(
     // Payment Secure Management Translations
     'payment_secures' => 'پرداخت‌های امن',
     'payment_secure' => 'پرداخت امن',
-    'Payment Management' => 'مدیریت پرداخت‌ها',
     'payment_secure_information' => 'اطلاعات پرداخت امن',
     'wallet' => 'کیف پول',
     'released' => 'آزاد شده',
@@ -1246,6 +1247,31 @@ return array(
     'plan' => 'پلن',
     'identity' => 'هویت',
     'secure' => 'امن',
+
+    // Manual Transaction Management
+    'manual_transactions' => 'تراکنش‌های دستی',
+    'manual_transaction' => 'تراکنش دستی',
+    'manual' => 'دستی',
+    'complete_transaction' => 'تکمیل تراکنش',
+    'complete_transaction_description' => 'این تراکنش دستی را به عنوان تکمیل شده علامت‌گذاری کنید. کاربر 90% مبلغ را به کیف پول خود شارژ خواهد شد.',
+    'confirm_completion' => 'تایید تکمیل',
+    'fail_transaction' => 'ناموفق کردن تراکنش',
+    'fail_transaction_description' => 'این تراکنش دستی را به عنوان ناموفق علامت‌گذاری کنید. کاربر از عدم موفقیت مطلع خواهد شد.',
+    'confirm_failure' => 'تایید عدم موفقیت',
+    'transaction_completed_successfully' => 'تراکنش با موفقیت تکمیل شد',
+    'wallet_credited_successfully' => 'کیف پول کاربر با :amount :currency شارژ شد',
+    'transaction_failed_successfully' => 'تراکنش به عنوان ناموفق علامت‌گذاری شد',
+    'user_notified_of_failure' => 'کاربر از عدم موفقیت تراکنش مطلع شد',
+    'manual_transaction_completed_title' => 'تراکنش دستی تکمیل شد',
+    'manual_transaction_completed_content' => 'کاربر گرامی: تراکنش دستی شما به مبلغ :amount با موفقیت تکمیل شد. کیف پول شما با :wallet_amount شارژ شد.',
+    'manual_transaction_failed_title' => 'تراکنش دستی ناموفق بود',
+    'manual_transaction_failed_content' => 'کاربر گرامی: تراکنش دستی شما به مبلغ :amount (شناسه: :transaction_id) به عنوان ناموفق علامت‌گذاری شد.',
+    'manual_transaction_completed_description' => 'تراکنش دستی تکمیل شد: شناسه #:transaction_id، مبلغ: :amount، شارژ کیف پول: :wallet_amount',
+    'wallet_not_found' => 'کیف پول یافت نشد',
+    'cannot_credit_wallet' => 'نمی‌توان کیف پول کاربر را شارژ کرد - کیف پول یافت نشد یا غیرفعال است',
+    'error_occurred' => 'خطایی رخ داد',
+    'transaction_completion_failed' => 'تکمیل تراکنش ناموفق بود',
+    'transaction_failure_update_failed' => 'به‌روزرسانی وضعیت تراکنش ناموفق بود',
 
     // Withdrawal Transaction Management
     'withdrawal_transactions' => 'تراکنش‌های برداشت',

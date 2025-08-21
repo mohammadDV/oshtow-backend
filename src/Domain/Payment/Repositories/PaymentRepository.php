@@ -106,6 +106,13 @@ class PaymentRepository implements IPaymentRepository
                 ];
             }
 
+            if ($identityRecord->status == IdentityRecord::INPROGRESS) {
+                return [
+                    'status' => 0,
+                    'message' => __('site.identity_record_is_already_in_progress'),
+                ];
+            }
+
             if ($identityRecord->status != IdentityRecord::PENDING) {
                 return [
                     'status' => 0,
@@ -140,7 +147,7 @@ class PaymentRepository implements IPaymentRepository
         if ($transaction) {
             // update identity record status
             if ($request->input('type') == Transaction::IDENTITY) {
-                $identityRecord->status = IdentityRecord::PAID;
+                $identityRecord->status = IdentityRecord::INPROGRESS;
                 $identityRecord->save();
             }
 

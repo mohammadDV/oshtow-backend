@@ -63,6 +63,10 @@ class AuthController extends Controller
             $status = $identityRecord->status;
         }
 
+        $plan = Plan::find(config('plan.default_plan_id'));
+
+        $amount = intval($plan->amount);
+
         return response([
             'is_admin' => $user->level == 3,
             'token' => $token,
@@ -72,7 +76,9 @@ class AuthController extends Controller
             'customer_number' => $user->customer_number,
             'user' => new UserResource($user),
             'mesasge' => 'success',
-            'status' => 1
+            'status' => 1,
+            'identity_amount' => $amount,
+            'bank_details' => config('fee.bank_details'),
         ], 200);
     }
 

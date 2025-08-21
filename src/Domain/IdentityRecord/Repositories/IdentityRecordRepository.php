@@ -159,6 +159,13 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        if ($identityRecord->status == IdentityRecord::INPROGRESS) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.request_already_in_progress')
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if ($identityRecord->status != IdentityRecord::PENDING) {
             return response()->json([
                 'status' => 0,

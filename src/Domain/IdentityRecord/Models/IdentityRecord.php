@@ -16,6 +16,7 @@ class IdentityRecord extends Model
     use HasFactory;
 
     const PENDING = 'pending';
+    const INPROGRESS = 'in_progress';
     const PAID = 'paid';
     const COMPLETED = 'completed';
     const REJECT = 'reject';

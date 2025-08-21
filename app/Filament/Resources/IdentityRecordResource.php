@@ -312,7 +312,7 @@ class IdentityRecordResource extends Resource
                     ->label(__('site.reject'))
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->visible(fn ($record) => in_array($record->status, [IdentityRecord::PENDING, IdentityRecord::PAID]))
+                    ->visible(fn ($record) => in_array($record->status, [IdentityRecord::PENDING, IdentityRecord::INPROGRESS,  IdentityRecord::PAID]))
                     ->requiresConfirmation()
                     ->modalHeading(__('site.confirm_reject_identity'))
                     ->modalDescription(__('site.confirm_reject_identity_description'))

@@ -153,6 +153,8 @@ return array(
     'identity_verification_rejected_message' => 'Dear user: Your identity verification has been rejected please try again.',
     'identity_verification_payment_required' => 'Identity Verification Payment Required',
     'identity_verification_payment_required_message' => 'The identity should be paid before approval.',
+    'request_already_in_progress' => 'Request already in progress',
+    'identity_record_is_already_in_progress' => 'Identity record is already in progress',
 
     // Project Management Translations
     'projects' => 'Projects',
@@ -610,6 +612,31 @@ return array(
     'plan' => 'Plan',
     'identity' => 'Identity',
     'secure' => 'Secure',
+
+    // Manual Transaction Management
+    'manual_transactions' => 'Manual Transactions',
+    'manual_transaction' => 'Manual Transaction',
+    'manual' => 'Manual',
+    'complete_transaction' => 'Complete Transaction',
+    'complete_transaction_description' => 'Mark this manual transaction as completed. The user will be charged 90% of the amount to their wallet.',
+    'confirm_completion' => 'Confirm Completion',
+    'fail_transaction' => 'Fail Transaction',
+    'fail_transaction_description' => 'Mark this manual transaction as failed. The user will be notified of the failure.',
+    'confirm_failure' => 'Confirm Failure',
+    'transaction_completed_successfully' => 'Transaction completed successfully',
+    'wallet_credited_successfully' => 'User wallet credited with :amount :currency',
+    'transaction_failed_successfully' => 'Transaction marked as failed',
+    'user_notified_of_failure' => 'User has been notified of the transaction failure',
+    'manual_transaction_completed_title' => 'Manual Transaction Completed',
+    'manual_transaction_completed_content' => 'Dear user: Your manual transaction for :amount has been completed successfully. Your wallet has been credited with :wallet_amount.',
+    'manual_transaction_failed_title' => 'Manual Transaction Failed',
+    'manual_transaction_failed_content' => 'Dear user: Your manual transaction for :amount (ID: :transaction_id) has been marked as failed.',
+    'manual_transaction_completed_description' => 'Manual transaction completed: ID #:transaction_id, Amount: :amount, Wallet credit: :wallet_amount',
+    'wallet_not_found' => 'Wallet not found',
+    'cannot_credit_wallet' => 'Cannot credit user wallet - wallet not found or inactive',
+    'error_occurred' => 'An error occurred',
+    'transaction_completion_failed' => 'Failed to complete transaction',
+    'transaction_failure_update_failed' => 'Failed to update transaction status',
 
     // Withdrawal Transaction Management
     'withdrawal_transactions' => 'Withdrawal Transactions',
