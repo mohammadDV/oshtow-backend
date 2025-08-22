@@ -92,7 +92,7 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             ->where('user_id', Auth::user()->id)
             ->first();
 
-        if ($exist) {
+        if ($exist && $exist->status != IdentityRecord::PENDING) {
 
             return response()->json([
                 'status' => 0,
@@ -100,7 +100,9 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $identityRecord = IdentityRecord::create([
+        $identityRecord = IdentityRecord::updateOrCreate([
+            'user_id' => Auth::user()->id,
+        ],[
             'first_name' => Auth::user()->first_name,
             'last_name' => Auth::user()->last_name,
             'country_id' => $request->input('country_id'),
@@ -116,7 +118,6 @@ class IdentityRecordRepository implements IIdentityRecordRepository
             'image_national_code_back' => $request->input('image_national_code_back'),
             'video' => $request->input('video'),
             'status' => IdentityRecord::PENDING,
-            'user_id' => Auth::user()->id,
         ]);
 
         if ($identityRecord) {
