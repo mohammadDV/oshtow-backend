@@ -27,7 +27,9 @@ class TicketResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
 
-    protected static ?string $navigationGroup = 'Ticket Management';
+    protected static ?string $navigationGroup = 'Support';
+
+    protected static ?int $navigationSort = 4;
 
     public static function getNavigationLabel(): string
     {

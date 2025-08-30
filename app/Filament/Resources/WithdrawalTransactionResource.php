@@ -25,7 +25,9 @@ class WithdrawalTransactionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
-    protected static ?string $navigationGroup = 'Wallet Management';
+    protected static ?string $navigationGroup = 'Financial';
+
+    protected static ?int $navigationSort = 9;
 
     public static function getNavigationLabel(): string
     {

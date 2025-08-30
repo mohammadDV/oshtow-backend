@@ -27,7 +27,9 @@ class IdentityRecordResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-identification';
 
-    protected static ?string $navigationGroup = 'Identity Management';
+    protected static ?string $navigationGroup = 'User Management';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string
     {
@@ -145,6 +147,7 @@ class IdentityRecordResource extends Resource
                                 IdentityRecord::PAID => __('site.paid'),
                                 IdentityRecord::COMPLETED => __('site.completed'),
                                 IdentityRecord::REJECT => __('site.reject'),
+                                IdentityRecord::INPROGRESS => __('site.in_progress'),
                             ])
                             ->default(IdentityRecord::PENDING)
                             ->required(),
@@ -192,6 +195,7 @@ class IdentityRecordResource extends Resource
                         IdentityRecord::PAID => 'info',
                         IdentityRecord::COMPLETED => 'success',
                         IdentityRecord::REJECT => 'danger',
+                        IdentityRecord::INPROGRESS => 'info',
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match($state) {
@@ -199,6 +203,7 @@ class IdentityRecordResource extends Resource
                         IdentityRecord::PAID => __('site.paid'),
                         IdentityRecord::COMPLETED => __('site.completed'),
                         IdentityRecord::REJECT => __('site.reject'),
+                        IdentityRecord::INPROGRESS => __('site.in_progress'),
                         default => $state,
                     }),
                 TextColumn::make('user.email')
@@ -224,6 +229,7 @@ class IdentityRecordResource extends Resource
                         IdentityRecord::PAID => __('site.paid'),
                         IdentityRecord::COMPLETED => __('site.completed'),
                         IdentityRecord::REJECT => __('site.reject'),
+                        IdentityRecord::INPROGRESS => __('site.in_progress'),
                     ]),
                 Tables\Filters\Filter::make('created_at')
                     ->label(__('site.created_at'))

@@ -38,9 +38,11 @@ class SubscriptionResource extends Resource
 {
     protected static ?string $model = Subscription::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-calendar';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationGroup = 'Subscription Management';
+    protected static ?string $navigationGroup = 'Subscription';
+
+    protected static ?int $navigationSort = 12;
 
     public static function getNavigationLabel(): string
     {

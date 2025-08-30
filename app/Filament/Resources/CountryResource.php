@@ -21,7 +21,9 @@ class CountryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-flag';
 
-    protected static ?string $navigationGroup = 'Address Management';
+    protected static ?string $navigationGroup = 'Address';
+
+    protected static ?int $navigationSort = 16;
 
     public static function getNavigationLabel(): string
     {

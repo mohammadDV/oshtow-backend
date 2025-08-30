@@ -21,7 +21,9 @@ class ProvinceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map';
 
-    protected static ?string $navigationGroup = 'Address Management';
+    protected static ?string $navigationGroup = 'Address';
+
+    protected static ?int $navigationSort = 17;
 
     public static function getNavigationLabel(): string
     {

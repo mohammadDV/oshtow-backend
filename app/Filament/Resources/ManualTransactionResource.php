@@ -27,9 +27,11 @@ class ManualTransactionResource extends Resource
 
     protected static ?string $slug = 'manual-transactions';
 
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
 
-    protected static ?string $navigationGroup = 'Payment Management';
+    protected static ?string $navigationGroup = 'Financial';
+
+    protected static ?int $navigationSort = 8;
 
     public static function getNavigationLabel(): string
     {

@@ -95,6 +95,8 @@ return array(
     'projects_created_last_month'      => 'پروژه‌های ایجاد شده در ماه گذشته',
     'claims_last_month'                => 'درخواست‌های ماه گذشته',
     'claims_created_last_month'        => 'درخواست‌های ایجاد شده در ماه گذشته',
+    'manual_payments'                  => 'پرداخت‌های دستی',
+    'manual_payments_last_month'       => 'پرداخت‌های دستی درانتظار',
 
     // Project Status Translations
     'projects_by_status'               => 'پروژه‌ها بر اساس وضعیت',

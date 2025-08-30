@@ -38,6 +38,17 @@ class AdminPanelProvider extends PanelProvider
             ->resources([
                 \App\Filament\Resources\ManualTransactionResource::class,
             ])
+            ->navigationGroups([
+                'Project Management' => 1,
+                'User Management' => 2,
+                'Support' => 3,
+                'Financial' => 4,
+                'Subscription' => 5,
+                'Content' => 6,
+                'Address' => 7,
+                'System' => 8,
+                'Communication' => 9,
+            ])
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
                 Pages\Dashboard::class,

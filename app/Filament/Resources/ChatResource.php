@@ -23,6 +23,8 @@ class ChatResource extends Resource
 
     protected static ?string $navigationGroup = 'Communication';
 
+    protected static ?int $navigationSort = 21;
+
     public static function getNavigationLabel(): string
     {
         return __('site.chats');

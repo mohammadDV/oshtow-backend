@@ -2,12 +2,13 @@
 
 namespace App\Filament\Widgets;
 
-use App\Filament\Resources\ClaimResource;
+use App\Filament\Resources\ManualTransactionResource;
 use App\Filament\Resources\ProjectResource;
 use App\Filament\Resources\TicketResource;
 use Domain\Claim\Models\Claim;
 use Domain\Project\Models\Project;
 use Carbon\Carbon;
+use Domain\Payment\Models\Transaction;
 use Domain\Ticket\Models\Ticket;
 use Domain\Wallet\Models\WithdrawalTransaction;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -28,6 +29,8 @@ class ClaimsOverview extends BaseWidget
         $projectsLastMonth = Project::whereBetween('created_at', [$startDate, $endDate])->count();
         $claimsLastMonth = Claim::whereBetween('created_at', [$startDate, $endDate])->count();
 
+        $manualPayments = Transaction::where('manual', 1)->where('status', Transaction::PENDING)->whereBetween('created_at', [$startDate, $endDate])->count();
+
 
         return [
             Stat::make(__('site.projects_last_month'), $projectsLastMonth)
@@ -37,12 +40,12 @@ class ClaimsOverview extends BaseWidget
                 ->chart([7, 2, 10, 3, 15, 4, 17]) // Sample chart data
                 ->url(ProjectResource::getUrl('index')),
 
-            Stat::make(__('site.claims_last_month'), $claimsLastMonth)
-                ->description(__('site.claims_created_last_month'))
+                Stat::make(__('site.manual_payments'), $manualPayments)
+                ->description(__('site.manual_payments_last_month'))
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('success')
                 ->chart([3, 8, 5, 12, 6, 9, 4]) // Sample chart data
-                ->url(ClaimResource::getUrl('index')),
+                ->url(ManualTransactionResource::getUrl('index')),
 
             Stat::make(__('site.active_tickets'), Ticket::where('status', 'active')->count())
                 ->description(__('site.tickets_need_attention'))
@@ -56,7 +59,7 @@ class ClaimsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-clock')
                 ->url(route('filament.admin.resources.withdrawal-transactions.index', ['tableFilters[status][value]' => WithdrawalTransaction::PENDING]))
                 ->chart([3, 8, 5, 12, 6, 9, 4]) // Sample chart data
-                ->color('danger'),
+                ->color('info'),
         ];
     }
 }

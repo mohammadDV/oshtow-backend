@@ -10,16 +10,17 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Morilog\Jalali\Jalalian;
 
 class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path';
 
-    protected static ?string $navigationGroup = 'Payment Management';
+    protected static ?string $navigationGroup = 'Financial';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getNavigationLabel(): string
     {

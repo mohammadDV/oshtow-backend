@@ -19,9 +19,11 @@ class TicketSubjectResource extends Resource
 {
     protected static ?string $model = TicketSubject::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
 
-    protected static ?string $navigationGroup = 'Ticket Management';
+    protected static ?string $navigationGroup = 'Support';
+
+    protected static ?int $navigationSort = 24;
 
     public static function getNavigationLabel(): string
     {

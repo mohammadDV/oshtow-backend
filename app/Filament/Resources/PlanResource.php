@@ -37,9 +37,11 @@ class PlanResource extends Resource
 {
     protected static ?string $model = Plan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?string $navigationGroup = 'Subscription Management';
+    protected static ?string $navigationGroup = 'Subscription';
+
+    protected static ?int $navigationSort = 11;
 
     public static function getNavigationLabel(): string
     {

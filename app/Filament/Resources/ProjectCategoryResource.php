@@ -26,6 +26,8 @@ class ProjectCategoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Project Management';
 
+    protected static ?int $navigationSort = 15;
+
     public static function getNavigationLabel(): string
     {
         return __('site.project_categories');

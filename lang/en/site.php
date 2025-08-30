@@ -82,6 +82,8 @@ return array(
     'projects_created_last_month' => 'Projects created in the last month',
     'claims_last_month' => 'Claims Last Month',
     'claims_created_last_month' => 'Claims created in the last month',
+    'manual_payments' => 'Manual Payments',
+    'manual_payments_last_month' => 'Manual payments in the last month',
 
     // Project Status Translations
     'projects_by_status' => 'Projects by Status',

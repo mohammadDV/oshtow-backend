@@ -21,7 +21,9 @@ class TicketMessageResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left';
 
-    protected static ?string $navigationGroup = 'Ticket Management';
+    protected static ?string $navigationGroup = 'Support';
+
+    protected static ?int $navigationSort = 23;
 
     public static function getNavigationLabel(): string
     {

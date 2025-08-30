@@ -31,9 +31,11 @@ class ClaimResource extends Resource
 {
     protected static ?string $model = Claim::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static ?string $navigationIcon = 'heroicon-o-exclamation-triangle';
 
     protected static ?string $navigationGroup = 'Project Management';
+
+    protected static ?int $navigationSort = 3;
 
     public static function getNavigationLabel(): string
     {
