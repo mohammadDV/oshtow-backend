@@ -125,6 +125,7 @@ class UserRepository implements IUserRepository
                 'city_id' => $user->city_id,
                 'mobile' => $user->mobile,
                 'biography' => $user->biography,
+                'vip' => $user->vip,
                 'profile_photo_path' => $user->profile_photo_path,
                 'bg_photo_path' => $user->bg_photo_path,
                 'rate' => $user->rate,
