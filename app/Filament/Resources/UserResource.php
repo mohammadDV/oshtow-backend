@@ -186,6 +186,13 @@ class UserResource extends Resource
                         default => 'gray',
                     })
                     ->formatStateUsing(fn (int $state): string => $state === 1 ? __('site.Active') : __('site.Inactive')),
+                IconColumn::make('vip')
+                    ->label(__('site.vip'))
+                    ->boolean()
+                    ->trueIcon('heroicon-o-star')
+                    ->falseIcon('heroicon-o-star')
+                    ->trueColor('warning')
+                    ->falseColor('gray'),
                 TextColumn::make('level')
                     ->label(__('site.level'))
                     ->badge()
@@ -257,33 +264,6 @@ class UserResource extends Resource
                     }),
             ])
             ->actions([
-                // Tables\Actions\ViewAction::make()
-                //     ->label(__('site.view_user')),
-                // Tables\Actions\EditAction::make()
-                //     ->label(__('site.edit_user')),
-                // Tables\Actions\Action::make('toggle_status')
-                //     ->label(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
-                //     ->icon(fn ($record) => $record->status === 1 ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
-                //     ->color(fn ($record) => $record->status === 1 ? 'danger' : 'success')
-                //     ->requiresConfirmation()
-                //     ->modalHeading(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user') : __('site.confirm_enable_user'))
-                //     ->modalDescription(fn ($record) => $record->status === 1 ? __('site.confirm_disable_user_description') : __('site.confirm_enable_user_description'))
-                //     ->modalSubmitActionLabel(fn ($record) => $record->status === 1 ? __('site.disable_user') : __('site.enable_user'))
-                //     ->modalCancelActionLabel(__('site.cancel'))
-                //     ->action(function ($record) {
-                //         $newStatus = $record->status === 1 ? 0 : 1;
-                //         $record->update(['status' => $newStatus]);
-
-                //         // Clear cache when user status changes
-                //         Cache::forget('user_count');
-                //     })
-                //     ->after(function ($record) {
-                //         $message = $record->status === 1 ? __('site.user_enabled_successfully') : __('site.user_disabled_successfully');
-                //         \Filament\Notifications\Notification::make()
-                //             ->title($message)
-                //             ->success()
-                //             ->send();
-                //     }),
                 Tables\Actions\Action::make('verify_email')
                     ->label(__('site.verify_email'))
                     ->icon('heroicon-o-envelope')
@@ -366,7 +346,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->select(['id', 'first_name', 'last_name', 'nickname', 'email', 'mobile', 'status', 'level', 'point', 'created_at', 'verified_at', 'email_verified_at', 'profile_photo_path', 'customer_number'])
+            ->select(['id', 'first_name', 'last_name', 'nickname', 'email', 'mobile', 'status', 'level', 'point', 'vip', 'created_at', 'verified_at', 'email_verified_at', 'profile_photo_path', 'customer_number'])
             ->without(['roles', 'permissions']) // Exclude unnecessary relationships
             ->withCount(['posts', 'wallets']) // Add counts for related data if needed
             ->with(['role:id,name']); // Only load essential role information
