@@ -6,6 +6,8 @@ use App\Http\Middleware\SetPersianLocale;
 use App\Filament\Widgets\ClaimsOverview;
 use App\Filament\Widgets\ProjectsByStatusChart;
 use App\Filament\Widgets\LatestTickets;
+use App\Filament\Widgets\RevenueOverview;
+use App\Filament\Widgets\MonthlyRevenueChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -55,7 +57,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                RevenueOverview::class,
                 ClaimsOverview::class,
+                MonthlyRevenueChart::class,
                 ProjectsByStatusChart::class,
                 LatestTickets::class,
                 // Widgets\AccountWidget::class,

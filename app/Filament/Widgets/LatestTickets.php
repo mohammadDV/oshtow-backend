@@ -11,7 +11,7 @@ use Filament\Tables\Actions\Action;
 
 class LatestTickets extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 5;
 
     protected static ?string $heading = 'آخرین تیکت‌ها';
 

@@ -9,7 +9,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Filament\Forms\Components\DatePicker;
+use Illuminate\Database\Eloquent\Builder;
 use Morilog\Jalali\Jalalian;
 
 class TransactionResource extends Resource
@@ -111,6 +115,14 @@ class TransactionResource extends Resource
                     ->label(__('site.amount'))
                     ->money('IRR')
                     ->sortable(),
+                TextColumn::make('revenue')
+                    ->label(__('site.revenue'))
+                    ->getStateUsing(fn ($record) => $record->revenue)
+                    ->money('IRR')
+                    ->sortable()
+                    ->color('success')
+                    ->weight('bold')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('status')
                     ->label(__('site.status'))
                     ->badge()
@@ -131,11 +143,13 @@ class TransactionResource extends Resource
                 TextColumn::make('reference')
                     ->label(__('site.reference'))
                     ->searchable()
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('bank_transaction_id')
                     ->label(__('site.bank_transaction_id'))
                     ->searchable()
-                    ->copyable(),
+                    ->copyable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('model_type')
                     ->label(__('site.model_type'))
                     ->badge()
@@ -178,9 +192,35 @@ class TransactionResource extends Resource
                         Transaction::IDENTITY => __('site.identity'),
                         Transaction::SECURE => __('site.secure'),
                     ]),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label(__('site.created_from')),
+                        DatePicker::make('created_until')
+                            ->label(__('site.created_until')),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('total_revenue')
+                    ->label(fn ($livewire) => __('site.total_revenue') . ': ' . number_format($livewire->getFilteredTableQuery()->where('status', Transaction::COMPLETED)->get()->sum('revenue')) . ' ریال')
+                    ->icon('heroicon-o-calculator')
+                    ->color('success')
+                    ->disabled()
+                    ->extraAttributes(['class' => 'cursor-default']),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
