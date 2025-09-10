@@ -179,6 +179,19 @@ class ProjectRepository implements IProjectRepository
             ], Response::HTTP_BAD_REQUEST);
         }
 
+        $projectExist = Project::query()
+            ->where('user_id', Auth::user()->id)
+            ->where('status', '=', Project::PENDING)
+            ->where('created_at', '>', now()->subSeconds(30))
+            ->first();
+
+        if ($projectExist) {
+            return response()->json([
+                'status' => 0,
+                'message' => __('site.You have already created a project'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         $project = Project::create([
             'title' => $request->input('title'),
             'type' => $request->input('type'),
@@ -191,7 +204,7 @@ class ProjectRepository implements IProjectRepository
             'dimensions' => $request->input('dimensions'),
             'active' => 1,
             'status' => Project::PENDING,
-            'vip' => 0,
+            'vip' => Auth::user()->vip,
             'priority' => 0,
             'send_date' => $request->input('send_date'),
             'receive_date' => $request->input('receive_date'),

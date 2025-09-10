@@ -52,6 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasName, Filament
         'is_report',
         'google_id',
         'customer_number',
+        'vip',
     ];
 
     /**
@@ -88,7 +89,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasName, Filament
 
 
     protected $visible = [
-        'id', 'first_name', 'level', 'last_name', 'customer_number','nickname', 'clubs','biography','profile_photo_path','bg_photo_path','point','rate','role_id', 'is_private', 'is_report', 'email', 'mobile', 'status', 'created_at','verified_at', 'email_verified_at'
+        'id', 'first_name', 'level', 'last_name', 'customer_number','nickname', 'clubs','biography', 'vip','profile_photo_path','bg_photo_path','point','rate','role_id', 'is_private', 'is_report', 'email', 'mobile', 'status', 'created_at','verified_at', 'email_verified_at'
     ];
 
     /**

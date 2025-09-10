@@ -86,6 +86,9 @@ class UserResource extends Resource
                             ])
                             ->default(1)
                             ->required(),
+                        Forms\Components\Toggle::make('vip')
+                            ->label(__('site.vip'))
+                            ->default(false),
                         Forms\Components\Toggle::make('is_private')
                             ->label(__('site.is_private'))
                             ->default(false),
