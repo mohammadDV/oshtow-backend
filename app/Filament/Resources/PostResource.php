@@ -171,6 +171,7 @@ class PostResource extends Resource
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.image'))
                     ->url(fn ($record) => $record->image ? $record->image : null)
                     ->circular()
@@ -214,27 +215,20 @@ class PostResource extends Resource
                     }),
                 TextColumn::make('view')
                     ->label(__('site.views'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->badge()
                     ->color('info'),
                 IconColumn::make('special')
                     ->label(__('site.special'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean()
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-star')
                     ->trueColor('warning')
-                    ->falseColor('gray'),
-                TextColumn::make('user.nickname')
-                    ->label(__('site.author'))
-                    ->searchable()
-                    ->sortable()
-                    ->url(fn ($record) => $record->user ? route('filament.admin.resources.users.edit', $record->user) : null)
-                    ->openUrlInNewTab()
-                    ->color('primary')
-                    ->icon('heroicon-o-user')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->tooltip(__('site.click_to_view_user_details')),
+                    ->falseColor('gray'),,
                 TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.created_at'))
                     ->dateTime('Y/m/d H:i')
                     ->sortable()
