@@ -226,7 +226,7 @@ class PostResource extends Resource
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-star')
                     ->trueColor('warning')
-                    ->falseColor('gray'),,
+                    ->falseColor('gray'),
                 TextColumn::make('created_at')
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.created_at'))
