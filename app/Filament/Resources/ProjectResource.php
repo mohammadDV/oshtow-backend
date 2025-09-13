@@ -235,6 +235,7 @@ class ProjectResource extends Resource
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.image'))
                     ->url(fn ($record) => $record->image ? $record->image : null)
                     ->circular()
@@ -286,6 +287,7 @@ class ProjectResource extends Resource
                     ->sortable(),
                 TextColumn::make('weight')
                     ->label(__('site.weight'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->suffix(__('site.kilogram'))
                     ->sortable(),
                 IconColumn::make('vip')
@@ -294,11 +296,13 @@ class ProjectResource extends Resource
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-star')
                     ->trueColor('warning')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->falseColor('gray'),
                 TextColumn::make('user.nickname')
                     ->label(__('site.project_user'))
                     ->searchable()
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->url(fn ($record) => $record->user ? route('filament.admin.resources.users.edit', $record->user) : null)
                     ->openUrlInNewTab()
                     ->color('primary')
@@ -306,6 +310,7 @@ class ProjectResource extends Resource
                     ->tooltip(__('site.click_to_view_user_details')),
                 TextColumn::make('claims_count')
                     ->label(__('site.claims'))
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->counts('claims')
                     ->badge()
                     ->color('info')
@@ -345,10 +350,12 @@ class ProjectResource extends Resource
                     ->date('Y/m/d')
                     ->sortable(),
                 TextColumn::make('receive_date')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.receive_date'))
                     ->date('Y/m/d')
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label(__('site.created_at'))
                     ->dateTime('Y/m/d H:i')
                     ->sortable(),

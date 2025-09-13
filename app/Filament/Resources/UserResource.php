@@ -148,6 +148,7 @@ class UserResource extends Resource
                     ->label(__('site.profile_photo_path'))
                     ->disk('s3')
                     ->circular()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->size(40)
                     ->extraImgAttributes(['loading' => 'lazy']), // HTML lazy loading attribute
                 TextColumn::make('first_name')
@@ -192,6 +193,7 @@ class UserResource extends Resource
                     ->trueIcon('heroicon-o-star')
                     ->falseIcon('heroicon-o-star')
                     ->trueColor('warning')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->falseColor('gray'),
                 TextColumn::make('level')
                     ->label(__('site.level'))
