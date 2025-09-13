@@ -18,6 +18,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Morilog\Jalali\Jalalian;
 use Filament\Notifications\Notification;
 
@@ -87,17 +88,35 @@ class IdentityRecordResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('country_id')
                             ->label(__('site.country'))
-                            ->relationship('country', 'title')
+                            ->options(fn () => static::getCountryOptions())
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (callable $set) => $set('province_id', null)),
                         Forms\Components\Select::make('province_id')
                             ->label(__('site.province'))
-                            ->relationship('province', 'title')
+                            ->options(fn (callable $get) =>
+                                $get('country_id')
+                                    ? \Domain\Address\Models\Province::where('country_id', $get('country_id'))
+                                        ->select('id', 'title')
+                                        ->pluck('title', 'id')
+                                        ->toArray()
+                                    : static::getProvinceOptions()
+                            )
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
                         Forms\Components\Select::make('city_id')
                             ->label(__('site.city'))
-                            ->relationship('city', 'title')
+                            ->options(fn (callable $get) =>
+                                $get('province_id')
+                                    ? \Domain\Address\Models\City::where('province_id', $get('province_id'))
+                                        ->select('id', 'title')
+                                        ->pluck('title', 'id')
+                                        ->toArray()
+                                    : static::getCityOptions()
+                            )
                             ->searchable()
                             ->preload(),
                         Forms\Components\TextInput::make('postal_code')
@@ -158,25 +177,22 @@ class IdentityRecordResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->paginated([10, 25, 50, 100])
+            ->deferLoading()
+            ->persistFiltersInSession()
+            ->persistSortInSession()
             ->columns([
                 TextColumn::make('id')
                     ->label(__('site.table_id'))
                     ->sortable()
                     ->searchable(),
-                ImageColumn::make('image_national_code_front')
-                    ->label(__('site.national_code_front'))
-                    ->disk('s3')
-                    ->size(40),
                 TextColumn::make('first_name')
                     ->label(__('site.first_name'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('last_name')
                     ->label(__('site.last_name'))
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('national_code')
-                    ->label(__('site.national_code'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('mobile')
@@ -206,19 +222,15 @@ class IdentityRecordResource extends Resource
                         IdentityRecord::INPROGRESS => __('site.in_progress'),
                         default => $state,
                     }),
-                TextColumn::make('user.email')
-                    ->label(__('site.user'))
-                    ->searchable()
-                    ->sortable()
-                    ->url(fn ($record) => $record->user ? route('filament.admin.resources.users.view', $record->user) : null)
-                    ->openUrlInNewTab(),
                 TextColumn::make('created_at')
                     ->label(__('site.created_at'))
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
                 TextColumn::make('updated_at')
                     ->label(__('site.updated_at'))
                     ->formatStateUsing(fn ($state) => $state ? Jalalian::fromDateTime($state)->format('Y-m-d H:i:s') : null)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
             ->filters([
@@ -279,6 +291,9 @@ class IdentityRecordResource extends Resource
 
                         try {
                             DB::beginTransaction();
+
+                            // Use lazy loading for user update
+                            $record->load('user');
                             $record->user->update([
                                 'verified_at' => Carbon::now()
                             ]);
@@ -287,7 +302,8 @@ class IdentityRecordResource extends Resource
                                 'status' => IdentityRecord::COMPLETED,
                             ]);
 
-                            $user = User::find($record->user_id);
+                            // Cache the user to avoid re-fetching
+                            $user = $record->user;
 
                             // Add the default plan
                             app(SubscribeRepository::class)->createSubscription(
@@ -306,13 +322,17 @@ class IdentityRecordResource extends Resource
                             ->send();
                     })
                     ->after(function ($record) {
-                        $user = User::find($record->user_id);
-                        NotificationService::create([
-                            'title' => __('site.identity_verification_approved'),
-                            'content' => __('site.identity_verification_approved_message'),
-                            'id' => $user->id,
-                            'type' => NotificationService::PROFILE,
-                        ], $user);
+                        // Use the already loaded user
+                        $user = $record->user ?? User::find($record->user_id);
+
+                        if ($user) {
+                            NotificationService::create([
+                                'title' => __('site.identity_verification_approved'),
+                                'content' => __('site.identity_verification_approved_message'),
+                                'id' => $user->id,
+                                'type' => NotificationService::PROFILE,
+                            ], $user);
+                        }
                     }),
                 Tables\Actions\Action::make('reject')
                     ->label(__('site.reject'))
@@ -325,16 +345,25 @@ class IdentityRecordResource extends Resource
                     ->modalSubmitActionLabel(__('site.reject'))
                     ->modalCancelActionLabel(__('site.cancel'))
                     ->action(function ($record) {
+                        // Load user before deletion to avoid N+1 query
+                        $record->load('user');
+                        $user = $record->user;
+
                         $record->delete();
-                    })
-                    ->after(function ($record) {
-                        $user = User::find($record->user_id);
-                        NotificationService::create([
-                            'title' => __('site.identity_verification_rejected'),
-                            'content' => __('site.identity_verification_rejected_message'),
-                            'id' => $user->id,
-                            'type' => NotificationService::PROFILE,
-                        ], $user);
+
+                        // Clear related caches
+                        Cache::forget('identity_records_count');
+
+                        // Send notification if user exists
+                        if ($user) {
+                            NotificationService::create([
+                                'title' => __('site.identity_verification_rejected'),
+                                'content' => __('site.identity_verification_rejected_message'),
+                                'id' => $user->id,
+                                'type' => NotificationService::PROFILE,
+                            ], $user);
+                        }
+
                         Notification::make()
                             ->title(__('site.identity_record_rejected_successfully'))
                             ->success()
@@ -355,7 +384,7 @@ class IdentityRecordResource extends Resource
     {
         return [
             'index' => Pages\ListIdentityRecords::route('/'),
-            'create' => Pages\CreateIdentityRecord::route('/create'),
+            // 'create' => Pages\CreateIdentityRecord::route('/create'),
             'edit' => Pages\EditIdentityRecord::route('/{record}/edit'),
             'view' => Pages\ViewIdentityRecord::route('/{record}'),
         ];
@@ -363,6 +392,120 @@ class IdentityRecordResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        // Cache the count for better performance
+        return Cache::remember('identity_records_count', 300, function () {
+            return static::getModel()::count();
+        });
+    }
+
+    /**
+     * Optimize the Eloquent query for better performance
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->select([
+                'id', 'first_name', 'last_name', 'national_code', 'mobile', 'email',
+                'status', 'user_id', 'country_id', 'province_id', 'city_id',
+                'image_national_code_front', 'image_national_code_back', 'video',
+                'created_at', 'updated_at'
+            ])
+            ->with([
+                'user:id,email,first_name,last_name',
+                'country:id,title',
+                'province:id,title',
+                'city:id,title'
+            ]);
+    }
+
+    /**
+     * Get table query string identifier for better caching
+     */
+    public static function getTableQueryStringIdentifier(): string
+    {
+        return 'identity_records';
+    }
+
+    /**
+     * Cache expensive status options
+     */
+    public static function getStatusOptions(): array
+    {
+        return Cache::remember('identity_record_status_options', 3600, function () {
+            return [
+                IdentityRecord::PENDING => __('site.pending'),
+                IdentityRecord::PAID => __('site.paid'),
+                IdentityRecord::COMPLETED => __('site.completed'),
+                IdentityRecord::REJECT => __('site.reject'),
+                IdentityRecord::INPROGRESS => __('site.in_progress'),
+            ];
+        });
+    }
+
+    /**
+     * Cache country options for better performance
+     */
+    public static function getCountryOptions(): array
+    {
+        return Cache::remember('country_options', 3600, function () {
+            return \Domain\Address\Models\Country::select('id', 'title')
+                ->orderBy('title')
+                ->pluck('title', 'id')
+                ->toArray();
+        });
+    }
+
+    /**
+     * Cache province options for better performance
+     */
+    public static function getProvinceOptions(): array
+    {
+        return Cache::remember('province_options', 3600, function () {
+            return \Domain\Address\Models\Province::select('id', 'title')
+                ->orderBy('title')
+                ->pluck('title', 'id')
+                ->toArray();
+        });
+    }
+
+    /**
+     * Cache city options for better performance
+     */
+    public static function getCityOptions(): array
+    {
+        return Cache::remember('city_options', 3600, function () {
+            return \Domain\Address\Models\City::select('id', 'title')
+                ->orderBy('title')
+                ->pluck('title', 'id')
+                ->toArray();
+        });
+    }
+
+    /**
+     * Clear all related caches
+     */
+    public static function clearCaches(): void
+    {
+        Cache::forget('identity_records_count');
+        Cache::forget('identity_record_status_options');
+        Cache::forget('country_options');
+        Cache::forget('province_options');
+        Cache::forget('city_options');
+        Cache::forget('default_plan');
+    }
+
+    /**
+     * Get table performance configuration
+     */
+    public static function getTablePerformanceConfig(): array
+    {
+        return [
+            'defer_loading' => true,
+            'persist_filters' => true,
+            'persist_sort' => true,
+            'lazy_image_loading' => true,
+            'default_pagination' => 25,
+            'max_pagination' => 100,
+        ];
     }
 }
